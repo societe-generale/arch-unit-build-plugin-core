@@ -39,9 +39,9 @@
 
 
     <scm>
-        <url>https://github.com/societe-generale/arch-unit-maven-plugin</url>
-        <connection>scm:git:git@github.com:societe-generale/arch-unit-maven-plugin.git</connection>
-        <developerConnection>scm:git:git@github.com:societe-generale/arch-unit-maven-plugin.git</developerConnection>
+        <url>https://github.com/societe-generale/arch-unit-build-plugin-core</url>
+        <connection>scm:git:git@github.com:societe-generale/arch-unit-build-plugin-core.git</connection>
+        <developerConnection>scm:git:git@github.com:societe-generale/arch-unit-build-plugin-core.git</developerConnection>
         <tag>HEAD</tag>
     </scm>
 
