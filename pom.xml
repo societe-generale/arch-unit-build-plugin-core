@@ -8,6 +8,9 @@
 
     <name>ArchUnit plugin core</name>
 
+    <description>The core logic for Maven or Gradle ArchUnit plugin</description>
+    <url>https://github.com/societe-generale/arch-unit-build-plugin-core</url>
+
     <developers>
         <developer>
             <id>arpitgarg9168 </id>
