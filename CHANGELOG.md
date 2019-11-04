@@ -3,17 +3,22 @@
 ## [Unreleased]
 
 ### Added
-- PR #4 - adding a new rule : DontReturnNullCollectionTest
-
+- PR #3 - new rule : HexagonalArchitectureTest
+- PR #4 - new rule : DontReturnNullCollectionTest
 
 ### Changed
-- Extracted core logic from https://github.com/societe-generale/arch-unit-maven-plugin/tree/2abd40359de0056ce16d87aec9a8f72fd1b1d2a4 , independent from Maven
-- upgraded versions for Lombok and Mockito so that we can build with latest JDKs
+- PR #2 : upgraded to ArchUnit 0.12.0
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+## [2.3.0] - 2019-10-06
+
+### initial version 
+- we extracted the code from https://github.com/societe-generale/arch-unit-maven-plugin/blob/master/CHANGELOG.md#230---2019-10-06 and aligned the version
+
 
  
