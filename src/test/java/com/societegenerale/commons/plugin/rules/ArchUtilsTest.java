@@ -30,7 +30,7 @@ public class ArchUtilsTest {
 	public void shouldLoadAllClassesWhenGivenPakageDoesntExist() {
 		JavaClasses classes = ArchUtils.importAllClassesInPackage("./target/classes", "someNotExistingFolder");
 
-		long noOfClasses = classes.stream().filter(it -> !it.isInnerClass()).count();
+		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
 
 		assertThat(noOfClasses).isEqualTo(22);
 
