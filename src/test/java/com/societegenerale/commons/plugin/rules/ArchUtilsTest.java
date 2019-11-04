@@ -19,8 +19,6 @@ public class ArchUtilsTest {
 	public void shouldLoadClassesFromGivenPackage() {
 		JavaClasses classes = ArchUtils.importAllClassesInPackage("./target/classes/", "com/societegenerale/commons/plugin/model");
 
-				
-
 		long noOfClassesInPackage = classes.stream().count();
 
 		assertThat(noOfClassesInPackage).isEqualTo(3);
@@ -30,10 +28,9 @@ public class ArchUtilsTest {
 	public void shouldLoadAllClassesWhenGivenPakageDoesntExist() {
 		JavaClasses classes = ArchUtils.importAllClassesInPackage("./target/classes", "someNotExistingFolder");
 
-		long noOfClasses = classes.stream().filter(it -> !it.isInnerClass()).count();
+		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
 
 		assertThat(noOfClasses).isEqualTo(22);
-
 	}
 
 }
