@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 ### Added
-- PR # - adding a new rule : DontReturnNullCollectionTest
+- PR #4 - adding a new rule : DontReturnNullCollectionTest
 
 
 ### Changed
