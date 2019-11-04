@@ -29,11 +29,12 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
                 .check(ArchUtils.importAllClassesInPackage(path, SRC_CLASSES_FOLDER));
 
         classes().that().resideInAPackage(DOMAIN)
-                .should().onlyAccessClassesThat().resideInAnyPackage("java..",
-                DOMAIN,
+                .should().onlyAccessClassesThat().resideInAnyPackage(DOMAIN,
+                "java..",
                 "javax.validation..",
                 "org.slf4j..",
-                "org.projectlombok..")
+                "org.projectlombok..",
+                "org.apache.commons..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should use only a limited set of core libraries, ie no external framework")
                 .check(ArchUtils.importAllClassesInPackage(path, SRC_CLASSES_FOLDER));
     }
