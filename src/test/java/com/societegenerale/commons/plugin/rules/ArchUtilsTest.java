@@ -19,8 +19,6 @@ public class ArchUtilsTest {
 	public void shouldLoadClassesFromGivenPackage() {
 		JavaClasses classes = ArchUtils.importAllClassesInPackage("./target/classes/", "com/societegenerale/commons/plugin/model");
 
-				
-
 		long noOfClassesInPackage = classes.stream().count();
 
 		assertThat(noOfClassesInPackage).isEqualTo(3);
@@ -33,7 +31,6 @@ public class ArchUtilsTest {
 		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
 
 		assertThat(noOfClasses).isEqualTo(22);
-
 	}
 
 }
