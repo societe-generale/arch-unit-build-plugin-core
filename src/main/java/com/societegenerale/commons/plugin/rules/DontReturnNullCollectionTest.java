@@ -19,7 +19,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
  */
 public class DontReturnNullCollectionTest implements ArchRuleTest {
 
-  protected static final String NO_NULL_COLLECTION_MESSAGE = "we don't want callers to perform null check every time. Return an empty collection, not null.";
+  protected static final String NO_NULL_COLLECTION_MESSAGE = "we don't want callers to perform null check every time. Return an empty collection, not null. Please annotate the method with "+Nonnull.class.getCanonicalName();
 
   @Override
   public void execute(String path) {
