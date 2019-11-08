@@ -3,17 +3,23 @@
 ## [Unreleased]
 
 ### Added
-- PR #3 - new rule : HexagonalArchitectureTest
-- PR #4 - new rule : DontReturnNullCollectionTest
 
 ### Changed
-- PR #2 : upgraded to ArchUnit 0.12.0
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+## [2.3.1] - 2019-11-08
+
+### Added
+- PR #3 - new rule : HexagonalArchitectureTest
+- PR #4 - new rule : DontReturnNullCollectionTest
+
+### Changed
+- PR #2 : upgraded to ArchUnit 0.12.0
 
 ## [2.3.0] - 2019-10-06
 
