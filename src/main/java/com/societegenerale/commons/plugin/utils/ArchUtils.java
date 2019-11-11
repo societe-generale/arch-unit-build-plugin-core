@@ -31,7 +31,7 @@ public class ArchUtils {
             return new ClassFileImporter().importPath(classesPath);
         }
         else{
-            StringBuilder warnMessage=new StringBuilder("classpath ").append(classesPath.toFile()).append("doesn't exist : loading all classes from root, ie ").append(path);
+            StringBuilder warnMessage=new StringBuilder("classpath ").append(classesPath.toFile()).append(" doesn't exist : loading all classes from root, ie ").append(path);
             log.warn(warnMessage.toString());
             return new ClassFileImporter().importPath(Paths.get(path));
         }
