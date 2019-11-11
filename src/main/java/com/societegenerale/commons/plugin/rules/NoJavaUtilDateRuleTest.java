@@ -45,10 +45,10 @@ public class NoJavaUtilDateRuleTest implements ArchRuleTest {
 			@Override
 			public void check(JavaClass item, ConditionEvents events) {
 
-				item.getAllFields().stream().filter(field -> isJavaUtilDateField(field)).forEach(field -> {
+				item.getAllFields().stream().filter(this::isJavaUtilDateField).forEach(field ->
 					events.add(SimpleConditionEvent.violated(field,
-							NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE + " - class: " + field.getOwner().getName()));
-				});
+							NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE + " - class: " + field.getOwner().getName()))
+				);
 
 			}
 

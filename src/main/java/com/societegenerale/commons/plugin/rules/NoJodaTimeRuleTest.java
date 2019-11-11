@@ -37,7 +37,7 @@ public class NoJodaTimeRuleTest implements ArchRuleTest {
       public void check(JavaClass item, ConditionEvents events) {
 
         List<JavaField> classesWithJodaTimeFields = item.getAllFields().stream()
-                .filter( field -> isJodaTimeField(field))
+                .filter(this::isJodaTimeField)
                 .collect(toList());
 
         for(JavaField field : classesWithJodaTimeFields){
@@ -50,7 +50,7 @@ public class NoJodaTimeRuleTest implements ArchRuleTest {
                 .filter(codeUnit -> codeUnit instanceof JavaMethod)
                 .flatMap(method -> method.getMethodCallsFromSelf().stream())
                 .filter(method -> method instanceof JavaMethodCall)
-                .filter(method -> isMethodUsingJodaTimeInternally(method))
+                .filter(this::isMethodUsingJodaTimeInternally)
                 .collect(toList());
 
         for(JavaMethodCall methodCall : methodsUsingJodaTimeInternally){
