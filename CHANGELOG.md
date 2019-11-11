@@ -12,6 +12,11 @@
 
 ### Fixed
 
+## [2.3.2] - 2019-11-11
+
+### Changed
+- Enabling to run provided ArchUnit rules like GeneralCodingRules by enabling the instantiation of classes with private constructor  
+
 ## [2.3.1] - 2019-11-08
 
 ### Added
