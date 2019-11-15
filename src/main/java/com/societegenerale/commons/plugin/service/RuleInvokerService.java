@@ -75,7 +75,7 @@ public class RuleInvokerService {
             return "";
         }
 
-        InvokableRules invokableRules = InvokableRules.of(rule.getRule(), rule.getChecks());
+        InvokableRules invokableRules = InvokableRules.of(rule.getRule(), rule.getChecks(),log);
 
         String packageOnRuleToApply = getPackageNameOnWhichToApplyRules(rule,buildPath);
 
