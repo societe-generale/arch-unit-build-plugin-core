@@ -1,5 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
+import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaMethod;
@@ -17,8 +18,8 @@ public class NoTestIgnoreWithoutCommentRuleTest implements ArchRuleTest  {
 
     protected static final String NO_JUNIT_IGNORE_WITHOUT_COMMENT_VIOLATION_MESSAGE = "Tests shouldn't been ignored without providing a comment explaining why";
 
-    public void execute(String path)  {
-        classes().should(notBeIgnoredWithoutAComment()).check(ArchUtils.importAllClassesInPackage(path, TEST_CLASSES_FOLDER));
+    public void execute(String path, ScopePathProvider scopePathProvider)  {
+        classes().should(notBeIgnoredWithoutAComment()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath()));
     }
 
     public static ArchCondition<JavaClass> notBeIgnoredWithoutAComment() {

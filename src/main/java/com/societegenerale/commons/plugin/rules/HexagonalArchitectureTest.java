@@ -1,5 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
+import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
@@ -15,18 +16,18 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
     private static final String DOMAIN = "..domain..";
 
     @Override
-    public void execute(String path) {
+    public void execute(String path, ScopePathProvider scopePathProvider) {
 
         noClasses().that().resideInAPackage(DOMAIN)
                 .should().accessClassesThat().resideInAPackage("..infrastructure..")
                 .orShould().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should not know about infrastructure or config code")
-                .check(ArchUtils.importAllClassesInPackage(path, SRC_CLASSES_FOLDER));
+                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
 
         noClasses().that().resideInAPackage("..infrastructure..")
                 .should().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE+"infrastructure classes should not know about config code")
-                .check(ArchUtils.importAllClassesInPackage(path, SRC_CLASSES_FOLDER));
+                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
 
         classes().that().resideInAPackage(DOMAIN)
                 .should().onlyAccessClassesThat().resideInAnyPackage(DOMAIN,
@@ -36,7 +37,7 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
                 "org.projectlombok..",
                 "org.apache.commons..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should use only a limited set of core libraries, ie no external framework")
-                .check(ArchUtils.importAllClassesInPackage(path, SRC_CLASSES_FOLDER));
+                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
     }
 
 
