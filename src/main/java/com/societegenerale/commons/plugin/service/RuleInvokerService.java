@@ -10,8 +10,6 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import org.apache.commons.lang3.StringUtils;
 import com.societegenerale.commons.plugin.Log;
 
-import static com.societegenerale.commons.plugin.rules.ArchRuleTest.SRC_CLASSES_FOLDER;
-import static com.societegenerale.commons.plugin.rules.ArchRuleTest.TEST_CLASSES_FOLDER;
 import static com.societegenerale.commons.plugin.utils.ReflectionUtils.loadClassWithContextClassLoader;
 import static java.lang.System.lineSeparator;
 
@@ -22,22 +20,33 @@ public class RuleInvokerService {
 
     private ArchUtils archUtils;
 
+    private ScopePathProvider scopePathProvider;
+
+    public RuleInvokerService(Log log, ScopePathProvider scopePathProvider) {
+        this.log=log;
+        archUtils =new ArchUtils(log);
+
+        this.scopePathProvider=scopePathProvider;
+    }
+
     public RuleInvokerService(Log log) {
         this.log=log;
         archUtils =new ArchUtils(log);
+
+        this.scopePathProvider=new DefaultScopePathProvider();
     }
 
-    public String invokeRules(Rules rules, String projectPath) {
+    public String invokeRules(Rules rules, String buildPath) {
 
         StringBuilder errorListBuilder = new StringBuilder();
 
         for (String rule : rules.getPreConfiguredRules()) {
-            String errorMessage = invokePreConfiguredRule(rule, projectPath);
+            String errorMessage = invokePreConfiguredRule(rule, buildPath);
             errorListBuilder.append(prepareErrorMessageForRuleFailures(rule, errorMessage));
         }
 
         for (ConfigurableRule rule : rules.getConfigurableRules()) {
-            String errorMessage = invokeConfigurableRules(rule, projectPath);
+            String errorMessage = invokeConfigurableRules(rule, buildPath);
             errorListBuilder.append(prepareErrorMessageForRuleFailures(rule.getRule(), errorMessage));
         }
 
@@ -45,20 +54,20 @@ public class RuleInvokerService {
 
     }
 
-    private String invokePreConfiguredRule(String ruleClassName, String projectPath) {
+    private String invokePreConfiguredRule(String ruleClassName, String buildPath) {
         Class<?> ruleClass = loadClassWithContextClassLoader(ruleClassName);
 
         String errorMessage = "";
         try {
             Method method = ruleClass.getDeclaredMethod(EXECUTE_METHOD_NAME, String.class);
-            method.invoke(ruleClass.newInstance(), projectPath);
+            method.invoke(ruleClass.newInstance(), buildPath);
         } catch (ReflectiveOperationException re) {
             errorMessage = re.getCause().toString();
         }
         return errorMessage;
     }
 
-    private String invokeConfigurableRules(ConfigurableRule rule, String projectPath) {
+    private String invokeConfigurableRules(ConfigurableRule rule, String buildPath) {
         if(rule.isSkip()) {
             if(log.isInfoEnabled()) {
                 log.info("Skipping rule " + rule.getRule());
@@ -68,20 +77,25 @@ public class RuleInvokerService {
 
         InvokableRules invokableRules = InvokableRules.of(rule.getRule(), rule.getChecks());
 
-        String packageOnRuleToApply = getPackageNameOnWhichToApplyRules(rule);
-        JavaClasses classes = archUtils.importAllClassesInPackage(projectPath, packageOnRuleToApply);
+        String packageOnRuleToApply = getPackageNameOnWhichToApplyRules(rule,buildPath);
+
+        log.info("invoking ConfigurableRule "+rule.toString()+" on "+buildPath+" - "+packageOnRuleToApply);
+        JavaClasses classes = archUtils.importAllClassesInPackage(buildPath, packageOnRuleToApply);
 
         InvocationResult result = invokableRules.invokeOn(classes);
         return result.getMessage();
     }
 
-    private String getPackageNameOnWhichToApplyRules(ConfigurableRule rule) {
+    private String getPackageNameOnWhichToApplyRules(ConfigurableRule rule,String buildPath) {
 
-        StringBuilder packageNameBuilder = new StringBuilder(SRC_CLASSES_FOLDER);
+        StringBuilder packageNameBuilder = new StringBuilder(buildPath);
 
         if (rule.getApplyOn() != null) {
             if (rule.getApplyOn().getScope() != null && "test".equals(rule.getApplyOn().getScope())) {
-                packageNameBuilder = new StringBuilder(TEST_CLASSES_FOLDER);
+                packageNameBuilder = new StringBuilder(scopePathProvider.getTestClassesPath());
+            }
+            else{
+                packageNameBuilder = new StringBuilder(scopePathProvider.getMainClassesPath());
             }
             if (rule.getApplyOn().getPackageName() != null) {
                 packageNameBuilder.append("/").append(rule.getApplyOn().getPackageName());
