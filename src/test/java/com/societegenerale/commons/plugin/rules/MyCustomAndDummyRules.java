@@ -9,7 +9,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
  * A dummy class with rules to configure through plugin config
  */
 @SuppressWarnings("unused")
-public class MyCustomRules {
+public class MyCustomAndDummyRules {
 
     static ArchRule annotatedWithTest_asField = classes().should().beAnnotatedWith("Test");
     static ArchRule resideInMyPackage_asField = classes().should().resideInAPackage("myPackage");
