@@ -12,6 +12,11 @@
 
 ### Fixed
 
+## [2.4.0] - 2019-11-15
+
+### Changed
+- PR #5 - introduced ScopePathProvider concept to allow build specific plugins to use their own
+
 ## [2.3.2] - 2019-11-11
 
 ### Changed
