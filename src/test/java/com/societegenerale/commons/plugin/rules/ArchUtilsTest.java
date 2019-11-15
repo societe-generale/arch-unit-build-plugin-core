@@ -30,7 +30,7 @@ public class ArchUtilsTest {
 
 		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
 
-		assertThat(noOfClasses).isEqualTo(24);
+		assertThat(noOfClasses).isEqualTo(26);
 	}
 
 }

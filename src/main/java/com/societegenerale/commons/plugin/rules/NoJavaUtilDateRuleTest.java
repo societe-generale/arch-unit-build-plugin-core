@@ -2,6 +2,7 @@ package com.societegenerale.commons.plugin.rules;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaField;
@@ -35,8 +36,8 @@ public class NoJavaUtilDateRuleTest implements ArchRuleTest {
 	protected static final String NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE = "Use Java8 java.time or java.util.GregorianCalendar or java.text.DateFormat  to parse and format dates instead of java.util.Date library because they  support internationalization better";
 
 	@Override
-	public void execute(String path) {
-		classes().should(notUseJavaUtilDate()).check(ArchUtils.importAllClassesInPackage(path, SRC_CLASSES_FOLDER));
+	public void execute(String path, ScopePathProvider scopePathProvider) {
+		classes().should(notUseJavaUtilDate()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
 	}
 
 	protected static ArchCondition<JavaClass> notUseJavaUtilDate() {

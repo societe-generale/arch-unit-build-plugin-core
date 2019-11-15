@@ -12,6 +12,7 @@ import java.util.function.Predicate;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
+import com.societegenerale.commons.plugin.Log;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.lang.ArchRule;
 
@@ -29,7 +30,11 @@ class InvokableRules {
     private final Set<Field> archRuleFields;
     private final Set<Method> archRuleMethods;
 
-    private InvokableRules(String rulesClassName, List<String> ruleChecks) {
+    private final Log log;
+
+    private InvokableRules(String rulesClassName, List<String> ruleChecks, Log log) {
+
+        this.log=log;
 
         rulesLocation = loadClassWithContextClassLoader(rulesClassName);
 
@@ -41,6 +46,22 @@ class InvokableRules {
 
         archRuleFields = filterNames(allFieldsWhichAreArchRules, isChosenCheck);
         archRuleMethods = filterNames(allMethodsWhichAreArchRules, isChosenCheck);
+
+        if(log.isInfoEnabled()) {
+            logBuiltInvokableRules(rulesClassName);
+        }
+    }
+
+    private void logBuiltInvokableRules(String rulesClassName) {
+
+        log.info("just built "+rulesClassName+" : ");
+
+        log.info(archRuleFields.size()+ " field rules loaded ");
+        archRuleFields.stream().forEach(a -> log.info(a.toString()));
+
+        log.info(archRuleMethods.size()+ " method rules loaded");
+        archRuleMethods.stream().forEach(a -> log.info(a.toString()));
+
     }
 
     private void validateRuleChecks(Set<? extends Member> allFieldsAndMethods, Collection<String> ruleChecks) {
@@ -74,6 +95,11 @@ class InvokableRules {
 
         Object instance = newInstance(rulesLocation);
 
+        if(log.isInfoEnabled()) {
+            log.info("applying rules on :");
+            importedClasses.stream().forEach(c -> log.info(c.getName()));
+        }
+
         InvocationResult result = new InvocationResult();
         for (Method method : archRuleMethods) {
             checkForFailure(() -> invoke(method, instance, importedClasses))
@@ -96,8 +122,8 @@ class InvokableRules {
         }
     }
 
-    static InvokableRules of(String rulesClassName, List<String> checks) {
-        return new InvokableRules(rulesClassName, checks);
+    static InvokableRules of(String rulesClassName, List<String> checks, Log log) {
+        return new InvokableRules(rulesClassName, checks, log);
     }
 
     static class InvocationResult {

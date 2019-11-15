@@ -1,6 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
 import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +31,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassUsingSpring);
+            new HexagonalArchitectureTest().execute(pathForDomainClassUsingSpring, new DefaultScopePathProvider());
 
         });
 
@@ -46,7 +47,7 @@ public class HexagonalArchitectureTestTest {
     @Test
     public void infraClassUsingSpringFrameworkShould_Not_ThrowViolations() {
 
-        assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathForInfraClassUsingSpring))
+        assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathForInfraClassUsingSpring, new DefaultScopePathProvider()))
                 .doesNotThrowAnyException();
 
     }
@@ -56,7 +57,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForInfraClassUsingConfig);
+            new HexagonalArchitectureTest().execute(pathForInfraClassUsingConfig, new DefaultScopePathProvider());
 
         });
 

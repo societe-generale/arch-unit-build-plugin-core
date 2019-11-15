@@ -1,5 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
+import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -24,8 +25,8 @@ public class NoJunitAssertRuleTest implements ArchRuleTest {
     private static final String PACKAGE_SEPARATOR = ".";
 
     @Override
-    public void execute(String path) {
-        classes().should(notUseJunitAssertRule()).check(ArchUtils.importAllClassesInPackage(path, TEST_CLASSES_FOLDER));
+    public void execute(String path, ScopePathProvider scopePathProvider) {
+        classes().should(notUseJunitAssertRule()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath()));
     }
 
     protected static ArchCondition<JavaClass> notUseJunitAssertRule() {

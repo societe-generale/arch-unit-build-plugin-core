@@ -1,5 +1,7 @@
 package com.societegenerale.commons.plugin.utils;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -31,11 +33,22 @@ public class ArchUtils {
             return new ClassFileImporter().importPath(classesPath);
         }
         else{
-            StringBuilder warnMessage=new StringBuilder("classpath ").append(classesPath.toFile()).append(" doesn't exist : loading all classes from root, ie ").append(path);
+            StringBuilder warnMessage=new StringBuilder("classpath ").append(classesPath.toFile())
+                                                                     .append(" doesn't exist : loading all classes from root, ie ")
+                                                                     .append(path)
+                                                                     .append(" even though it's probably not what you want to achieve..");
             log.warn(warnMessage.toString());
+
+            //logging content of directory, to help with debugging..
+            log.warn("existing folders and files under root project : ");
+            try {
+                Files.walk(Paths.get(path))
+                        .forEach(f -> log.warn(f.toFile().getName()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             return new ClassFileImporter().importPath(Paths.get(path));
         }
-
     }
-
 }

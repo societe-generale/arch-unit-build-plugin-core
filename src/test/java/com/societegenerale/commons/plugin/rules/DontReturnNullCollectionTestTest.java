@@ -1,6 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
 import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class DontReturnNullCollectionTestTest {
     public void shouldThrowViolations() {
 
         Throwable validationExceptionThrown = catchThrowable(() ->
-            new DontReturnNullCollectionTest().execute(pathObjectWithAmethodReturningAnullList)
+            new DontReturnNullCollectionTest().execute(pathObjectWithAmethodReturningAnullList, new DefaultScopePathProvider())
         );
 
         assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
@@ -34,7 +35,7 @@ public class DontReturnNullCollectionTestTest {
     @Test
     public void shouldNotThrowViolations() {
 
-        assertThatCode(() -> new DontReturnNullCollectionTest().execute(pathProperlyAnnotatedObjectWithAmethodReturningAlist))
+        assertThatCode(() -> new DontReturnNullCollectionTest().execute(pathProperlyAnnotatedObjectWithAmethodReturningAlist, new DefaultScopePathProvider()))
                 .doesNotThrowAnyException();
 
     }

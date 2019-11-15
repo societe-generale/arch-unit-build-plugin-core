@@ -1,6 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
 import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 
 import org.junit.Before;
@@ -23,14 +24,14 @@ public class NoPublicFieldRuleTestTest {
 	@Test(expected = AssertionError.class)
 	public void shouldThrowViolations() {
 
-		new NoPublicFieldRuleTest().execute(pathObjectWithPublicField);
+		new NoPublicFieldRuleTest().execute(pathObjectWithPublicField, new DefaultScopePathProvider());
 
 	}
 
 	@Test
 	public void shouldNotThrowAnyViolation_even_with_publicStaticFinaField() {
 
-		assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathObjectWithNoPublicField))
+		assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathObjectWithNoPublicField, new DefaultScopePathProvider()))
 				.doesNotThrowAnyException();
 
 	}
