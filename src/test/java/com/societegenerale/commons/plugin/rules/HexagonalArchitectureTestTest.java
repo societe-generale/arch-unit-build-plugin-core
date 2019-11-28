@@ -15,6 +15,11 @@ public class HexagonalArchitectureTestTest {
 
     private String pathForDomainClassUsingSpring = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/DomainClassUsingSpring.class";
 
+    private String pathForDomainClassAnnotatedWithJson = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/DomainClassAnnotatedWithJson.class";
+
+    private String pathForDomainClassAnnotatedWithLombok = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/DomainClassAnnotatedWithLombok.class";
+
+
     private String pathForInfraClassUsingSpring = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/InfraClassUsingSpring.class";
 
     private String pathForInfraClassUsingConfig = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/InfraClassUsingConfig.class";
@@ -41,6 +46,31 @@ public class HexagonalArchitectureTestTest {
                 .hasMessageContaining("ClassUsingSpring")
                 .hasMessageContaining(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE)
                 .hasMessageContaining("domain classes should use only a limited set of core libraries");
+
+    }
+
+    @Test
+    public void domainClassAnnotatedWithJacksonShouldThrowViolations(){
+
+        Throwable validationExceptionThrown = catchThrowable(() -> {
+
+            new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithJson, new DefaultScopePathProvider());
+
+        });
+
+        assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
+                .hasMessageStartingWith("Architecture Violation")
+                .hasMessageContaining("was violated (1 times)")
+                .hasMessageContaining("ClassAnnotatedWithJson")
+                .hasMessageContaining(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE)
+                .hasMessageContaining("domain classes should use only a limited set of core libraries");
+
+    }
+
+    @Test
+    public void domainClassAnnotatedWithLombokShould_Not_ThrowViolations(){
+
+        assertThatCode(() -> new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithLombok, new DefaultScopePathProvider())).doesNotThrowAnyException();
 
     }
 
