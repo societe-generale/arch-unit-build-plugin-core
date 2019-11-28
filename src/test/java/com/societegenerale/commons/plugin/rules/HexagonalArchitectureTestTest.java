@@ -17,6 +17,9 @@ public class HexagonalArchitectureTestTest {
 
     private String pathForDomainClassAnnotatedWithJson = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/DomainClassAnnotatedWithJson.class";
 
+    private String pathForDomainClassAnnotatedWithLombok = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/DomainClassAnnotatedWithLombok.class";
+
+
     private String pathForInfraClassUsingSpring = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/InfraClassUsingSpring.class";
 
     private String pathForInfraClassUsingConfig = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/InfraClassUsingConfig.class";
@@ -61,6 +64,13 @@ public class HexagonalArchitectureTestTest {
                 .hasMessageContaining("ClassAnnotatedWithJson")
                 .hasMessageContaining(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE)
                 .hasMessageContaining("domain classes should use only a limited set of core libraries");
+
+    }
+
+    @Test
+    public void domainClassAnnotatedWithLombokShould_Not_ThrowViolations(){
+
+        assertThatCode(() -> new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithLombok, new DefaultScopePathProvider())).doesNotThrowAnyException();
 
     }
 
