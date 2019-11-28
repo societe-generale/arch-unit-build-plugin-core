@@ -5,9 +5,13 @@ import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ConditionEvent;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
+
+import java.util.Optional;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
@@ -30,29 +34,48 @@ public class NoTestIgnoreRuleTest implements ArchRuleTest  {
       @SuppressWarnings("squid:S1166")
       public void check(JavaClass item, ConditionEvents events) {
 
+        //class level checks
+        add(buildViolationsIfAnnotationFound(item,Ignore.class),events);
+        add(buildViolationsIfAnnotationFound(item,Disabled.class),events);
+
+        //method level checks
+        for (JavaMethod method : item.getMethods()) {
+          add(buildViolationsIfAnnotationFound(item, method,Ignore.class),events);
+          add(buildViolationsIfAnnotationFound(item, method,Disabled.class),events);
+        }
+
+      }
+
+      private void add(Optional<ConditionEvent> violation, ConditionEvents events) {
+          if(violation.isPresent()){
+            events.add(violation.get());
+          }
+      }
+
+      private Optional<ConditionEvent> buildViolationsIfAnnotationFound(JavaClass item, Class annotation) {
+
         try {
-          if (item.getAnnotationOfType(Ignore.class) != null) {
-            events.add(SimpleConditionEvent.violated(item, item.getName() + ", at class level"));
+          if (item.getAnnotationOfType(annotation) != null)  {
+            return Optional.of(SimpleConditionEvent.violated(item, item.getName() + ", at class level"));
           }
         } catch (IllegalArgumentException e) {
           //if there's no Ignore annotation, IllegalArgument exception is thrown.
           //we swallow it, as it means there's no annotation at class level.
         }
+        return Optional.empty();
+      }
 
-        for (JavaMethod method : item.getMethods()) {
-          try {
-            if (method.getAnnotationOfType(Ignore.class) != null) {
-              events.add(SimpleConditionEvent.violated(method, item.getName()+" - "+method.getName() + ", at method level"));
-            }
-          } catch (IllegalArgumentException e) {
-            //if there's no Ignore annotation, IllegalArgument exception is thrown.
-            //we swallow it, as it means there's no annotation at method level.
+      private Optional<ConditionEvent> buildViolationsIfAnnotationFound(JavaClass item, JavaMethod method, Class annotation) {
+
+        try {
+          if (method.getAnnotationOfType(annotation) != null)  {
+            return Optional.of(SimpleConditionEvent.violated(method, item.getName()+" - "+method.getName() + ", at method level"));
           }
-
+        } catch (IllegalArgumentException e) {
+          //if there's no Ignore annotation, IllegalArgument exception is thrown.
+          //we swallow it, as it means there's no annotation at class level.
         }
-
-
-
+        return Optional.empty();
       }
     };
   }
