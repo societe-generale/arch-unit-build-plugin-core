@@ -12,6 +12,13 @@
 
 ### Fixed
 
+## [2.4.1] - 2019-11-29
+
+### Changed
+- PR #8 - HexagonalArchitectureTest now validates that no prohibited annotation is used
+- PR #9 - Taking into account Junit5 @Disabled in the rules that were checking Junit4 @Ignore 
+ 
+
 ## [2.4.0] - 2019-11-15
 
 ### Changed
