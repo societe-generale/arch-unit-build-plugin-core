@@ -11,6 +11,7 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 import org.junit.Ignore;
 import org.junit.jupiter.api.Disabled;
 
+import java.lang.annotation.Annotation;
 import java.util.Optional;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
@@ -55,6 +56,9 @@ public class NoTestIgnoreRuleTest implements ArchRuleTest  {
       private Optional<ConditionEvent> buildViolationsIfAnnotationFound(JavaClass item, Class annotation) {
 
         try {
+
+          Annotation ann=item.getAnnotationOfType(annotation);
+
           if (item.getAnnotationOfType(annotation) != null)  {
             return Optional.of(SimpleConditionEvent.violated(item, item.getName() + ", at class level"));
           }
