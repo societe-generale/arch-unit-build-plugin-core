@@ -6,12 +6,11 @@ import org.junit.jupiter.api.Disabled;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
-
-public class TestClassWithJunit5DisableAtMethodLevel {
+@Disabled
+public class TestClassWithJunit5DisabledAtClassLevel {
 
     @Test
-    @Disabled
-    public void someDisabledTestWithoutAComment() {
+    public void someTestUsingAssertJ() {
 
         assertThat(true).isTrue();
 
