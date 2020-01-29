@@ -58,6 +58,8 @@ public class HexagonalArchitectureTestTest {
 
         });
 
+        assertThat(validationExceptionThrown).as("a violation should have been raised").isNotNull();
+
         assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
                 .hasMessageStartingWith("Architecture Violation")
                 .hasMessageContaining("was violated (1 times)")
