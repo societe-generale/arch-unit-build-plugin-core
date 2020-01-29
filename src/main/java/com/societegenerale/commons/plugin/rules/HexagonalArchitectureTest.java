@@ -7,6 +7,7 @@ import com.tngtech.archunit.core.domain.JavaAnnotation;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static java.util.stream.Collectors.toList;
@@ -35,7 +36,21 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
         @Override
         public boolean apply(JavaAnnotation annotation) {
 
-            return allowedPackageInDomainPrefix.stream().noneMatch(allowedPackagePrefix -> annotation.getRawType().getPackage().getName().startsWith(allowedPackagePrefix));
+            System.out.println("testing "+annotation.getRawType().getPackage().getName()+"...");
+
+            Optional<String> allowedPackagePrefixThatMatched=allowedPackageInDomainPrefix.stream().
+                    filter(allowedPackagePrefix -> annotation.getRawType().getPackage().getName().startsWith(allowedPackagePrefix)).
+                    findFirst();
+
+            if(allowedPackagePrefixThatMatched.isPresent()){
+                System.out.println("INFO - "+annotation.getRawType().getPackage().getName()+" starts with "+allowedPackagePrefixThatMatched.get()+", which is an allowed prefix");
+                return false;
+            }
+            else{
+                System.out.println("ERROR - "+annotation.getRawType().getPackage().getName()+" starts with none of the allowed prefixes");
+                return true;
+            }
+
         }
     };
 
