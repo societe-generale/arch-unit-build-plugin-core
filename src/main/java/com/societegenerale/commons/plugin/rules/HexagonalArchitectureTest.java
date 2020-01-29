@@ -36,18 +36,20 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
         @Override
         public boolean apply(JavaAnnotation annotation) {
 
-            System.out.println("testing "+annotation.getRawType().getPackage().getName()+"...");
+            String annotationName = annotation.getRawType().getPackage().getName();
+
+            System.out.println("testing "+ annotationName +"...");
 
             Optional<String> allowedPackagePrefixThatMatched=allowedPackageInDomainPrefix.stream().
-                    filter(allowedPackagePrefix -> annotation.getRawType().getPackage().getName().startsWith(allowedPackagePrefix)).
+                    filter(allowedPackagePrefix -> annotationName.startsWith(allowedPackagePrefix)).
                     findFirst();
 
             if(allowedPackagePrefixThatMatched.isPresent()){
-                System.out.println("INFO - "+annotation.getRawType().getPackage().getName()+" starts with "+allowedPackagePrefixThatMatched.get()+", which is an allowed prefix");
+                System.out.println("INFO - "+ annotationName +" starts with "+allowedPackagePrefixThatMatched.get()+", which is an allowed prefix");
                 return false;
             }
             else{
-                System.out.println("ERROR - "+annotation.getRawType().getPackage().getName()+" starts with none of the allowed prefixes");
+                System.out.println("ERROR - "+ annotationName +" starts with none of the allowed prefixes");
                 return true;
             }
 
