@@ -26,7 +26,7 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
             "java..",
             "javax.validation..",
             "org.slf4j..",
-            "org.projectlombok..",
+            "lombok..",
             "org.apache.commons.."};
 
     //removing the trailing ".." in package names, as we're going to use that list in a "startsWith" comparison
