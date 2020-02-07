@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- PR #11 - HexagonalArchitectureTest now validates that no Dto / Vo classes are present in domain
 
 ### Changed
 
