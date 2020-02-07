@@ -4,12 +4,18 @@ import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaAnnotation;
+import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -28,6 +34,9 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
             "org.slf4j..",
             "lombok..",
             "org.apache.commons.."};
+
+    private final String FORBIDDEN_SUFFIX_DTO=".*Dto$";
+    private final String FORBIDDEN_SUFFIX_VO=".*Vo$";
 
     //removing the trailing ".." in package names, as we're going to use that list in a "startsWith" comparison
     private static List<String> allowedPackageInDomainPrefix = Arrays.asList(allowedPackageInDomain).stream().map(p -> p.replace("..","")).collect(toList());
@@ -56,14 +65,41 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
         }
     };
 
+    protected static ArchCondition<JavaClass> notHaveAnameEndingBy_ignoringCase(String forbiddenSuffixRegexp) {
+
+        return new ArchCondition<JavaClass>("not have a name with that suffix") {
+
+            Pattern pattern = Pattern.compile(forbiddenSuffixRegexp, Pattern.CASE_INSENSITIVE);
+
+            @Override
+            public void check(JavaClass javaClass, ConditionEvents events) {
+
+                if(pattern.matcher(javaClass.getSimpleName()).matches()){
+                    events.add(SimpleConditionEvent.violated(javaClass, "class matched pattern "+forbiddenSuffixRegexp+" (ignoring case)"
+                            +" - class: "+javaClass.getName()));
+                }
+
+
+            }
+        };
+    }
+
+
     @Override
     public void execute(String path, ScopePathProvider scopePathProvider) {
+
+        classes().that().resideInAPackage(DOMAIN)
+                .should(notHaveAnameEndingBy_ignoringCase(FORBIDDEN_SUFFIX_DTO))
+                .andShould(notHaveAnameEndingBy_ignoringCase(FORBIDDEN_SUFFIX_VO))
+                .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "DTO / VO classes shouldn't be located in domain, as they are not business oriented")
+                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
 
         noClasses().that().resideInAPackage(DOMAIN)
                 .should().accessClassesThat().resideInAPackage("..infrastructure..")
                 .orShould().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should not know about infrastructure or config code")
                 .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
+
 
         noClasses().that().resideInAPackage("..infrastructure..")
                 .should().accessClassesThat().resideInAPackage("..config..")
