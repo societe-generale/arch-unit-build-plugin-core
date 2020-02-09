@@ -8,11 +8,18 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaMethod;
+import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.lang.ArchCondition;
+import com.tngtech.archunit.lang.ConditionEvents;
+import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
+import java.util.*;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
@@ -27,6 +34,8 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
 
     protected static final String WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE = "When following hexagonal architecture, ";
     private static final String DOMAIN = "..domain..";
+    private static final String INFRA = "..infrastructure..";
+
 
     private static String[] allowedPackageInDomain= {DOMAIN,
             "java..",
@@ -85,6 +94,63 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
     }
 
 
+    private static ArchCondition<JavaClass> notHavePublicMethodsOtherThanTheOnesDefinedInInterface() {
+
+        return new ArchCondition<JavaClass>("not have public methods apart from the ones defined in the interface") {
+
+            @Override
+            public void check(JavaClass javaClass, ConditionEvents events) {
+
+                Set<JavaClass> implementedInterfaces = javaClass.getInterfaces();
+
+                if(implementedInterfaces.isEmpty()){
+                    return ;
+                }
+
+                for(JavaClass thisInterface : implementedInterfaces){
+
+                    if(thisInterface.getPackage().getName().contains("domain")){
+
+                        Set<JavaMethod> methodsFromDomainInterface = thisInterface.getMethods();
+
+                        List<JavaMethod> publicMethodsForInspectedClass = javaClass.getMethods().stream().filter(m -> m.getModifiers().contains(JavaModifier.PUBLIC)).collect(toList());
+
+                        List<JavaMethod> methodsThatMatchedFromInterface=new ArrayList<>();
+
+                        for(JavaMethod methodFromInterface : methodsFromDomainInterface){
+
+                            for(JavaMethod publicMethodForInspectedClass : publicMethodsForInspectedClass){
+
+                                if(publicMethodForInspectedClass.getName().equals(methodFromInterface.getName())){
+                                    methodsThatMatchedFromInterface.add(publicMethodForInspectedClass);
+                                    break;
+                                }
+                            }
+                        }
+
+                        publicMethodsForInspectedClass.removeAll(methodsThatMatchedFromInterface);
+
+                        if(!publicMethodsForInspectedClass.isEmpty()){
+
+                            for(JavaMethod publicMethodThatShouldNotBeThere : publicMethodsForInspectedClass) {
+
+
+
+                                events.add(SimpleConditionEvent.violated(javaClass, "Classes should not have public methods that are not part of the interface\n"
+                                        + " - class: " + javaClass.getName()+"\n"
+                                        + " - method name: " + publicMethodThatShouldNotBeThere.getName()));
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        };
+    }
+
     @Override
     public void execute(String path, ScopePathProvider scopePathProvider) {
 
@@ -95,13 +161,12 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
                 .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
 
         noClasses().that().resideInAPackage(DOMAIN)
-                .should().accessClassesThat().resideInAPackage("..infrastructure..")
+                .should().accessClassesThat().resideInAPackage(INFRA)
                 .orShould().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should not know about infrastructure or config code")
                 .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
 
-
-        noClasses().that().resideInAPackage("..infrastructure..")
+        noClasses().that().resideInAPackage(INFRA)
                 .should().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE+"infrastructure classes should not know about config code")
                 .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
@@ -111,6 +176,11 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
                 .should().onlyAccessClassesThat().resideInAnyPackage(allowedPackageInDomain)
                 .andShould().notBeAnnotatedWith(invalidAnnotations)
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should use only a limited set of core libraries, ie no external framework")
+                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
+
+        classes().that().resideInAPackage(INFRA)
+                .should(notHavePublicMethodsOtherThanTheOnesDefinedInInterface())
+                .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "infrastructure classes implementing domain interface should not have other public methods")
                 .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
     }
 

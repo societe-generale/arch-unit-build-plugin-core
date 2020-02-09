@@ -30,6 +30,12 @@ public class HexagonalArchitectureTestTest {
 
     private String pathForInfraClassUsingConfig = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/InfraClassUsingConfig.class";
 
+    private String pathForValidInfraClassImplementingDomainInterface = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/SomeValidClassImplementingSomeDomainInterface.class";
+
+    private String pathForInvalidInfraClassImplementingDomainInterface = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/SomeInvalidClassImplementingSomeDomainInterface.class";
+
+    private String pathForSomeValidClassImplementingSomeNonDomainInterface = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/SomeValidClassImplementingSomeNonDomainInterface.class";
+
     @Before
     public void setup(){
         //in the normal lifecycle, ArchUtils is instantiated, which enables a static field there to be initialized
@@ -152,5 +158,53 @@ public class HexagonalArchitectureTestTest {
                 .hasMessageContaining(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE)
                 .hasMessageContaining("DTO / VO classes shouldn't be located in domain, as they are not business oriented");
     }
+
+    @Test
+    public void infraClassImplementingDomainInterfaceWithOtherPublicMethodsShouldThrowViolations(){
+
+        Throwable validationExceptionThrown = catchThrowable(() -> {
+
+            new HexagonalArchitectureTest().execute(pathForInvalidInfraClassImplementingDomainInterface, new DefaultScopePathProvider());
+
+        });
+
+        assertThat(validationExceptionThrown).as("should have thrown a violation").isNotNull();
+
+        assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
+                .hasMessageStartingWith("Architecture Violation")
+                .hasMessageContaining("was violated (1 times)")
+                .hasMessageContaining("SomeInvalidClassImplementingSomeDomainInterface")
+                .hasMessageContaining(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE)
+                .hasMessageContaining("Classes should not have public methods that are not part of the interface");
+
+    }
+
+    @Test
+    public void infraClassImplementingDomainInterfaceWithNoOtherPublicMethodsShouldNotThrowViolations(){
+
+        Throwable validationExceptionThrown = catchThrowable(() -> {
+
+            new HexagonalArchitectureTest().execute(pathForValidInfraClassImplementingDomainInterface, new DefaultScopePathProvider());
+
+        });
+
+        assertThat(validationExceptionThrown).as("should not have thrown a violation").isNull();
+
+    }
+
+    @Test
+    public void infraClassImplementingInterfacesOtherThanDomainCanHaveOtherPublicMethodsAndShouldNotThrowViolations(){
+
+        Throwable validationExceptionThrown = catchThrowable(() -> {
+
+            new HexagonalArchitectureTest().execute(pathForSomeValidClassImplementingSomeNonDomainInterface, new DefaultScopePathProvider());
+
+        });
+
+        assertThat(validationExceptionThrown).as("should not have thrown a violation").isNull();
+
+    }
+
+
 
 }
