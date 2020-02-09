@@ -129,6 +129,20 @@ public class HexagonalArchitectureTestTest {
         assertViolationFor(validationExceptionThrownForDTO,"SomeOtherClassDTO");
     }
 
+    @Test
+    public void domainClassEndingWithVoShouldThrowViolation(){
+
+        Throwable validationExceptionThrownForDto = catchThrowable(() -> {
+
+            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithVo, new DefaultScopePathProvider());
+
+        });
+
+        assertThat(validationExceptionThrownForDto).as("expecting a violation to be raised for SomeClassVo in domain").isNotNull();
+        assertViolationFor(validationExceptionThrownForDto,"SomeClassVo");
+
+    }
+
     private void assertViolationFor(Throwable violation, String className){
 
         assertThat(violation).isInstanceOf(AssertionError.class)
