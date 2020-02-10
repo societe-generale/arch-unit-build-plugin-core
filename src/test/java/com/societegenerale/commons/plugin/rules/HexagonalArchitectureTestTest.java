@@ -20,6 +20,12 @@ public class HexagonalArchitectureTestTest {
     private String pathForDomainClassAnnotatedWithLombok = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/DomainClassAnnotatedWithLombok.class";
 
 
+    private String pathForDomainClassEndingWithDto = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/SomeClassDto.class";
+
+    private String pathForDomainClassEndingWithDTO = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/SomeOtherClassDTO.class";
+
+    private String pathForDomainClassEndingWithVo = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/domain/SomeClassVo.class";
+
     private String pathForInfraClassUsingSpring = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/InfraClassUsingSpring.class";
 
     private String pathForInfraClassUsingConfig = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/InfraClassUsingConfig.class";
@@ -100,6 +106,51 @@ public class HexagonalArchitectureTestTest {
                 .hasMessageContaining(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE)
                 .hasMessageContaining("infrastructure classes should not know about config code");
 
+    }
+
+    @Test
+    public void domainClassEndingWithDtoIgnoringCaseShouldThrowViolation(){
+
+        Throwable validationExceptionThrownForDto = catchThrowable(() -> {
+
+            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithDto, new DefaultScopePathProvider());
+
+        });
+
+        assertThat(validationExceptionThrownForDto).as("expecting a violation to be raised for SomeClassDto in domain").isNotNull();
+        assertViolationFor(validationExceptionThrownForDto,"SomeClassDto");
+
+        Throwable validationExceptionThrownForDTO = catchThrowable(() -> {
+
+            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithDTO, new DefaultScopePathProvider());
+
+        });
+        assertThat(validationExceptionThrownForDTO).as("expecting a violation to be raised for SomeOtherClassDTO in domain").isNotNull();
+        assertViolationFor(validationExceptionThrownForDTO,"SomeOtherClassDTO");
+    }
+
+    @Test
+    public void domainClassEndingWithVoShouldThrowViolation(){
+
+        Throwable validationExceptionThrownForDto = catchThrowable(() -> {
+
+            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithVo, new DefaultScopePathProvider());
+
+        });
+
+        assertThat(validationExceptionThrownForDto).as("expecting a violation to be raised for SomeClassVo in domain").isNotNull();
+        assertViolationFor(validationExceptionThrownForDto,"SomeClassVo");
+
+    }
+
+    private void assertViolationFor(Throwable violation, String className){
+
+        assertThat(violation).isInstanceOf(AssertionError.class)
+                .hasMessageStartingWith("Architecture Violation")
+                .hasMessageContaining("was violated (1 times)")
+                .hasMessageContaining(className)
+                .hasMessageContaining(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE)
+                .hasMessageContaining("DTO / VO classes shouldn't be located in domain, as they are not business oriented");
     }
 
 }
