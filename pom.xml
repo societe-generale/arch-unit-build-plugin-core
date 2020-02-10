@@ -74,7 +74,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <java.version>1.8</java.version>
 
-        <tng.archunit.version>0.12.0</tng.archunit.version>
+        <tng.archunit.version>0.13.1</tng.archunit.version>
 
         <junit.version>4.12</junit.version>
         <lombok.version>1.18.10</lombok.version>
