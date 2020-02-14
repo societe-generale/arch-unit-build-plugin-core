@@ -3,26 +3,15 @@ package com.societegenerale.commons.plugin.rules;
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.base.DescribedPredicate;
-import com.tngtech.archunit.core.domain.JavaAnnotation;
-import com.tngtech.archunit.core.domain.JavaClass;
-import com.tngtech.archunit.lang.ArchCondition;
-import com.tngtech.archunit.lang.ConditionEvents;
-import com.tngtech.archunit.lang.SimpleConditionEvent;
-import com.tngtech.archunit.core.domain.JavaClass;
-import com.tngtech.archunit.core.domain.JavaMethod;
-import com.tngtech.archunit.core.domain.JavaModifier;
+import com.tngtech.archunit.core.domain.*;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -103,15 +92,24 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
 
                 Set<JavaClass> implementedInterfaces = javaClass.getInterfaces();
 
+                System.out.println("analysing "+javaClass.getFullName()+"...");
+
                 if(implementedInterfaces.isEmpty()){
+                    System.out.println("\t --> no interface");
                     return ;
                 }
 
                 for(JavaClass thisInterface : implementedInterfaces){
 
-                    if(thisInterface.getPackage().getName().contains("domain")){
+                    System.out.println("\t --> has interface "+thisInterface.getFullName()+"..");
+                    System.out.println("\t --> "+thisInterface.toString());
+                    System.out.println("\t --> code unit size : "+thisInterface.getCodeUnits().size());
 
-                        Set<JavaMethod> methodsFromDomainInterface = thisInterface.getMethods();
+                    Set<JavaMethod> methodsFromDomainInterface = thisInterface.getAllMethods();
+
+                    System.out.println("\t\t --> nb of methods in the interface :  "+methodsFromDomainInterface.size());
+
+                    if(thisInterface.getPackage().getName().contains("domain")){
 
                         List<JavaMethod> publicMethodsForInspectedClass = javaClass.getMethods().stream().filter(m -> m.getModifiers().contains(JavaModifier.PUBLIC)).collect(toList());
 
@@ -154,35 +152,48 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
     @Override
     public void execute(String path, ScopePathProvider scopePathProvider) {
 
-        classes().that().resideInAPackage(DOMAIN)
-                .should(notHaveAnameEndingBy_ignoringCase(FORBIDDEN_SUFFIX_DTO))
-                .andShould(notHaveAnameEndingBy_ignoringCase(FORBIDDEN_SUFFIX_VO))
-                .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "DTO / VO classes shouldn't be located in domain, as they are not business oriented")
-                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
-
-        noClasses().that().resideInAPackage(DOMAIN)
-                .should().accessClassesThat().resideInAPackage(INFRA)
-                .orShould().accessClassesThat().resideInAPackage("..config..")
-                .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should not know about infrastructure or config code")
-                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
-
-        noClasses().that().resideInAPackage(INFRA)
-                .should().accessClassesThat().resideInAPackage("..config..")
-                .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE+"infrastructure classes should not know about config code")
-                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
 
 
-        classes().that().resideInAPackage(DOMAIN)
-                .should().onlyAccessClassesThat().resideInAnyPackage(allowedPackageInDomain)
-                .andShould().notBeAnnotatedWith(invalidAnnotations)
-                .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should use only a limited set of core libraries, ie no external framework")
-                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
+        System.out.println("TESTING FOR PATH : "+path);
+
+        JavaClasses classesToInspect = ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath());
+
+        System.out.println("NB of classes : "+classesToInspect.size());
+
+        Optional<JavaClass> debug = classesToInspect.stream().filter(c -> c.getFullName().equals("de.gefa.gop.service.infrastructure.service.PartnerConfigurationServiceImpl")).findFirst();
+
+        if(debug.isPresent()) {
+
+            JavaClass partnerConfigurationServiceImpl =debug.get();
+
+            System.out.println("interfaces found for partnerConfigurationServiceImpl : ");
+            partnerConfigurationServiceImpl.getAllInterfaces().stream().forEach(i -> {
+                System.out.println("\t - "+i.getName()+" - "+i.isInterface());
+
+                try {
+                    Object interfaceLoadedDynamically=Class.forName(i.getName());
+
+                    System.out.println("interface is loadable : "+interfaceLoadedDynamically);
+                } catch (ClassNotFoundException e) {
+                    System.out.println("interface is NOT loadable");
+                    e.printStackTrace();
+                }
+
+            });
+
+            System.out.println("how many are interfaces : " + partnerConfigurationServiceImpl.getInterfaces().stream().filter(c -> c.isInterface()).count());
+
+
+
+
+        }
 
         classes().that().resideInAPackage(INFRA)
                 .should(notHavePublicMethodsOtherThanTheOnesDefinedInInterface())
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "infrastructure classes implementing domain interface should not have other public methods")
                 .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
     }
+
 
 
 }

@@ -1,13 +1,13 @@
 package com.societegenerale.commons.plugin.utils;
 
+import com.societegenerale.commons.plugin.Log;
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.societegenerale.commons.plugin.Log;
 
 /**
  * Created by agarg020917 on 11/17/2017.
@@ -30,6 +30,7 @@ public class ArchUtils {
         Path classesPath = Paths.get(path + classFolder);
 
         if (classesPath.toFile().exists()) {
+            System.out.println("Loading classes from "+classesPath+"...");
             return new ClassFileImporter().importPath(classesPath);
         }
         else{
