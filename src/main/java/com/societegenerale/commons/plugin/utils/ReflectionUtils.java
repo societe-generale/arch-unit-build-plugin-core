@@ -16,7 +16,7 @@ public class ReflectionUtils {
 
     public static <T> T newInstance(Class<T> clazz) {
         try {
-            Constructor<T> constructor = clazz.getConstructor();
+            Constructor<T> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {

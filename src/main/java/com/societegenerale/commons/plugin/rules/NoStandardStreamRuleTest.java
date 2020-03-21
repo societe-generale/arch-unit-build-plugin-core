@@ -1,5 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
+import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.lang.ArchCondition;
@@ -13,8 +14,8 @@ public class NoStandardStreamRuleTest implements ArchRuleTest {
   private static final ArchCondition<JavaClass> notUseStandardStream = ACCESS_STANDARD_STREAMS;
 
   @Override
-  public void execute(String path) {
-    noClasses().should(notUseStandardStream).check(ArchUtils.importAllClassesInPackage(path, SRC_CLASSES_FOLDER));
+  public void execute(String path, ScopePathProvider scopePathProvider) {
+    noClasses().should(notUseStandardStream).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
   }
 
   public static ArchCondition<JavaClass> getNotUseStandardStream(){

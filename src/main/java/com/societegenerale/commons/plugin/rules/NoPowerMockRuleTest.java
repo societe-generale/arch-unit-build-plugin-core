@@ -1,5 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
+import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.base.Optional;
 import com.tngtech.archunit.core.domain.JavaClass;
@@ -19,9 +20,10 @@ public class NoPowerMockRuleTest implements ArchRuleTest {
 
     protected static final String POWER_MOCK_VIOLATION_MESSAGE = "Favor Mockito and proper dependency injection - ";
 
+
     @Override
-    public void execute(String path) {
-        classes().should(notUsePowerMock()).check(ArchUtils.importAllClassesInPackage(path, TEST_CLASSES_FOLDER));
+    public void execute(String path, ScopePathProvider scopePathProvider) {
+        classes().should(notUsePowerMock()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath()));
     }
 
     public static ArchCondition<JavaClass> notUsePowerMock() {

@@ -10,6 +10,7 @@ import com.societegenerale.commons.plugin.model.Rules;
 import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
 import com.societegenerale.commons.plugin.rules.classesForTests.DummyCustomRule;
 
+import com.tngtech.archunit.library.GeneralCodingRules;
 import org.junit.Test;
 
 import static java.util.Collections.emptyList;
@@ -135,9 +136,28 @@ public class RuleInvokerServiceTest {
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
         String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/test-classes/com/societegenerale/aut/test/specificCase");
+
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
         assertThat(errorMessage).contains("Rule 'classes should be annotated with @Test' was violated (1 times)");
         assertThat(errorMessage).contains("Rule 'classes should reside in a package 'myPackage'' was violated (1 times)");
+    }
+
+    @Test
+    public void shouldExecuteAllRulesFromArchUnit_GeneralCodingRule() {
+
+        ApplyOn applyOn = new ApplyOn("com.tngtech.archunit.library","main");
+
+        configurableRule.setRule(GeneralCodingRules.class.getName());
+        configurableRule.setApplyOn(applyOn);
+
+        Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
+
+        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/test-classes/com/societegenerale/aut/test/specificCase");
+
+        assertThat(errorMessage).isNotEmpty();
+        assertThat(errorMessage).contains("Architecture Violation");
+        assertThat(errorMessage).contains("Rule 'no classes should use JodaTime, because modern Java projects use the [java.time] API instead' was violated (1 times)");
+        assertThat(errorMessage).contains("Field <com.societegenerale.aut.test.specificCase.DummyClassToValidate.anyJodaTimeObject> has type <org.joda.time.JodaTimePermission");
     }
 }
