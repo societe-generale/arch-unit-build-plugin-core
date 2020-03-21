@@ -5,9 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import com.societegenerale.commons.plugin.Log;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import com.societegenerale.commons.plugin.Log;
+
+import static java.util.Collections.emptyList;
 
 /**
  * Created by agarg020917 on 11/17/2017.
@@ -20,7 +22,11 @@ public class ArchUtils {
         this.log=log;
     }
 
-    public static JavaClasses importAllClassesInPackage(String path, String classFolder) {
+    public static JavaClasses importAllClassesInPackage(String path, String classFolder){
+        return importAllClassesInPackage(path, classFolder,emptyList());
+    }
+
+    public static JavaClasses importAllClassesInPackage(String path, String classFolder,Iterable<String> excludedPaths) {
 
         //not great design, but since all the rules need to call this, it's very convenient to keep this method static
         if(log==null){

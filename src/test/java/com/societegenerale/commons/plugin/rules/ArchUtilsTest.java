@@ -1,5 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
+import java.util.Arrays;
+
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClasses;
@@ -32,5 +34,20 @@ public class ArchUtilsTest {
 
 		assertThat(noOfClasses).isEqualTo(26);
 	}
+
+	@Test
+	public void shouldIgnoreClassesFromConfiguredPaths() {
+
+		JavaClasses classes = ArchUtils.importAllClassesInPackage("./target", "");
+
+		assertThat(classes).isNotEmpty();
+
+		JavaClasses classesWithTestClassesExclusions = ArchUtils.importAllClassesInPackage("./target", "",Arrays.asList("test-classes"));
+
+		assertThat(classesWithTestClassesExclusions).isNotEmpty();
+
+		assertThat(classes.size()).as("There should be less classes loaded when we apply the test-classes exclusion").isGreaterThan(classesWithTestClassesExclusions.size());
+	}
+
 
 }
