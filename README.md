@@ -5,3 +5,7 @@
 
 
 The core logic for Maven or Gradle ArchUnit plugin
+
+## Documentation
+
+To get a full documentation, we invite you to follow this link : https://github.com/societe-generale/arch-unit-maven-plugin
