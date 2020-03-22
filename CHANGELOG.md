@@ -12,6 +12,11 @@
 
 ### Fixed
 
+## [2.5.1] - 2020-03-23
+
+### Fixed
+- bug fixed : excludedPaths not taken into account for preConfiguredRules 
+
 ## [2.5.0] - 2020-03-22
 
 ### Added

@@ -71,7 +71,7 @@ public class RuleInvokerService {
         String errorMessage = "";
         try {
             Method method = ruleClass.getDeclaredMethod(EXECUTE_METHOD_NAME, String.class, ScopePathProvider.class, Collection.class);
-            method.invoke(ruleClass.newInstance(), buildPath, scopePathProvider,emptySet());
+            method.invoke(ruleClass.newInstance(), buildPath, scopePathProvider,excludedPaths);
         } catch (ReflectiveOperationException re) {
             errorMessage = re.getCause().toString();
         }
