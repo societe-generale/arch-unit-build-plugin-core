@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.societegenerale.commons</groupId>
     <artifactId>arch-unit-build-plugin-core</artifactId>
-    <version>2.5.0</version>
+    <version>2.5.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>ArchUnit plugin core</name>
@@ -45,7 +45,7 @@
         <url>https://github.com/societe-generale/arch-unit-build-plugin-core</url>
         <connection>scm:git:git@github.com:societe-generale/arch-unit-build-plugin-core.git</connection>
         <developerConnection>scm:git:git@github.com:societe-generale/arch-unit-build-plugin-core.git</developerConnection>
-        <tag>arch_unit_build_plugin_core_2.5.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <repositories>
