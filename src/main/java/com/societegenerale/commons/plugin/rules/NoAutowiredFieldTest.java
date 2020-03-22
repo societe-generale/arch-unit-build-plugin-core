@@ -1,5 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
+import java.util.Collection;
+
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaField;
@@ -17,9 +19,9 @@ public class NoAutowiredFieldTest implements ArchRuleTest  {
     protected static final String NO_AUTOWIRED_FIELD_MESSAGE = "Favor constructor injection and avoid autowiring fields - ";
 
     @Override
-    public void execute(String path, ScopePathProvider scopePathProvider) {
+    public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-        fields().should(notBeAutowired()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
+        fields().should(notBeAutowired()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
     }
 
     protected static ArchCondition<JavaField> notBeAutowired() {
@@ -36,8 +38,6 @@ public class NoAutowiredFieldTest implements ArchRuleTest  {
                             +" - field name: "+javaField.getName()));
 
                 }
-
-
             }
         };
     }

@@ -3,10 +3,10 @@ package com.societegenerale.commons.plugin.rules;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
-
 import org.junit.Before;
 import org.junit.Test;
 
+import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class NoPublicFieldRuleTestTest {
@@ -24,14 +24,14 @@ public class NoPublicFieldRuleTestTest {
 	@Test(expected = AssertionError.class)
 	public void shouldThrowViolations() {
 
-		new NoPublicFieldRuleTest().execute(pathObjectWithPublicField, new DefaultScopePathProvider());
+		new NoPublicFieldRuleTest().execute(pathObjectWithPublicField, new DefaultScopePathProvider(),emptySet());
 
 	}
 
 	@Test
 	public void shouldNotThrowAnyViolation_even_with_publicStaticFinaField() {
 
-		assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathObjectWithNoPublicField, new DefaultScopePathProvider()))
+		assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathObjectWithNoPublicField, new DefaultScopePathProvider(),emptySet()))
 				.doesNotThrowAnyException();
 
 	}

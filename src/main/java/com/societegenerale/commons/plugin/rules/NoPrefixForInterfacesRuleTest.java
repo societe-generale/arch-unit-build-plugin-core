@@ -1,5 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
+import java.util.Collection;
+
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
@@ -22,9 +24,9 @@ public class NoPrefixForInterfacesRuleTest implements ArchRuleTest {
   private static Character upperCaseI = 'I';
 
   @Override
-  public void execute(String path, ScopePathProvider scopePathProvider) {
+  public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-    classes().that().areInterfaces().should(notBePrefixed()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
+    classes().that().areInterfaces().should(notBePrefixed()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
 
   }
 

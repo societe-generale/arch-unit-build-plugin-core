@@ -1,17 +1,19 @@
 package com.societegenerale.commons.plugin.service;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 
+import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
 import com.societegenerale.commons.plugin.model.Rules;
 import com.societegenerale.commons.plugin.service.InvokableRules.InvocationResult;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import org.apache.commons.lang3.StringUtils;
-import com.societegenerale.commons.plugin.Log;
 
 import static com.societegenerale.commons.plugin.utils.ReflectionUtils.loadClassWithContextClassLoader;
 import static java.lang.System.lineSeparator;
+import static java.util.Collections.emptySet;
 
 public class RuleInvokerService {
     private static final String EXECUTE_METHOD_NAME = "execute";
@@ -20,7 +22,14 @@ public class RuleInvokerService {
 
     private ArchUtils archUtils;
 
-    private ScopePathProvider scopePathProvider;
+    private ScopePathProvider scopePathProvider=new DefaultScopePathProvider();
+
+    private Collection<String> excludedPaths= emptySet();
+
+    public RuleInvokerService(Log log) {
+        this.log=log;
+        archUtils =new ArchUtils(log);
+    }
 
     public RuleInvokerService(Log log, ScopePathProvider scopePathProvider) {
         this.log=log;
@@ -29,12 +38,14 @@ public class RuleInvokerService {
         this.scopePathProvider=scopePathProvider;
     }
 
-    public RuleInvokerService(Log log) {
+    public RuleInvokerService(Log log, ScopePathProvider scopePathProvider,Collection<String> excludedPaths) {
         this.log=log;
         archUtils =new ArchUtils(log);
 
-        this.scopePathProvider=new DefaultScopePathProvider();
+        this.scopePathProvider=scopePathProvider;
+        this.excludedPaths=excludedPaths;
     }
+
 
     public String invokeRules(Rules rules, String buildPath) {
 
@@ -59,8 +70,8 @@ public class RuleInvokerService {
 
         String errorMessage = "";
         try {
-            Method method = ruleClass.getDeclaredMethod(EXECUTE_METHOD_NAME, String.class, ScopePathProvider.class);
-            method.invoke(ruleClass.newInstance(), buildPath, scopePathProvider);
+            Method method = ruleClass.getDeclaredMethod(EXECUTE_METHOD_NAME, String.class, ScopePathProvider.class, Collection.class);
+            method.invoke(ruleClass.newInstance(), buildPath, scopePathProvider,emptySet());
         } catch (ReflectiveOperationException re) {
             errorMessage = re.getCause().toString();
         }
@@ -80,7 +91,7 @@ public class RuleInvokerService {
         String packageOnRuleToApply = getPackageNameOnWhichToApplyRules(rule,buildPath);
 
         log.info("invoking ConfigurableRule "+rule.toString()+" on "+buildPath+" - "+packageOnRuleToApply);
-        JavaClasses classes = archUtils.importAllClassesInPackage(buildPath, packageOnRuleToApply);
+        JavaClasses classes = archUtils.importAllClassesInPackage(buildPath, packageOnRuleToApply,excludedPaths);
 
         InvocationResult result = invokableRules.invokeOn(classes);
         return result.getMessage();

@@ -1,13 +1,15 @@
 package com.societegenerale.commons.plugin.rules;
 
+import java.util.Collection;
+
+import javax.inject.Inject;
+
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-
-import javax.inject.Inject;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
@@ -19,9 +21,9 @@ public class NoInjectedFieldTest implements ArchRuleTest  {
     protected static final String NO_INJECTED_FIELD_MESSAGE = "Favor constructor injection and avoid field injection - ";
 
     @Override
-    public void execute(String path, ScopePathProvider scopePathProvider) {
+    public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-        fields().should(notBeInjected()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
+        fields().should(notBeInjected()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
     }
 
     protected static ArchCondition<JavaField> notBeInjected() {

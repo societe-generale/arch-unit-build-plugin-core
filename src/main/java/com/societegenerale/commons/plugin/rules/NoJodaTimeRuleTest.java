@@ -1,5 +1,8 @@
 package com.societegenerale.commons.plugin.rules;
 
+import java.util.Collection;
+import java.util.List;
+
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
@@ -9,8 +12,6 @@ import com.tngtech.archunit.core.domain.JavaMethodCall;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-
-import java.util.List;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static java.util.stream.Collectors.toList;
@@ -27,8 +28,8 @@ public class NoJodaTimeRuleTest implements ArchRuleTest {
   protected static final String NO_JODA_VIOLATION_MESSAGE = "Use Java8 Date API instead of Joda library";
 
   @Override
-  public void execute(String path, ScopePathProvider scopePathProvider) {
-    classes().should(notUseJodaTime()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath()));
+  public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+    classes().should(notUseJodaTime()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
   }
 
   protected static ArchCondition<JavaClass> notUseJodaTime() {
