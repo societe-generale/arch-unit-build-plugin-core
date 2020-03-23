@@ -1,11 +1,13 @@
 package com.societegenerale.commons.plugin.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
 
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
 import com.societegenerale.commons.plugin.model.Rules;
+import com.societegenerale.commons.plugin.rules.ArchRuleTest;
 import com.societegenerale.commons.plugin.service.InvokableRules.InvocationResult;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClasses;
@@ -47,7 +49,8 @@ public class RuleInvokerService {
     }
 
 
-    public String invokeRules(Rules rules, String buildPath) {
+    public String invokeRules(Rules rules, String buildPath)
+            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 
         StringBuilder errorListBuilder = new StringBuilder();
 
@@ -65,13 +68,25 @@ public class RuleInvokerService {
 
     }
 
-    private String invokePreConfiguredRule(String ruleClassName, String buildPath) {
+    private String invokePreConfiguredRule(String ruleClassName, String buildPath)
+            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<?> ruleClass = loadClassWithContextClassLoader(ruleClassName);
+
+        ArchRuleTest ruleToExecute;
+
+        try{
+            //sometimes, rules need to log - if they do, they should provide a constructor that accepts a Log...
+            ruleToExecute= (ArchRuleTest) ruleClass.getConstructor(Log.class).newInstance(log);
+        }
+        catch(NoSuchMethodException e){
+            //.. otherwise, we use the default constructor with no param
+            ruleToExecute= (ArchRuleTest)ruleClass.newInstance();
+        }
 
         String errorMessage = "";
         try {
             Method method = ruleClass.getDeclaredMethod(EXECUTE_METHOD_NAME, String.class, ScopePathProvider.class, Collection.class);
-            method.invoke(ruleClass.newInstance(), buildPath, scopePathProvider,excludedPaths);
+            method.invoke(ruleToExecute, buildPath, scopePathProvider,excludedPaths);
         } catch (ReflectiveOperationException re) {
             errorMessage = re.getCause().toString();
         }

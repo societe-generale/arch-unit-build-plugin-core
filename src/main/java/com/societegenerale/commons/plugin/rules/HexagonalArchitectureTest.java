@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.base.DescribedPredicate;
@@ -29,6 +30,8 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
     protected static final String WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE = "When following hexagonal architecture, ";
     private static final String DOMAIN = "..domain..";
 
+    private Log log;
+
     private static String[] allowedPackageInDomain= {DOMAIN,
             "java..",
             "javax.validation..",
@@ -42,24 +45,28 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
     //removing the trailing ".." in package names, as we're going to use that list in a "startsWith" comparison
     private static List<String> allowedPackageInDomainPrefix = Arrays.asList(allowedPackageInDomain).stream().map(p -> p.replace("..","")).collect(toList());
 
+    public HexagonalArchitectureTest(Log log){
+        this.log=log;
+    }
+
     private DescribedPredicate<JavaAnnotation> invalidAnnotations = new DescribedPredicate<JavaAnnotation>("invalid annotations, that don't belong to authorized packages") {
         @Override
         public boolean apply(JavaAnnotation annotation) {
 
             String annotationName = annotation.getRawType().getPackage().getName();
 
-            System.out.println("testing "+ annotationName +"...");
+            log.info("testing "+ annotationName +"...");
 
             Optional<String> allowedPackagePrefixThatMatched=allowedPackageInDomainPrefix.stream().
                     filter(allowedPackagePrefix -> annotationName.startsWith(allowedPackagePrefix)).
                     findFirst();
 
             if(allowedPackagePrefixThatMatched.isPresent()){
-                System.out.println("INFO - "+ annotationName +" starts with "+allowedPackagePrefixThatMatched.get()+", which is an allowed prefix");
+                log.info( annotationName +" starts with "+allowedPackagePrefixThatMatched.get()+", which is an allowed prefix");
                 return false;
             }
             else{
-                System.out.println("ERROR - "+ annotationName +" starts with none of the allowed prefixes");
+                log.warn(annotationName +" starts with none of the allowed prefixes");
                 return true;
             }
 
