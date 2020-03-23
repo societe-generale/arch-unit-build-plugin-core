@@ -3,9 +3,6 @@
 ## [Unreleased]
 
 ### Added
-- PR #11 - HexagonalArchitectureTest now validates that no Dto / Vo classes are present in domain
-- PR #14 - Possibility to exclude some classes from being analyzed
-
 
 ### Changed
 
@@ -14,6 +11,17 @@
 ### Removed
 
 ### Fixed
+
+## [2.5.1] - 2020-03-23
+
+### Fixed
+- bug fixed : excludedPaths not taken into account for preConfiguredRules 
+
+## [2.5.0] - 2020-03-22
+
+### Added
+- PR #11 - HexagonalArchitectureTest now validates that no Dto / Vo classes are present in domain
+- PR #14 - Possibility to exclude some classes from being analyzed - new config element is available from now on 
 
 ## [2.4.1] - 2019-11-29
 

@@ -6,7 +6,10 @@ import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class DontReturnNullCollectionTestTest {
 
@@ -24,7 +27,7 @@ public class DontReturnNullCollectionTestTest {
     public void shouldThrowViolations() {
 
         Throwable validationExceptionThrown = catchThrowable(() ->
-            new DontReturnNullCollectionTest().execute(pathObjectWithAmethodReturningAnullList, new DefaultScopePathProvider())
+            new DontReturnNullCollectionTest().execute(pathObjectWithAmethodReturningAnullList, new DefaultScopePathProvider(), emptySet())
         );
 
         assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
@@ -35,7 +38,7 @@ public class DontReturnNullCollectionTestTest {
     @Test
     public void shouldNotThrowViolations() {
 
-        assertThatCode(() -> new DontReturnNullCollectionTest().execute(pathProperlyAnnotatedObjectWithAmethodReturningAlist, new DefaultScopePathProvider()))
+        assertThatCode(() -> new DontReturnNullCollectionTest().execute(pathProperlyAnnotatedObjectWithAmethodReturningAlist, new DefaultScopePathProvider(),emptySet()))
                 .doesNotThrowAnyException();
 
     }

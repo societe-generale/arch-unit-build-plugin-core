@@ -1,5 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
+import java.util.Collection;
+
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.base.Optional;
@@ -22,8 +24,8 @@ public class NoPowerMockRuleTest implements ArchRuleTest {
 
 
     @Override
-    public void execute(String path, ScopePathProvider scopePathProvider) {
-        classes().should(notUsePowerMock()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath()));
+    public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+        classes().should(notUsePowerMock()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(),excludedPaths));
     }
 
     public static ArchCondition<JavaClass> notUsePowerMock() {

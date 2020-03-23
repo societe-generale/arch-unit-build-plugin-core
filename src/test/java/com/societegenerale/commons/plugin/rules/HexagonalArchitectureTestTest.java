@@ -7,7 +7,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest.WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE;
-import static org.assertj.core.api.Assertions.*;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 
 public class HexagonalArchitectureTestTest {
@@ -42,7 +45,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassUsingSpring, new DefaultScopePathProvider());
+            new HexagonalArchitectureTest().execute(pathForDomainClassUsingSpring, new DefaultScopePathProvider(),emptySet());
 
         });
 
@@ -60,7 +63,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithJson, new DefaultScopePathProvider());
+            new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithJson, new DefaultScopePathProvider(),emptySet());
 
         });
 
@@ -78,14 +81,14 @@ public class HexagonalArchitectureTestTest {
     @Test
     public void domainClassAnnotatedWithLombokShould_Not_ThrowViolations(){
 
-        assertThatCode(() -> new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithLombok, new DefaultScopePathProvider())).doesNotThrowAnyException();
+        assertThatCode(() -> new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithLombok, new DefaultScopePathProvider(),emptySet())).doesNotThrowAnyException();
 
     }
 
     @Test
     public void infraClassUsingSpringFrameworkShould_Not_ThrowViolations() {
 
-        assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathForInfraClassUsingSpring, new DefaultScopePathProvider()))
+        assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathForInfraClassUsingSpring, new DefaultScopePathProvider(),emptySet()))
                 .doesNotThrowAnyException();
 
     }
@@ -95,7 +98,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForInfraClassUsingConfig, new DefaultScopePathProvider());
+            new HexagonalArchitectureTest().execute(pathForInfraClassUsingConfig, new DefaultScopePathProvider(),emptySet());
 
         });
 
@@ -113,7 +116,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrownForDto = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithDto, new DefaultScopePathProvider());
+            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithDto, new DefaultScopePathProvider(),emptySet());
 
         });
 
@@ -122,7 +125,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrownForDTO = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithDTO, new DefaultScopePathProvider());
+            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithDTO, new DefaultScopePathProvider(),emptySet());
 
         });
         assertThat(validationExceptionThrownForDTO).as("expecting a violation to be raised for SomeOtherClassDTO in domain").isNotNull();
@@ -134,7 +137,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrownForDto = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithVo, new DefaultScopePathProvider());
+            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithVo, new DefaultScopePathProvider(),emptySet());
 
         });
 

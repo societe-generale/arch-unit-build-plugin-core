@@ -1,5 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
+import java.util.Collection;
 import java.util.Optional;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
@@ -23,8 +24,9 @@ public class NoTestIgnoreRuleTest implements ArchRuleTest  {
 
   protected static final String NO_JUNIT_IGNORE_VIOLATION_MESSAGE = "Tests shouldn't been ignored";
 
-  public void execute(String path, ScopePathProvider scopePathProvider) {
-    classes().should(notBeenIgnore()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath()));
+  @Override
+  public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+    classes().should(notBeenIgnore()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(),excludedPaths));
   }
 
   public static ArchCondition<JavaClass> notBeenIgnore() {

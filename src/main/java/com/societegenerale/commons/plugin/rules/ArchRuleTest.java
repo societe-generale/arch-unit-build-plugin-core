@@ -1,5 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
+import java.util.Collection;
+
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 
 /**
@@ -8,6 +10,6 @@ import com.societegenerale.commons.plugin.service.ScopePathProvider;
 @FunctionalInterface
 public interface ArchRuleTest {
 
-  void execute(String path, ScopePathProvider scopePathProvider);
+  void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths);
 
 }

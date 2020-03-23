@@ -3,6 +3,7 @@ package com.societegenerale.commons.plugin.rules;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Optional;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
@@ -26,8 +27,8 @@ public class NoTestIgnoreWithoutCommentRuleTest implements ArchRuleTest  {
 
     protected static final String NO_JUNIT_IGNORE_WITHOUT_COMMENT_VIOLATION_MESSAGE = "Tests shouldn't been ignored without providing a comment explaining why";
 
-    public void execute(String path, ScopePathProvider scopePathProvider)  {
-        classes().should(notBeIgnoredWithoutAComment()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath()));
+    public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths)  {
+        classes().should(notBeIgnoredWithoutAComment()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(),excludedPaths));
     }
 
     public static ArchCondition<JavaClass> notBeIgnoredWithoutAComment() {
