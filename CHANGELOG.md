@@ -12,6 +12,11 @@
 
 ### Fixed
 
+## [2.5.2] - 2020-03-23
+
+### Fixed
+- PR 17 : avoiding System.out calls, and enabling rules to log properly 
+
 ## [2.5.1] - 2020-03-23
 
 ### Fixed

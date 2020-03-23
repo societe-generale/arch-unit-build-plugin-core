@@ -1,5 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
+import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -33,6 +34,9 @@ public class HexagonalArchitectureTestTest {
 
     private String pathForInfraClassUsingConfig = "./target/aut-target/classes/com/societegenerale/aut/main/myproject/infrastructure/InfraClassUsingConfig.class";
 
+
+    private Log silentLogger=new SilentLog();
+
     @Before
     public void setup(){
         //in the normal lifecycle, ArchUtils is instantiated, which enables a static field there to be initialized
@@ -45,7 +49,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassUsingSpring, new DefaultScopePathProvider(),emptySet());
+            new HexagonalArchitectureTest(silentLogger).execute(pathForDomainClassUsingSpring, new DefaultScopePathProvider(),emptySet());
 
         });
 
@@ -63,7 +67,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithJson, new DefaultScopePathProvider(),emptySet());
+            new HexagonalArchitectureTest(silentLogger).execute(pathForDomainClassAnnotatedWithJson, new DefaultScopePathProvider(),emptySet());
 
         });
 
@@ -81,7 +85,7 @@ public class HexagonalArchitectureTestTest {
     @Test
     public void domainClassAnnotatedWithLombokShould_Not_ThrowViolations(){
 
-        assertThatCode(() -> new HexagonalArchitectureTest().execute(pathForDomainClassAnnotatedWithLombok, new DefaultScopePathProvider(),emptySet())).doesNotThrowAnyException();
+        assertThatCode(() -> new HexagonalArchitectureTest(silentLogger).execute(pathForDomainClassAnnotatedWithLombok, new DefaultScopePathProvider(),emptySet())).doesNotThrowAnyException();
 
     }
 
@@ -98,7 +102,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForInfraClassUsingConfig, new DefaultScopePathProvider(),emptySet());
+            new HexagonalArchitectureTest(silentLogger).execute(pathForInfraClassUsingConfig, new DefaultScopePathProvider(),emptySet());
 
         });
 
@@ -116,7 +120,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrownForDto = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithDto, new DefaultScopePathProvider(),emptySet());
+            new HexagonalArchitectureTest(silentLogger).execute(pathForDomainClassEndingWithDto, new DefaultScopePathProvider(),emptySet());
 
         });
 
@@ -125,7 +129,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrownForDTO = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithDTO, new DefaultScopePathProvider(),emptySet());
+            new HexagonalArchitectureTest(silentLogger).execute(pathForDomainClassEndingWithDTO, new DefaultScopePathProvider(),emptySet());
 
         });
         assertThat(validationExceptionThrownForDTO).as("expecting a violation to be raised for SomeOtherClassDTO in domain").isNotNull();
@@ -137,7 +141,7 @@ public class HexagonalArchitectureTestTest {
 
         Throwable validationExceptionThrownForDto = catchThrowable(() -> {
 
-            new HexagonalArchitectureTest().execute(pathForDomainClassEndingWithVo, new DefaultScopePathProvider(),emptySet());
+            new HexagonalArchitectureTest(silentLogger).execute(pathForDomainClassEndingWithVo, new DefaultScopePathProvider(),emptySet());
 
         });
 
