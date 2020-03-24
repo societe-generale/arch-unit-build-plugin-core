@@ -44,13 +44,12 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		fields().that().areFinal().should(beInUpperCaseAndUseUnderscoreIfNeeded())
-				.because(CONSTANT_NAMES_VIOLATION_MESSAGE).check(ArchUtils.importAllClassesInPackage(path,
-						scopePathProvider.getMainClassesPath(), excludedPaths));
+		fields().that().areFinal().should(beInUpperCaseAndUseUnderscoreIfNeeded()).check(
+				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 
-		classes().that().areEnums().should(beInUpperCaseAndUseUnderscoreIfNeededEnums())
-				.because(ENUM_VALUES_VIOLATION_MESSAGE).check(ArchUtils.importAllClassesInPackage(path,
-						scopePathProvider.getMainClassesPath(), excludedPaths));
+		classes().that().areEnums().should(beInUpperCaseAndUseUnderscoreIfNeededEnums()).check(
+				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+
 	}
 
 	protected static ArchCondition<JavaField> beInUpperCaseAndUseUnderscoreIfNeeded() {

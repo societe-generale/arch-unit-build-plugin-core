@@ -68,6 +68,16 @@ public class ConstantNamesRuleTestTest {
 
 	}
 
+	private void assertNoExceptionIsThrownFor(Class clazz) {
+
+		JavaClasses classToTest = new ClassFileImporter().importClasses(clazz);
+
+		assertThatCode(() -> fields().that().areFinal()
+				.should(ConstantNamesRuleTest.beInUpperCaseAndUseUnderscoreIfNeeded()).check(classToTest))
+						.doesNotThrowAnyException();
+
+	}
+
 	private void assertExceptionIsThrownFor(Class clazz) {
 
 		JavaClasses classToTest = new ClassFileImporter().importClasses(clazz);
@@ -77,16 +87,6 @@ public class ConstantNamesRuleTestTest {
 					.check(classToTest);
 		}).hasMessageContaining(ClassWithConstantNamesNotWrittenCorrectly.class.getName())
 				.hasMessageContaining(CONSTANT_NAMES_VIOLATION_MESSAGE);
-
-	}
-
-	private void assertNoExceptionIsThrownFor(Class clazz) {
-
-		JavaClasses classToTest = new ClassFileImporter().importClasses(clazz);
-
-		assertThatCode(() -> fields().that().areFinal()
-				.should(ConstantNamesRuleTest.beInUpperCaseAndUseUnderscoreIfNeeded()).check(classToTest))
-						.doesNotThrowAnyException();
 
 	}
 
