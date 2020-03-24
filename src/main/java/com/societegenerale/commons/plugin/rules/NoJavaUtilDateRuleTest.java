@@ -1,5 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+
 import java.util.Collection;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
@@ -9,8 +11,6 @@ import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 /**
  * java.util.Date is deprecated but a lot of people still use it out of years of
@@ -39,7 +39,8 @@ public class NoJavaUtilDateRuleTest implements ArchRuleTest {
 
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-		classes().should(notUseJavaUtilDate()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+		classes().should(notUseJavaUtilDate()).check(
+				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 	}
 
 	protected static ArchCondition<JavaClass> notUseJavaUtilDate() {
@@ -48,11 +49,9 @@ public class NoJavaUtilDateRuleTest implements ArchRuleTest {
 			@Override
 			public void check(JavaClass item, ConditionEvents events) {
 
-				item.getAllFields().stream().filter(this::isJavaUtilDateField).forEach(field ->
-					events.add(SimpleConditionEvent.violated(field,
-							NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE + " - class: " + field.getOwner().getName()))
-				);
-
+				item.getAllFields().stream().filter(this::isJavaUtilDateField)
+						.forEach(field -> events.add(SimpleConditionEvent.violated(field,
+								NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE + " - class: " + field.getOwner().getName())));
 			}
 
 			private boolean isJavaUtilDateField(JavaField field) {
