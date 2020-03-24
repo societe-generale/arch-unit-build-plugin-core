@@ -44,11 +44,10 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		fields().that().areFinal().should(beInUpperCaseAndUseUnderscoreIfNeeded()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
-
-		classes().that().areEnums().should(beInUpperCaseAndUseUnderscoreIfNeededEnums()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+		fields().that().areFinal().should(beInUpperCaseAndUseUnderscoreIfNeeded()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+				
+		classes().that().areEnums().should(beInUpperCaseAndUseUnderscoreIfNeededEnums()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+				
 
 	}
 
