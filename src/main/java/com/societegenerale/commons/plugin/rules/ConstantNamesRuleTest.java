@@ -48,7 +48,6 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 				
 		classes().that().areEnums().should(beInUpperCaseAndUseUnderscoreIfNeededEnums()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 				
-
 	}
 
 	protected static ArchCondition<JavaField> beInUpperCaseAndUseUnderscoreIfNeeded() {
@@ -67,6 +66,14 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 
 			}
 
+			private boolean isInCorrect(JavaField field) {
+
+				pattern = Pattern.compile(namePattern);
+				matcher = pattern.matcher(field.getName());
+				return !matcher.matches();
+
+			}
+
 		};
 	}
 
@@ -76,30 +83,22 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 			@Override
 			public void check(JavaClass item, ConditionEvents events) {
 
-				item.getEnumConstants().stream().filter(ConstantNamesRuleTest::isInCorrectEnums)
+				item.getEnumConstants().stream().filter(this::isInCorrectEnums)
 						.forEach(field -> events
 								.add(SimpleConditionEvent.violated(field, ENUM_VALUES_VIOLATION_MESSAGE + " - class: "
 										+ field.getDeclaringClass().getName() + " - field name: " + field.name())));
 
 			}
 
+			private boolean isInCorrectEnums(JavaEnumConstant enumConstant) {
+
+				pattern = Pattern.compile(namePattern);
+				matcher = pattern.matcher(enumConstant.name());
+				return !matcher.matches();
+
+			}
+
 		};
-	}
-
-	private static boolean isInCorrect(JavaField field) {
-
-		pattern = Pattern.compile(namePattern);
-		matcher = pattern.matcher(field.getName());
-		return !matcher.matches();
-
-	}
-
-	private static boolean isInCorrectEnums(JavaEnumConstant enumConstant) {
-
-		pattern = Pattern.compile(namePattern);
-		matcher = pattern.matcher(enumConstant.name());
-		return !matcher.matches();
-
 	}
 
 }
