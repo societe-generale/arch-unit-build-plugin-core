@@ -31,9 +31,9 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 public class ConstantNamesRuleTest implements ArchRuleTest {
 
-	private static final String NAME_PATTERN = "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$";
+	private static final String REGEX = "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$";
 
-	private static final Pattern PATTERN = Pattern.compile(NAME_PATTERN);
+	private static final Pattern PATTERN = Pattern.compile(REGEX);
 
 	private static Matcher matcher;
 
