@@ -31,11 +31,11 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 public class ConstantNamesRuleTest implements ArchRuleTest {
 
-	private static Pattern pattern;
+	private static final String NAME_PATTERN = "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$";
+
+	private static final Pattern PATTERN = Pattern.compile(NAME_PATTERN);
 
 	private static Matcher matcher;
-
-	private static String namePattern = "^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$";
 
 	public static final String CONSTANT_NAMES_VIOLATION_MESSAGE = "Constant names have to be written in uppercase. It's possible to add underscore but not at the beginning or the end of the name.";
 
@@ -44,7 +44,7 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		fields().that().areFinal().should(beInUpperCaseAndUseUnderscoreIfNeeded()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+		fields().that().areStatic().and().areFinal().should(beInUpperCaseAndUseUnderscoreIfNeeded()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 				
 		classes().that().areEnums().should(beInUpperCaseAndUseUnderscoreIfNeededEnums()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 				
@@ -68,8 +68,7 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 
 			private boolean isInCorrect(JavaField field) {
 
-				pattern = Pattern.compile(namePattern);
-				matcher = pattern.matcher(field.getName());
+				matcher = PATTERN.matcher(field.getName());
 				return !matcher.matches();
 
 			}
@@ -92,8 +91,7 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 
 			private boolean isInCorrectEnums(JavaEnumConstant enumConstant) {
 
-				pattern = Pattern.compile(namePattern);
-				matcher = pattern.matcher(enumConstant.name());
+				matcher = PATTERN.matcher(enumConstant.name());
 				return !matcher.matches();
 
 			}
