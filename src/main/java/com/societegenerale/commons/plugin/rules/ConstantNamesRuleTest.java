@@ -30,8 +30,7 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
  *      Fields that are static and not final should not use constants naming.
  * 
  * 
- * @see <a href=
- *      "https://rules.sonarsource.com/java/tag/convention/RSPEC-3008">Static
+ * @see <a href= "https://rules.sonarsource.com/java/tag/convention/RSPEC-3008">Static
  *      non-final field names should comply with a naming convention</a>
  * 
  */
@@ -57,15 +56,12 @@ public class ConstantNamesRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		fields().that().areStatic().and().areFinal().should(beInUpperCaseAndUseUnderscore()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
-
-		fields().that().areStatic().and().areNotFinal().should(notBeInUpperCaseAndUseUnderscore()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
-
-		classes().that().areEnums().should(haveConstantsInUpperCaseAndUseUnderscore()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
-
+		fields().that().areStatic().and().areFinal().should(beInUpperCaseAndUseUnderscore()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+				
+		fields().that().areStatic().and().areNotFinal().should(notBeInUpperCaseAndUseUnderscore()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+		
+		classes().that().areEnums().should(haveConstantsInUpperCaseAndUseUnderscore()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+				
 	}
 
 	protected static ArchCondition<JavaField> beInUpperCaseAndUseUnderscore() {
