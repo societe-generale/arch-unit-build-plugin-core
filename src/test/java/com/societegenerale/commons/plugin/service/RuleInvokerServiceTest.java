@@ -1,5 +1,6 @@
 package com.societegenerale.commons.plugin.service;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import com.societegenerale.commons.plugin.Log;
@@ -7,9 +8,9 @@ import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.model.ApplyOn;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
 import com.societegenerale.commons.plugin.model.Rules;
+import com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest;
 import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
 import com.societegenerale.commons.plugin.rules.classesForTests.DummyCustomRule;
-
 import com.tngtech.archunit.library.GeneralCodingRules;
 import org.junit.Test;
 
@@ -26,7 +27,8 @@ public class RuleInvokerServiceTest {
     private Log testLogger = new SilentLog();
 
     @Test
-    public void shouldInvokePreConfiguredRulesMethod() {
+    public void shouldInvokePreConfiguredRulesMethod()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         Rules rules=new Rules(Arrays.asList(NoStandardStreamRuleTest.class.getName()),emptyList());
 
@@ -38,7 +40,22 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldNotExecuteSkippedConfigurableRules() {
+    public void shouldInvokePreConfiguredRuleThatCanLog()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+
+        Rules rules=new Rules(Arrays.asList(HexagonalArchitectureTest.class.getName()),emptyList());
+
+        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/");
+
+        assertThat(errorMessage).isNotEmpty();
+        assertThat(errorMessage).contains("Architecture Violation");
+        assertThat(errorMessage).contains("Rule 'classes that reside in a package");
+    }
+
+
+    @Test
+    public void shouldNotExecuteSkippedConfigurableRules()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","test");
 
@@ -54,7 +71,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteConfigurableRuleWithNoPackageProvided_OnlyOnClassesOfScope() {
+    public void shouldExecuteConfigurableRuleWithNoPackageProvided_OnlyOnClassesOfScope()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ApplyOn applyOn = new ApplyOn(null,"test");
 
@@ -71,7 +89,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecute2ConfigurableRulesOnTest() {
+    public void shouldExecute2ConfigurableRulesOnTest()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","test");
 
@@ -89,7 +108,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteOnlyTheConfiguredRule() {
+    public void shouldExecuteOnlyTheConfiguredRule()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","test");
 
@@ -108,7 +128,8 @@ public class RuleInvokerServiceTest {
 
 
     @Test
-    public void shouldExecuteAllRulesFromConfigurableClassByDefault() {
+    public void shouldExecuteAllRulesFromConfigurableClassByDefault()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","main");
 
@@ -126,7 +147,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteAllRulesOnSpecificPackageInTest() {
+    public void shouldExecuteAllRulesOnSpecificPackageInTest()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","test");
 
@@ -144,7 +166,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteAllRulesFromArchUnit_GeneralCodingRule() {
+    public void shouldExecuteAllRulesFromArchUnit_GeneralCodingRule()
+            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ApplyOn applyOn = new ApplyOn("com.tngtech.archunit.library","main");
 
