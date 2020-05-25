@@ -42,10 +42,6 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		// classes().that(haveAMethodAnnotatedWithTest).areNotInnerClasses().or().areInnerClasses()
-		// .should(respectNamingConventionRelatedToTestClasses()).check(ArchUtils.importAllClassesInPackage(path,
-		// scopePathProvider.getMainClassesPath(), excludedPaths));
-
 		classes().that(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
 				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 
