@@ -28,7 +28,7 @@ public class TestClassesNamingRuleTestTest {
 	}
 
 	@Test(expected = AssertionError.class)
-	public void testShouldThrowViolation() {
+	public void shouldThrowViolation() {
 
 		new TestClassesNamingRuleTest().execute(pathTestClassWithIncorrectName1, new DefaultScopePathProvider(),
 				emptySet());
@@ -39,7 +39,7 @@ public class TestClassesNamingRuleTestTest {
 	}
 
 	@Test
-	public void testShouldNotThrowAnyViolation() {
+	public void shouldNotThrowAnyViolation() {
 
 		assertThatCode(() -> new TestClassesNamingRuleTest().execute(pathClassWithCorrectName1Test,
 				new DefaultScopePathProvider(), emptySet())).doesNotThrowAnyException();
