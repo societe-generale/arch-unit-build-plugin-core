@@ -31,7 +31,7 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 public class TestClassesNamingRuleTest implements ArchRuleTest {
 
-	private static final String TEST_CLASSES_NAMING_REGEX = "^((Test|IT)[a-zA-Z0-9]+|[A-Z][a-zA-Z0-9]*(Test|IT|TestCase|ITCase))$";
+	private static final String TEST_CLASSES_NAMING_REGEX = "^((Test|IT)[a-zA-Z0-9]+|[A-Z][a-zA-Z0-9]*(Test|Tests|IT|TestCase|ITCase))$";
 
 	private static final Pattern TEST_CLASSES_NAMING_PATTERN = Pattern.compile(TEST_CLASSES_NAMING_REGEX);
 
