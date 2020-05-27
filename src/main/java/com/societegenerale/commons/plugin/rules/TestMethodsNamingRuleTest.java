@@ -40,7 +40,7 @@ public class TestMethodsNamingRuleTest implements ArchRuleTest {
 
 	private static Matcher matcher;
 
-	public static final String TEST_METHODS_VIOLATION_MESSAGE = "Test methodss should comply with a naming convention";
+	public static final String TEST_METHODS_VIOLATION_MESSAGE = "Test methods should comply with a naming convention. Method names have to start with prefixes \"test\" or \"should\" ";
 
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
