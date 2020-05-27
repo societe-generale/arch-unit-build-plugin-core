@@ -37,7 +37,7 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 
 	private static Matcher matcher;
 
-	public static final String TEST_CLASS_VIOLATION_MESSAGE = "Test classes should comply with a naming convention";
+	public static final String TEST_CLASS_VIOLATION_MESSAGE = "Test classes should comply with a naming convention. Class name  has to end with one of those suffixes : \"Test\" ; \"Tests\" ; \"IT\" ; \"TestCase\" ; \"ITCase\"";
 
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
