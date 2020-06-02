@@ -1,7 +1,5 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
-
 import java.util.Collection;
 import java.util.regex.Pattern;
 
@@ -13,6 +11,8 @@ import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
 
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+
 /**
  * 
  * We regularly see date fields that are not typed properly. However, it's quite
@@ -23,20 +23,17 @@ import com.tngtech.archunit.lang.SimpleConditionEvent;
 
 public class StringFieldsThatAreActuallyDatesRuleTest implements ArchRuleTest {
 
-	private static final String STRING_FIELDS_THAT_ARE_ACTUALLY_DATES_NAMING_REGEX = "^[a-z][a-zA-Z0-9]*Date$";
-
-	private static final Pattern STRING_FIELDS_THAT_ARE_ACTUALLY_DATES_PATTERN = Pattern
-			.compile(STRING_FIELDS_THAT_ARE_ACTUALLY_DATES_NAMING_REGEX);
+	private static final Pattern STRING_FIELDS_THAT_ARE_ACTUALLY_DATES_PATTERN = Pattern.compile(".*Date$");
 
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		fields().that().haveRawType(String.class).and(areFinishedByDate).should(beDates()).check(
+		fields().that().haveRawType(String.class).and(endWithDate).should(beDates()).check(
 				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 
 	}
 
-	private DescribedPredicate<JavaField> areFinishedByDate = new DescribedPredicate<JavaField>(
+	private DescribedPredicate<JavaField> endWithDate = new DescribedPredicate<JavaField>(
 			"are finished by \"Date\"") {
 		@Override
 		public boolean apply(JavaField field) {
