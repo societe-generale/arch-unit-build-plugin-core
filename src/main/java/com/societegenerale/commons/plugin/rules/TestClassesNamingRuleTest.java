@@ -3,7 +3,6 @@ package com.societegenerale.commons.plugin.rules;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 import java.util.Collection;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -35,9 +34,7 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 
 	private static final Pattern TEST_CLASSES_NAMING_PATTERN = Pattern.compile(TEST_CLASSES_NAMING_REGEX);
 
-	private static Matcher matcher;
-
-	public static final String TEST_CLASS_VIOLATION_MESSAGE = "Test classes should comply with a naming convention. Class name  has to end with one of those suffixes : \"Test\" ; \"Tests\" ; \"IT\" ; \"TestCase\" ; \"ITCase\"";
+	public static final String TEST_CLASS_VIOLATION_MESSAGE = "Test classes should comply with a naming convention";
 
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
@@ -79,9 +76,7 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 
 			private boolean isInCorrect(JavaClass javaClass) {
 
-				matcher = TEST_CLASSES_NAMING_PATTERN.matcher(javaClass.getSimpleName());
-
-				return !matcher.matches();
+				return !TEST_CLASSES_NAMING_PATTERN.matcher(javaClass.getSimpleName()).matches();
 
 			}
 
