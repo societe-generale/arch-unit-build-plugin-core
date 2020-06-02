@@ -1,14 +1,11 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.societegenerale.commons.plugin.rules.TestClassesNamingRuleTest.TEST_CLASS_VIOLATION_MESSAGE;
 import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import com.societegenerale.aut.test.ClassTestWithIncorrectName2;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -38,14 +35,11 @@ public class TestClassesNamingRuleTestTest {
 
 	}
 
-	@Test
+	@Test(expected = AssertionError.class)
 	public void shouldThrowViolation2Test() {
 
-		assertThatThrownBy(() -> {
-			new TestClassesNamingRuleTest().execute(pathTestClassWithIncorrectName2, new DefaultScopePathProvider(),
-					emptySet());
-		}).hasMessageContaining(ClassTestWithIncorrectName2.class.getName())
-				.hasMessageContaining(TEST_CLASS_VIOLATION_MESSAGE);
+		new TestClassesNamingRuleTest().execute(pathTestClassWithIncorrectName2, new DefaultScopePathProvider(),
+				emptySet());
 
 	}
 

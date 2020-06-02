@@ -42,6 +42,12 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 		classes().that(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
 				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 
+		classes().that().areInnerClasses().and(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
+				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+
+		classes().that().areNestedClasses().and(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
+				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+
 	}
 
 	private DescribedPredicate<JavaClass> haveAMethodAnnotatedWithTest = new DescribedPredicate<JavaClass>(
