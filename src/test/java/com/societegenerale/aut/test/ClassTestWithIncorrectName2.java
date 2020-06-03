@@ -7,9 +7,11 @@ public class ClassTestWithIncorrectName2 {
 
 	@Nested
 	class PositiveCase {
+
 		@Test
 		public void check() {
 		}
+
 	}
 
 }

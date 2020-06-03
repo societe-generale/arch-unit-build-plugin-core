@@ -2,7 +2,9 @@ package com.societegenerale.commons.plugin.rules;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -12,7 +14,9 @@ import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
+import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaMethod;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
@@ -42,12 +46,6 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 		classes().that(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
 				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
 
-		classes().that().areInnerClasses().and(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
-
-		classes().that().areNestedClasses().and(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
-
 	}
 
 	private DescribedPredicate<JavaClass> haveAMethodAnnotatedWithTest = new DescribedPredicate<JavaClass>(
@@ -55,7 +53,89 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 		@Override
 		public boolean apply(JavaClass input) {
 
-			return !input.getMethods().stream().filter(this::isAnnotedWithTest).collect(Collectors.toSet()).isEmpty();
+			return isTestClass(input);
+
+		}
+
+		private boolean isTestClass(JavaClass input) {
+
+			/*
+			 * 
+			 * This code works here
+			 * 
+			 * 
+			 * 
+			 * public class ClassTestWithIncorrectName2 {
+			 * 
+			 * @Nested class PositiveCase {
+			 * 
+			 * @Test public void check() { }
+			 * 
+			 * }
+			 * 
+			 * }
+			 * 
+			 * ----------------------------------
+			 * 
+			 * But not there
+			 * 
+			 * public class ClassTestWithIncorrectName2 {
+			 * 
+			 * @Nested class PositiveCase {
+			 * 
+			 * @Nested class PositiveCase1 {
+			 * 
+			 * @Test public void check() { }
+			 * 
+			 * }
+			 * 
+			 * }
+			 * 
+			 * }
+			 * 
+			 * 
+			 * ------
+			 * 
+			 * Recursion looks like the solution
+			 * 
+			 */
+
+			// Getting Inner Classes using Java Core
+
+			Class<?>[] innerClasses = input.reflect().getDeclaredClasses();
+
+			if (innerClasses.length == 0) {
+				return isThereAtLeastOneMethodAnnotedWithTest(input);
+
+			} else {
+
+				// Converting Inner Classes into JavaClasses to use Arch Unit API
+
+				JavaClasses javaInnerClasses = new ClassFileImporter().importClasses(Arrays.asList(innerClasses));
+
+				Set<JavaClass> testClasses = javaInnerClasses.stream()
+						.filter(this::isThereAtLeastOneMethodAnnotedWithTest).collect(Collectors.toSet());
+
+				if (testClasses.isEmpty()) {
+
+					return false;
+
+				} else {
+
+					return true;
+				}
+
+			}
+
+		}
+
+		private boolean isThereAtLeastOneMethodAnnotedWithTest(JavaClass javaClass) {
+
+			// Check if the list of methods annoted with @Test is not empty
+
+			return !javaClass.getMethods().stream().filter(this::isAnnotedWithTest).collect(Collectors.toSet())
+					.isEmpty();
+
 		}
 
 		private boolean isAnnotedWithTest(JavaMethod method) {
