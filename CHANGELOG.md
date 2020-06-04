@@ -12,6 +12,16 @@
 
 ### Fixed
 
+## [2.5.3] - 2020-06-03
+
+### Changed
+- PR-18 : naming rule for constants
+- PR-20 : final fields should be static
+- PR-22 : test classes should follow naming convention
+- PR-23 : test method should follow naming convention 
+- PR-25 : fields ending by "Date" should not be String 
+
+
 ## [2.5.2] - 2020-03-23
 
 ### Fixed
