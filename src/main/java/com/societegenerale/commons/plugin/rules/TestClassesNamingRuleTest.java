@@ -2,8 +2,10 @@ package com.societegenerale.commons.plugin.rules;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -40,6 +42,8 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 
 	public static final String TEST_CLASS_VIOLATION_MESSAGE = "Test classes should comply with a naming convention";
 
+	private List<Class<?>> allDirectOrIndirectInnerClasses = new ArrayList<>();
+
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
@@ -60,63 +64,27 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 		private boolean isTestClass(JavaClass input) {
 
 			/*
-			 * 
-			 * This code works here
-			 * 
-			 * 
-			 * 
-			 * public class ClassTestWithIncorrectName2 {
-			 * 
-			 * @Nested class PositiveCase {
-			 * 
-			 * @Test public void check() { }
-			 * 
-			 * }
-			 * 
-			 * }
-			 * 
-			 * ----------------------------------
-			 * 
-			 * But not there
-			 * 
-			 * public class ClassTestWithIncorrectName2 {
-			 * 
-			 * @Nested class PositiveCase {
-			 * 
-			 * @Nested class PositiveCase1 {
-			 * 
-			 * @Test public void check() { }
-			 * 
-			 * }
-			 * 
-			 * }
-			 * 
-			 * }
-			 * 
-			 * 
-			 * ------
-			 * 
-			 * Recursion looks like the solution
-			 * 
+			 * Checking if a method annotated with @Test is directly present in a root
+			 * class. If true, the root class is a test class. If not, we should continue to
+			 * search for @Test method
 			 */
 
-			// Getting Inner Classes using Java Core
+			if (isThereAtLeastOneMethodAnnotedWithTest(input)) {
 
-			Class<?>[] innerClasses = input.reflect().getDeclaredClasses();
-
-			if (innerClasses.length == 0) {
-				return isThereAtLeastOneMethodAnnotedWithTest(input);
+				return true;
 
 			} else {
 
+				getAllInnerClasses(input.reflect());
+
 				// Converting Inner Classes into JavaClasses to use Arch Unit API
 
-				JavaClasses javaInnerClasses = new ClassFileImporter().importClasses(Arrays.asList(innerClasses));
+				JavaClasses javaInnerClasses = new ClassFileImporter().importClasses(allDirectOrIndirectInnerClasses);
 
-				Set<JavaClass> testClasses = javaInnerClasses.stream()
+				Set<JavaClass> classesWhereTestIsPresentAtLeastOneTime = javaInnerClasses.stream()
 						.filter(this::isThereAtLeastOneMethodAnnotedWithTest).collect(Collectors.toSet());
 
-				if (testClasses.isEmpty()) {
+				if (classesWhereTestIsPresentAtLeastOneTime.isEmpty()) {
 
 					return false;
 
@@ -124,6 +92,25 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 
 					return true;
 				}
+
+			}
+
+		}
+
+		// Getting All Inner Classes
+
+		private void getAllInnerClasses(Class<?> clazz) {
+
+			List<Class<?>> listInnerClasses = Arrays.asList(clazz.getDeclaredClasses());
+
+			allDirectOrIndirectInnerClasses.addAll(listInnerClasses);
+
+			// listInnerClasses.parallelStream().forEachOrdered(innerClass ->
+			// getAllInnerClasses(innerClass));
+
+			for (Class<?> a : listInnerClasses) {
+
+				getAllInnerClasses(a);
 
 			}
 
