@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
+import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
@@ -42,10 +43,22 @@ public class TestMethodsNamingRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		methods().that().areAnnotatedWith(Test.class).should(respectNamingConvention()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+		methods().that().areAnnotatedWith(Test.class).and(dontRespectNamingConvention).should(respectNamingConvention())
+				.check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),
+						excludedPaths));
 
 	}
+
+	private DescribedPredicate<JavaMethod> dontRespectNamingConvention = new DescribedPredicate<JavaMethod>(
+			"don't respect naming convention") {
+		@Override
+		public boolean apply(JavaMethod javaMethod) {
+
+			return !TEST_METHODS_NAMING_PATTERN.matcher(javaMethod.getName()).matches();
+
+		}
+
+	};
 
 	private ArchCondition<JavaMethod> respectNamingConvention() {
 
@@ -55,17 +68,8 @@ public class TestMethodsNamingRuleTest implements ArchRuleTest {
 
 			public void check(JavaMethod method, ConditionEvents events) {
 
-				if (isInCorrect(method)) {
-
-					events.add(SimpleConditionEvent.violated(method, TEST_METHODS_VIOLATION_MESSAGE + " - class: "
-							+ method.getClass().getSimpleName() + " - method: " + method.getName()));
-				}
-
-			}
-
-			private boolean isInCorrect(JavaMethod javaMethod) {
-
-				return !TEST_METHODS_NAMING_PATTERN.matcher(javaMethod.getName()).matches();
+				events.add(SimpleConditionEvent.violated(method, TEST_METHODS_VIOLATION_MESSAGE + " - class: "
+						+ method.getClass().getSimpleName() + " - method: " + method.getName()));
 
 			}
 
