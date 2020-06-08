@@ -3,7 +3,6 @@ package com.societegenerale.commons.plugin.rules;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
 import java.util.Collection;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.junit.Test;
@@ -38,8 +37,6 @@ public class TestMethodsNamingRuleTest implements ArchRuleTest {
 
 	private static final Pattern TEST_METHODS_NAMING_PATTERN = Pattern.compile(TEST_METHODS_NAMING_REGEX);
 
-	private static Matcher matcher;
-
 	public static final String TEST_METHODS_VIOLATION_MESSAGE = "Test methods should comply with a naming convention. Method name has to start with prefixes \"test\" or \"should\" ";
 
 	@Override
@@ -68,9 +65,7 @@ public class TestMethodsNamingRuleTest implements ArchRuleTest {
 
 			private boolean isInCorrect(JavaMethod javaMethod) {
 
-				matcher = TEST_METHODS_NAMING_PATTERN.matcher(javaMethod.getName());
-
-				return !matcher.matches();
+				return !TEST_METHODS_NAMING_PATTERN.matcher(javaMethod.getName()).matches();
 
 			}
 
