@@ -1,55 +1,70 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.societegenerale.commons.plugin.rules.NoJavaUtilDateRuleTest.NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import java.util.Collection;
+
+import org.assertj.core.util.Arrays;
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
-import com.societegenerale.aut.main.ObjectWithAdateField;
-import com.societegenerale.aut.main.ObjectWithJava8TimeLib;
-import com.societegenerale.aut.main.ObjectWithJavaTextDateFormat;
-import com.societegenerale.aut.main.ObjectWithJavaUtilGregorianCalendar;
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
+import com.societegenerale.commons.plugin.utils.ArchUtils;
 
+@RunWith(Parameterized.class)
 public class NoJavaUtilDateRuleTestTest {
 
-	@Test
-	public void shouldThrowViolations() {
+	// instance variable for parameterized tests
 
-		assertExceptionIsThrownFor(ObjectWithAdateField.class);
+	private String path;
 
+	// pathClassThrowingException
+
+	private String pathObjectWithAdateField = "./target/aut-target/test-classes/com/societegenerale/aut/test/ObjectWithAdateField.class";
+
+	/*
+	 * pathsOfClassesNotThrowingAnyException They are static because they are used
+	 * in static context
+	 */
+
+	private static String pathObjectWithJava8TimeLib = "./target/aut-target/test-classes/com/societegenerale/aut/test/ObjectWithJava8TimeLib.class";
+
+	private static String pathObjectWithJavaTextDateFormat = "./target/aut-target/test-classes/com/societegenerale/aut/test/ObjectWithJavaTextDateFormat.class";
+
+	private static String pathObjectWithJavaUtilGregorianCalendar = "./target/aut-target/test-classes/com/societegenerale/aut/test/ObjectWithJavaUtilGregorianCalendar.class";
+
+	@Before
+	public void setup() {
+		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
+		// field there to be initialized
+		ArchUtils archUtils = new ArchUtils(new SilentLog());
+	}
+
+	public NoJavaUtilDateRuleTestTest(String path) {
+		this.path = path;
+	}
+
+	@Test(expected = AssertionError.class)
+	public void shouldThrowViolationsTest() {
+
+		new NoJavaUtilDateRuleTest().execute(pathObjectWithAdateField, new DefaultScopePathProvider(), emptySet());
+
+	}
+
+	@Parameterized.Parameters
+	public static Collection pathsOfClassesNotThrowingAnyException() {
+		return Arrays.asList(new String[] { pathObjectWithJava8TimeLib, pathObjectWithJavaTextDateFormat,
+				pathObjectWithJavaUtilGregorianCalendar });
 	}
 
 	@Test
 	public void shouldNotThrowAnyViolation() {
 
-		assertNoExceptionIsThrownFor(ObjectWithJava8TimeLib.class);
-
-		assertNoExceptionIsThrownFor(ObjectWithJavaTextDateFormat.class);
-
-		assertNoExceptionIsThrownFor(ObjectWithJavaUtilGregorianCalendar.class);
-
-	}
-
-	private void assertExceptionIsThrownFor(Class clazz) {
-
-		JavaClasses classToTest = new ClassFileImporter().importClasses(clazz);
-
-		assertThatThrownBy(() -> {
-			classes().should(NoJavaUtilDateRuleTest.notUseJavaUtilDate()).check(classToTest);
-		}).hasMessageContaining(ObjectWithAdateField.class.getName())
-				.hasMessageContaining(NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE);
-
-	}
-
-	private void assertNoExceptionIsThrownFor(Class clazz) {
-
-		JavaClasses classToTest = new ClassFileImporter().importClasses(clazz);
-
-		assertThatCode(() -> classes().should(NoJavaUtilDateRuleTest.notUseJavaUtilDate()).check(classToTest))
+		assertThatCode(() -> new NoJavaUtilDateRuleTest().execute(path, new DefaultScopePathProvider(), emptySet()))
 				.doesNotThrowAnyException();
 
 	}

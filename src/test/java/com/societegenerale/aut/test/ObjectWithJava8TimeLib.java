@@ -1,4 +1,4 @@
-package com.societegenerale.aut.main;
+package com.societegenerale.aut.test;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
