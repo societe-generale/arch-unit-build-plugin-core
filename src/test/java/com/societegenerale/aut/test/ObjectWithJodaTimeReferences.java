@@ -1,4 +1,4 @@
-package com.societegenerale.aut.main;
+package com.societegenerale.aut.test;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;

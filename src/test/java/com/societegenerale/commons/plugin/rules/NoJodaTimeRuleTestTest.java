@@ -1,49 +1,61 @@
 package com.societegenerale.commons.plugin.rules;
 
-import com.societegenerale.aut.main.ObjectWithJava8TimeLib;
-import com.societegenerale.aut.main.ObjectWithJodaTimeReferences;
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
+import static com.societegenerale.commons.plugin.rules.NoJodaTimeRuleTest.NO_JODA_VIOLATION_MESSAGE;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
+import org.junit.Before;
 import org.junit.Test;
 
-import static com.societegenerale.commons.plugin.rules.NoJodaTimeRuleTest.NO_JODA_VIOLATION_MESSAGE;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static org.assertj.core.api.Assertions.*;
+import com.societegenerale.aut.test.ObjectWithJodaTimeReferences;
+import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
+import com.societegenerale.commons.plugin.utils.ArchUtils;
 
 public class NoJodaTimeRuleTestTest {
 
-    private JavaClasses classesUsingJodaLibrary = new ClassFileImporter().importClasses(ObjectWithJodaTimeReferences.class);
-    private JavaClasses classesUsingJava8Libray= new ClassFileImporter().importClasses(ObjectWithJava8TimeLib.class);
+	private String pathObjectWithJava8TimeLib = "./target/aut-target/test-classes/com/societegenerale/aut/test/ObjectWithJava8TimeLib.class";
 
-    @Test
-    public void shouldCatchViolationsInStaticBlocksAndMemberFields(){
+	private String pathObjectWithJodaTimeReferences = "./target/aut-target/test-classes/com/societegenerale/aut/test/ObjectWithJodaTimeReferences.class";
 
-        Throwable validationExceptionThrown = catchThrowable(() -> {
+	@Before
+	public void setup() {
+		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
+		// field there to be initialized
+		ArchUtils archUtils = new ArchUtils(new SilentLog());
+	}
 
-            classes().should(NoJodaTimeRuleTest.notUseJodaTime()).check(classesUsingJodaLibrary);
+	@Test
+	public void shouldCatchViolationsInStaticBlocksAndMemberFields() {
 
-        });
+		Throwable validationExceptionThrown = catchThrowable(() -> {
 
-        assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
-                                             .hasMessageContaining("was violated (2 times)")
-                                             .hasMessageContaining("ObjectWithJodaTimeReferences - field name: jodaDatTime")
-                                             .hasMessageContaining("ObjectWithJodaTimeReferences - line: 17");
+			new NoJodaTimeRuleTest().execute(pathObjectWithJodaTimeReferences, new DefaultScopePathProvider(),
+					emptySet());
 
-        assertThat(validationExceptionThrown).hasMessageStartingWith("Architecture Violation")
-            .hasMessageContaining(ObjectWithJodaTimeReferences.class.getName())
-            .hasMessageContaining(NO_JODA_VIOLATION_MESSAGE);
-    }
+		});
 
+		assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
+				.hasMessageContaining("was violated (2 times)")
+				.hasMessageContaining("ObjectWithJodaTimeReferences - field name: jodaDatTime")
+				.hasMessageContaining("ObjectWithJodaTimeReferences - line: 17");
 
-    @Test(expected = Throwable.class)
-    public void shouldThrowNOJODAViolation(){
-        classes().should(NoJodaTimeRuleTest.notUseJodaTime()).check(classesUsingJodaLibrary);
-    }
+		assertThat(validationExceptionThrown).hasMessageStartingWith("Architecture Violation")
+				.hasMessageContaining(ObjectWithJodaTimeReferences.class.getName())
+				.hasMessageContaining(NO_JODA_VIOLATION_MESSAGE);
+	}
 
-    @Test
-    public void shouldNotThrowAnyViolation(){
-        assertThatCode(
-            () -> classes().should(NoJodaTimeRuleTest.notUseJodaTime()).check(classesUsingJava8Libray))
-            .doesNotThrowAnyException();
-    }
+	@Test(expected = Throwable.class)
+	public void shouldThrowNOJODAViolation() {
+		new NoJodaTimeRuleTest().execute(pathObjectWithJodaTimeReferences, new DefaultScopePathProvider(), emptySet());
+	}
+
+	@Test
+	public void shouldNotThrowAnyViolation() {
+		assertThatCode(() -> new NoJodaTimeRuleTest().execute(pathObjectWithJava8TimeLib,
+				new DefaultScopePathProvider(), emptySet())).doesNotThrowAnyException();
+
+	}
 }
