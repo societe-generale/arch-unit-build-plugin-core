@@ -50,17 +50,17 @@ public class RuleInvokerService {
 
 
     public String invokeRules(Rules rules, String buildPath)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+            throws InvocationTargetException, InstantiationException, IllegalAccessException {
 
         StringBuilder errorListBuilder = new StringBuilder();
 
         for (String rule : rules.getPreConfiguredRules()) {
-            String errorMessage = invokePreConfiguredRule(rule, buildPath);
+            String errorMessage = invokePreConfiguredRule(rule,buildPath);
             errorListBuilder.append(prepareErrorMessageForRuleFailures(rule, errorMessage));
         }
 
         for (ConfigurableRule rule : rules.getConfigurableRules()) {
-            String errorMessage = invokeConfigurableRules(rule, buildPath);
+            String errorMessage = invokeConfigurableRules(rule);
             errorListBuilder.append(prepareErrorMessageForRuleFailures(rule.getRule(), errorMessage));
         }
 
@@ -69,7 +69,7 @@ public class RuleInvokerService {
     }
 
     private String invokePreConfiguredRule(String ruleClassName, String buildPath)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+            throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<?> ruleClass = loadClassWithContextClassLoader(ruleClassName);
 
         ArchRuleTest ruleToExecute;
@@ -93,7 +93,7 @@ public class RuleInvokerService {
         return errorMessage;
     }
 
-    private String invokeConfigurableRules(ConfigurableRule rule, String buildPath) {
+    private String invokeConfigurableRules(ConfigurableRule rule) {
         if(rule.isSkip()) {
             if(log.isInfoEnabled()) {
                 log.info("Skipping rule " + rule.getRule());
@@ -103,32 +103,38 @@ public class RuleInvokerService {
 
         InvokableRules invokableRules = InvokableRules.of(rule.getRule(), rule.getChecks(),log);
 
-        String packageOnRuleToApply = getPackageNameOnWhichToApplyRules(rule,buildPath);
+        String packageOnRuleToApply = getPackageNameOnWhichToApplyRules(rule);
 
-        log.info("invoking ConfigurableRule "+rule.toString()+" on "+buildPath+" - "+packageOnRuleToApply);
-        JavaClasses classes = archUtils.importAllClassesInPackage(buildPath, packageOnRuleToApply,excludedPaths);
+        log.info("invoking ConfigurableRule "+rule.toString()+" on "+packageOnRuleToApply);
+        JavaClasses classes = archUtils.importAllClassesInPackage("", packageOnRuleToApply,excludedPaths);
 
         InvocationResult result = invokableRules.invokeOn(classes);
         return result.getMessage();
     }
 
-    private String getPackageNameOnWhichToApplyRules(ConfigurableRule rule,String buildPath) {
+    private String getPackageNameOnWhichToApplyRules(ConfigurableRule rule) {
 
-        StringBuilder packageNameBuilder = new StringBuilder(buildPath);
+        StringBuilder packageNameBuilder = new StringBuilder();
 
         if (rule.getApplyOn() != null) {
             if (rule.getApplyOn().getScope() != null && "test".equals(rule.getApplyOn().getScope())) {
-                packageNameBuilder = new StringBuilder(scopePathProvider.getTestClassesPath());
+                packageNameBuilder.append(scopePathProvider.getTestClassesPath());
             }
             else{
-                packageNameBuilder = new StringBuilder(scopePathProvider.getMainClassesPath());
+                packageNameBuilder.append(scopePathProvider.getMainClassesPath());
             }
+
+            if(!packageNameBuilder.toString().endsWith("/")){
+                packageNameBuilder.append("/");
+            }
+
             if (rule.getApplyOn().getPackageName() != null) {
-                packageNameBuilder.append("/").append(rule.getApplyOn().getPackageName());
+                packageNameBuilder.append(rule.getApplyOn().getPackageName());
             }
 
         }
-        return packageNameBuilder.toString().replace(".", "/");
+
+        return DotsToSlashesReplacer.replace(packageNameBuilder.toString());
     }
 
 

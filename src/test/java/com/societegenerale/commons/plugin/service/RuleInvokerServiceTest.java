@@ -3,6 +3,7 @@ package com.societegenerale.commons.plugin.service;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
+import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.model.ApplyOn;
@@ -20,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RuleInvokerServiceTest {
 
-    RuleInvokerService ruleInvokerService = new RuleInvokerService(new SilentLog());
+    RuleInvokerService ruleInvokerService = new RuleInvokerService(new SilentLog(),new TestSpecificScopeProvider());
 
     ConfigurableRule configurableRule = new ConfigurableRule();
 
@@ -41,11 +42,11 @@ public class RuleInvokerServiceTest {
 
     @Test
     public void shouldInvokePreConfiguredRuleThatCanLog()
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
         Rules rules=new Rules(Arrays.asList(HexagonalArchitectureTest.class.getName()),emptyList());
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/");
+        String errorMessage = ruleInvokerService.invokeRules(rules, new TestSpecificScopeProvider().getMainClassesPath());
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
@@ -150,14 +151,14 @@ public class RuleInvokerServiceTest {
     public void shouldExecuteAllRulesOnSpecificPackageInTest()
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","test");
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase","test");
 
         configurableRule.setRule(DummyCustomRule.class.getName());
         configurableRule.setApplyOn(applyOn);
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/test-classes/com/societegenerale/aut/test/specificCase");
+        String errorMessage = ruleInvokerService.invokeRules(rules, "");
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
@@ -169,14 +170,14 @@ public class RuleInvokerServiceTest {
     public void shouldExecuteAllRulesFromArchUnit_GeneralCodingRule()
             throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn("com.tngtech.archunit.library","main");
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase","test");
 
         configurableRule.setRule(GeneralCodingRules.class.getName());
         configurableRule.setApplyOn(applyOn);
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/test-classes/com/societegenerale/aut/test/specificCase");
+        String errorMessage = ruleInvokerService.invokeRules(rules, "");
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
