@@ -29,7 +29,7 @@ public class StringFieldsThatAreActuallyDatesRuleTest implements ArchRuleTest {
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		fields().that().haveRawType(String.class).and(endWithDate).should(beDates()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+				ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path,excludedPaths));
 
 	}
 

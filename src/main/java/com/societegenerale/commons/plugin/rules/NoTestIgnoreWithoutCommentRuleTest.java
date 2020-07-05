@@ -28,7 +28,7 @@ public class NoTestIgnoreWithoutCommentRuleTest implements ArchRuleTest  {
     protected static final String NO_JUNIT_IGNORE_WITHOUT_COMMENT_VIOLATION_MESSAGE = "Tests shouldn't been ignored without providing a comment explaining why";
 
     public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths)  {
-        classes().should(notBeIgnoredWithoutAComment()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(),excludedPaths));
+        classes().should(notBeIgnoredWithoutAComment()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(),path,excludedPaths));
     }
 
     public static ArchCondition<JavaClass> notBeIgnoredWithoutAComment() {

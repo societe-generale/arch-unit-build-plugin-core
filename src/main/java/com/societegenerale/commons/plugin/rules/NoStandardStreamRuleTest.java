@@ -17,7 +17,7 @@ public class NoStandardStreamRuleTest implements ArchRuleTest {
 
   @Override
   public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-    noClasses().should(notUseStandardStream).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+    noClasses().should(notUseStandardStream).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path,  excludedPaths));
   }
 
   public static ArchCondition<JavaClass> getNotUseStandardStream(){

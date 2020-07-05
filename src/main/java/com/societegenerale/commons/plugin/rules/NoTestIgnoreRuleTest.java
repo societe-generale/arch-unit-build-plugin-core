@@ -26,7 +26,7 @@ public class NoTestIgnoreRuleTest implements ArchRuleTest  {
 
   @Override
   public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-    classes().should(notBeenIgnore()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(),excludedPaths));
+    classes().should(notBeenIgnore()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(),path, excludedPaths));
   }
 
   public static ArchCondition<JavaClass> notBeenIgnore() {

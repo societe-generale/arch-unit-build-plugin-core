@@ -1,4 +1,4 @@
-package com.societegenerale.aut.test;
+package com.societegenerale.aut.main;
 
 import java.time.LocalDate;
 import java.util.Date;
