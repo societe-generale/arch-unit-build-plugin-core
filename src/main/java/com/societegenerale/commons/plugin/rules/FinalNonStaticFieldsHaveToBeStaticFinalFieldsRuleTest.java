@@ -1,11 +1,11 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
-
 import java.util.Collection;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 /**
  * 
@@ -28,8 +28,8 @@ public class FinalNonStaticFieldsHaveToBeStaticFinalFieldsRuleTest implements Ar
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		fields().that().areFinal().and().areNotStatic().should().beStatic().andShould().beFinal()
-				.because(FINAL_NON_STATIC_FIELDS_VIOLATION_MESSAGE).check(ArchUtils.importAllClassesInPackage(path,
-						scopePathProvider.getMainClassesPath(), excludedPaths));
+				.because(FINAL_NON_STATIC_FIELDS_VIOLATION_MESSAGE).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path,
+						 excludedPaths));
 
 	}
 

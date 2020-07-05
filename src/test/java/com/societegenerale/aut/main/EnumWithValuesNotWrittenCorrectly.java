@@ -1,4 +1,4 @@
-package com.societegenerale.aut.test;
+package com.societegenerale.aut.main;
 
 public enum EnumWithValuesNotWrittenCorrectly {
 

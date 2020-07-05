@@ -1,7 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
+import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
-import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,9 +13,9 @@ import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class DontReturnNullCollectionTestTest {
 
-    String pathObjectWithAmethodReturningAnullList = "./target/aut-target/classes/com/societegenerale/aut/main/ObjectWithMethodsReturningNullCollections.class";
+    String pathObjectWithAmethodReturningAnullList = "com/societegenerale/aut/main/ObjectWithMethodsReturningNullCollections.class";
 
-    String pathProperlyAnnotatedObjectWithAmethodReturningAlist = "./target/aut-target/classes/com/societegenerale/aut/main/ObjectWithProperlyAnnotatedMethodsReturningCollections.class";
+    String pathProperlyAnnotatedObjectWithAmethodReturningAlist = "com/societegenerale/aut/main/ObjectWithProperlyAnnotatedMethodsReturningCollections.class";
 
     @Before
     public void setup(){
@@ -27,7 +27,7 @@ public class DontReturnNullCollectionTestTest {
     public void shouldThrowViolations() {
 
         Throwable validationExceptionThrown = catchThrowable(() ->
-            new DontReturnNullCollectionTest().execute(pathObjectWithAmethodReturningAnullList, new DefaultScopePathProvider(), emptySet())
+            new DontReturnNullCollectionTest().execute(pathObjectWithAmethodReturningAnullList, new TestSpecificScopeProvider(), emptySet())
         );
 
         assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
@@ -38,7 +38,7 @@ public class DontReturnNullCollectionTestTest {
     @Test
     public void shouldNotThrowViolations() {
 
-        assertThatCode(() -> new DontReturnNullCollectionTest().execute(pathProperlyAnnotatedObjectWithAmethodReturningAlist, new DefaultScopePathProvider(),emptySet()))
+        assertThatCode(() -> new DontReturnNullCollectionTest().execute(pathProperlyAnnotatedObjectWithAmethodReturningAlist, new TestSpecificScopeProvider(),emptySet()))
                 .doesNotThrowAnyException();
 
     }

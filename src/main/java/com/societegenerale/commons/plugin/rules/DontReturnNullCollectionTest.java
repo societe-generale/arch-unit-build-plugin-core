@@ -30,7 +30,7 @@ public class DontReturnNullCollectionTest implements ArchRuleTest {
     ArchRule rule = methods().that().haveRawReturnType(List.class).or().haveRawReturnType(Set.class).should().beAnnotatedWith(Nonnull.class)
             .because(NO_NULL_COLLECTION_MESSAGE);
 
-    rule.check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+    rule.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path, excludedPaths));
   }
 
 }
