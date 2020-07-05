@@ -26,7 +26,7 @@ public class NoPrefixForInterfacesRuleTest implements ArchRuleTest {
   @Override
   public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-    classes().that().areInterfaces().should(notBePrefixed()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+    classes().that().areInterfaces().should(notBePrefixed()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path,excludedPaths));
 
   }
 

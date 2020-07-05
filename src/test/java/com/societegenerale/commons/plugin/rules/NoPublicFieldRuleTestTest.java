@@ -1,20 +1,19 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static java.util.Collections.emptySet;
-import static org.assertj.core.api.Assertions.assertThatCode;
-
+import com.societegenerale.aut.test.TestSpecificScopeProvider;
+import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.societegenerale.commons.plugin.SilentLog;
-import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
-import com.societegenerale.commons.plugin.utils.ArchUtils;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class NoPublicFieldRuleTestTest {
 
-	String pathObjectWithNoPublicField = "./target/aut-target/test-classes/com/societegenerale/aut/test/ObjectWithNoNonStaticPublicField.class";
+	String pathObjectWithNoPublicField = "com/societegenerale/aut/main/ObjectWithNoNonStaticPublicField.class";
 
-	String pathObjectWithPublicField = "./target/aut-target/test-classes/com/societegenerale/aut/test/ObjectWithPublicField.class";
+	String pathObjectWithPublicField = "com/societegenerale/aut/main/ObjectWithPublicField.class";
 
 	@Before
 	public void setup() {
@@ -26,7 +25,7 @@ public class NoPublicFieldRuleTestTest {
 	@Test(expected = AssertionError.class)
 	public void shouldThrowViolations() {
 
-		new NoPublicFieldRuleTest().execute(pathObjectWithPublicField, new DefaultScopePathProvider(), emptySet());
+		new NoPublicFieldRuleTest().execute(pathObjectWithPublicField, new TestSpecificScopeProvider(), emptySet());
 
 	}
 
@@ -34,7 +33,7 @@ public class NoPublicFieldRuleTestTest {
 	public void shouldNotThrowAnyViolationEvenWithPublicStaticFinaField() {
 
 		assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathObjectWithNoPublicField,
-				new DefaultScopePathProvider(), emptySet())).doesNotThrowAnyException();
+				new TestSpecificScopeProvider(), emptySet())).doesNotThrowAnyException();
 
 	}
 

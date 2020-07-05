@@ -24,7 +24,7 @@ public class NoPublicFieldRuleTest implements ArchRuleTest {
 		ArchRule rulePublic = fields().that().areNotStatic().or().areNotFinal().should().notBePublic()
 				.because(NO_PUBLIC_FIELD_VIOLATION_MESSAGE);
 
-		rulePublic.check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+		rulePublic.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path, excludedPaths));
 
 	}
 
