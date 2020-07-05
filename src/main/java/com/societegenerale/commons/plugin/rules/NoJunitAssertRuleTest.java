@@ -28,7 +28,7 @@ public class NoJunitAssertRuleTest implements ArchRuleTest {
 
     @Override
     public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-        classes().should(notUseJunitAssertRule()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(), excludedPaths));
+        classes().should(notUseJunitAssertRule()).check(ArchUtils.importAllClassesInPackage( scopePathProvider.getTestClassesPath(),path, excludedPaths));
     }
 
     protected static ArchCondition<JavaClass> notUseJunitAssertRule() {

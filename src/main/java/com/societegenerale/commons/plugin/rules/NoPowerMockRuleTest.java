@@ -25,7 +25,7 @@ public class NoPowerMockRuleTest implements ArchRuleTest {
 
     @Override
     public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-        classes().should(notUsePowerMock()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(),excludedPaths));
+        classes().should(notUsePowerMock()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(),path, excludedPaths));
     }
 
     public static ArchCondition<JavaClass> notUsePowerMock() {
