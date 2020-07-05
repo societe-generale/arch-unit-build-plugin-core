@@ -3,7 +3,7 @@ package com.societegenerale.aut.test;
 import org.junit.Test;
 import org.junit.jupiter.api.Nested;
 
-public class ClassWithCorrectName2Test {
+public class ClassTestWithCorrectName2Test {
 
 	@Nested
 	class PositiveCase {
