@@ -1,14 +1,14 @@
-package com.societegenerale.aut.test;
+package com.societegenerale.aut.main;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class TestClassWithAutowiredField {
+public class ClassWithAutowiredField {
 
     @Autowired
     Object someDummyInjectedStuff;
 
 
-    public TestClassWithAutowiredField() {
+    public ClassWithAutowiredField() {
 
         //we should use constructor injection instead
 

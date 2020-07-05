@@ -23,7 +23,7 @@ public class NoInjectedFieldTest implements ArchRuleTest  {
     @Override
     public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-        fields().should(notBeInjected()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+        fields().should(notBeInjected()).check(ArchUtils.importAllClassesInPackage( scopePathProvider.getMainClassesPath(),path,excludedPaths));
     }
 
     protected static ArchCondition<JavaField> notBeInjected() {

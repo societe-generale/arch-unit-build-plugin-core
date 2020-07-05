@@ -21,7 +21,7 @@ public class NoAutowiredFieldTest implements ArchRuleTest  {
     @Override
     public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-        fields().should(notBeAutowired()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+        fields().should(notBeAutowired()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path,excludedPaths));
     }
 
     protected static ArchCondition<JavaField> notBeAutowired() {

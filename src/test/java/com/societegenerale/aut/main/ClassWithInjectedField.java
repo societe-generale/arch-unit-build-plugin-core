@@ -1,15 +1,15 @@
-package com.societegenerale.aut.test;
+package com.societegenerale.aut.main;
 
 import javax.inject.Inject;
 
 
-public class TestClassWithInjectedField {
+public class ClassWithInjectedField {
 
     @Inject
     Object someDummyInjectedStuff;
 
 
-    public TestClassWithInjectedField() {
+    public ClassWithInjectedField() {
 
         //we should use constructor injection instead
 
