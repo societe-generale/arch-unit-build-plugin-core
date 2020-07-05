@@ -18,7 +18,7 @@ public class NoAutowiredFieldTestTest {
 
 	private String pathTestClassWithAutowiredField = "./target/aut-target/test-classes/com/societegenerale/aut/test/TestClassWithAutowiredField.class";
 
-	// injected fields should not trigger autowired violation
+	// injected fields should not trigger autowired violation - they have their own rule
 	private String pathTestClassWithInjectedField = "./target/aut-target/test-classes/com/societegenerale/aut/test/TestClassWithInjectedField.class";
 
 	@Before
