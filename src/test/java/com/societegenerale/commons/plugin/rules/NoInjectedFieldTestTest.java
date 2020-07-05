@@ -16,7 +16,7 @@ import com.societegenerale.commons.plugin.utils.ArchUtils;
 
 public class NoInjectedFieldTestTest {
 
-	// autowired fields should not trigger injected violation
+	// autowired fields should not trigger injected violations here - there's a separate rule for it 
 	private String pathTestClassWithAutowiredFields = "./target/aut-target/test-classes/com/societegenerale/aut/test/TestClassWithAutowiredField.class";
 
 	private String pathTestClassWithInjectedField = "./target/aut-target/test-classes/com/societegenerale/aut/test/TestClassWithInjectedField.class";
