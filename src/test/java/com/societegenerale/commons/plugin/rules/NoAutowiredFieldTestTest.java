@@ -1,45 +1,53 @@
 package com.societegenerale.commons.plugin.rules;
 
-import com.societegenerale.aut.test.TestClassWithAutowiredField;
-import com.societegenerale.aut.test.TestClassWithInjectedField;
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
+import static com.societegenerale.commons.plugin.rules.NoAutowiredFieldTest.NO_AUTOWIRED_FIELD_MESSAGE;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
+import org.junit.Before;
 import org.junit.Test;
 
-import static com.societegenerale.commons.plugin.rules.NoAutowiredFieldTest.NO_AUTOWIRED_FIELD_MESSAGE;
-import static com.societegenerale.commons.plugin.rules.NoAutowiredFieldTest.notBeAutowired;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
-import static org.assertj.core.api.Assertions.*;
+import com.societegenerale.aut.test.TestClassWithAutowiredField;
+import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
+import com.societegenerale.commons.plugin.utils.ArchUtils;
 
 public class NoAutowiredFieldTestTest {
 
-    private JavaClasses testClassWithAutowiredField = new ClassFileImporter().importClasses(TestClassWithAutowiredField.class);
+	private String pathTestClassWithAutowiredField = "./target/aut-target/test-classes/com/societegenerale/aut/test/TestClassWithAutowiredField.class";
 
-    //injected fields should not trigger autowired violation
-    private JavaClasses testClassWithInjectedField = new ClassFileImporter().importClasses(TestClassWithInjectedField.class);
+	// injected fields should not trigger autowired violation - they have their own rule
+	private String pathTestClassWithInjectedField = "./target/aut-target/test-classes/com/societegenerale/aut/test/TestClassWithInjectedField.class";
 
-    @Test
-    public void shouldThrowViolations(){
+	@Before
+	public void setup() {
+		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
+		// field there to be initialized
+		ArchUtils archUtils = new ArchUtils(new SilentLog());
+	}
 
-        Throwable validationExceptionThrown = catchThrowable(() -> {
+	@Test
+	public void shouldThrowViolations() {
 
-                fields().should(notBeAutowired()).check(testClassWithAutowiredField);
+		Throwable validationExceptionThrown = catchThrowable(() -> {
 
-        });
+			new NoAutowiredFieldTest().execute(pathTestClassWithAutowiredField, new DefaultScopePathProvider(),
+					emptySet());
+		});
 
-        assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
-                .hasMessageStartingWith("Architecture Violation")
-                .hasMessageContaining("was violated (1 times)")
-                .hasMessageContaining(TestClassWithAutowiredField.class.getName())
-                .hasMessageContaining(NO_AUTOWIRED_FIELD_MESSAGE);
+		assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
+				.hasMessageStartingWith("Architecture Violation").hasMessageContaining("was violated (1 times)")
+				.hasMessageContaining(TestClassWithAutowiredField.class.getName())
+				.hasMessageContaining(NO_AUTOWIRED_FIELD_MESSAGE);
 
-    }
+	}
 
-    @Test
-    public void shouldNotThrowAnyViolation(){
-        assertThatCode(
-                () -> fields().should(notBeAutowired()).check(testClassWithInjectedField))
-                .doesNotThrowAnyException();
-    }
+	@Test
+	public void shouldNotThrowAnyViolation() {
+		assertThatCode(() -> new NoAutowiredFieldTest().execute(pathTestClassWithInjectedField,
+				new DefaultScopePathProvider(), emptySet())).doesNotThrowAnyException();
+	}
 
 }
