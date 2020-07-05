@@ -96,8 +96,11 @@ class InvokableRules {
         Object instance = newInstance(rulesLocation);
 
         if(log.isInfoEnabled()) {
-            log.info("applying rules on :");
-            importedClasses.stream().forEach(c -> log.info(c.getName()));
+            log.info("applying rules on "+importedClasses.size()+" classe(s). To see the details, enable debug logs");
+
+            if(log.isDebugEnabled()) {
+                importedClasses.stream().forEach(c -> log.debug(c.getName()));
+            }
         }
 
         InvocationResult result = new InvocationResult();

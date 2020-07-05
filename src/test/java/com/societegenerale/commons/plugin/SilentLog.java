@@ -8,7 +8,17 @@ public class SilentLog implements Log {
     }
 
     @Override
+    public boolean isDebugEnabled() {
+        return false;
+    }
+
+    @Override
     public void info(String s) {
+
+    }
+
+    @Override
+    public void debug(String s) {
 
     }
 
