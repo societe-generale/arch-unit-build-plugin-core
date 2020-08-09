@@ -2,18 +2,16 @@ package com.societegenerale.commons.plugin.rules;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
-import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.junit.Test;
-
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.junit.Test;
 
 /**
  * This rule raises an issue when a test method name does not match the provided
@@ -46,7 +44,7 @@ public class TestMethodsNamingRuleTest implements ArchRuleTest {
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		methods().that().areAnnotatedWith(Test.class).should(respectNamingConvention()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+				ArchUtils.importAllClassesInPackage( scopePathProvider.getTestClassesPath(), path, excludedPaths));
 
 	}
 

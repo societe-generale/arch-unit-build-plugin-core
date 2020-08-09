@@ -1,8 +1,10 @@
 package com.societegenerale.commons.plugin.service;
 
+import com.societegenerale.commons.plugin.model.RootClassFolder;
+
 public interface ScopePathProvider {
 
-    String getMainClassesPath();
+    RootClassFolder getMainClassesPath();
 
-    String getTestClassesPath();
+    RootClassFolder getTestClassesPath();
 }

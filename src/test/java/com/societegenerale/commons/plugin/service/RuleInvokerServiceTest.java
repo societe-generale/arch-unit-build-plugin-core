@@ -1,25 +1,27 @@
 package com.societegenerale.commons.plugin.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
+import static java.util.Collections.emptyList;
+import static java.util.Collections.singletonList;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.model.ApplyOn;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
+import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.model.Rules;
 import com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest;
 import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
 import com.societegenerale.commons.plugin.rules.classesForTests.DummyCustomRule;
 import com.tngtech.archunit.library.GeneralCodingRules;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import org.junit.Test;
 
-import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
-import static org.assertj.core.api.Assertions.assertThat;
-
 public class RuleInvokerServiceTest {
+
+  private static final RootClassFolder ROOT_CLASS_FOLDER=new RootClassFolder("./target/aut-target/");
 
     RuleInvokerService ruleInvokerService = new RuleInvokerService(new SilentLog(),new TestSpecificScopeProvider());
 
@@ -33,7 +35,7 @@ public class RuleInvokerServiceTest {
 
         Rules rules=new Rules(Arrays.asList(NoStandardStreamRuleTest.class.getName()),emptyList());
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/");
+        String errorMessage = ruleInvokerService.invokeRules(rules,ROOT_CLASS_FOLDER );
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
@@ -67,7 +69,7 @@ public class RuleInvokerServiceTest {
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/");
+        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
         assertThat(errorMessage).isEmpty();
     }
 
@@ -83,7 +85,7 @@ public class RuleInvokerServiceTest {
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/");
+        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).doesNotContain("Class <com.societegenerale.aut.main.ObjectWithAdateField>");
         assertThat(errorMessage).contains("Class <com.societegenerale.aut.test.TestClassWithOutJunitAsserts>");
@@ -101,7 +103,7 @@ public class RuleInvokerServiceTest {
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/");
+        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
         assertThat(errorMessage).contains("classes should be annotated with @Test");
@@ -120,7 +122,7 @@ public class RuleInvokerServiceTest {
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/");
+        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
         assertThat(errorMessage).contains("classes should be annotated with @Test");
@@ -139,7 +141,7 @@ public class RuleInvokerServiceTest {
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "./target/aut-target/");
+        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
@@ -149,7 +151,7 @@ public class RuleInvokerServiceTest {
 
     @Test
     public void shouldExecuteAllRulesOnSpecificPackageInTest()
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+            throws  InstantiationException, IllegalAccessException, InvocationTargetException {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase","test");
 
@@ -158,7 +160,7 @@ public class RuleInvokerServiceTest {
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "");
+        String errorMessage = ruleInvokerService.invokeRules(rules,ROOT_CLASS_FOLDER);
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
@@ -177,7 +179,7 @@ public class RuleInvokerServiceTest {
 
         Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, "");
+        String errorMessage = ruleInvokerService.invokeRules(rules, new RootClassFolder(""));
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");

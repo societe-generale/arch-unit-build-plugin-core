@@ -1,6 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
-import java.util.Collection;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -9,8 +9,7 @@ import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import java.util.Collection;
 
 /**
  * java.util.Date is deprecated but a lot of people still use it out of years of
@@ -39,7 +38,7 @@ public class NoJavaUtilDateRuleTest implements ArchRuleTest {
 
 	@Override
 	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-		classes().should(notUseJavaUtilDate()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+		classes().should(notUseJavaUtilDate()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path, excludedPaths));
 	}
 
 	protected static ArchCondition<JavaClass> notUseJavaUtilDate() {

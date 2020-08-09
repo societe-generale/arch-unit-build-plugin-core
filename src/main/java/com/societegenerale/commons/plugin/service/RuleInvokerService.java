@@ -1,21 +1,21 @@
 package com.societegenerale.commons.plugin.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
+import static com.societegenerale.commons.plugin.utils.ReflectionUtils.loadClassWithContextClassLoader;
+import static java.lang.System.lineSeparator;
+import static java.util.Collections.emptySet;
 
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
+import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.model.Rules;
 import com.societegenerale.commons.plugin.rules.ArchRuleTest;
 import com.societegenerale.commons.plugin.service.InvokableRules.InvocationResult;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClasses;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
-
-import static com.societegenerale.commons.plugin.utils.ReflectionUtils.loadClassWithContextClassLoader;
-import static java.lang.System.lineSeparator;
-import static java.util.Collections.emptySet;
 
 public class RuleInvokerService {
     private static final String EXECUTE_METHOD_NAME = "execute";
@@ -49,7 +49,7 @@ public class RuleInvokerService {
     }
 
 
-    public String invokeRules(Rules rules, String buildPath)
+    public String invokeRules(Rules rules, RootClassFolder buildPath)
             throws InvocationTargetException, InstantiationException, IllegalAccessException {
 
         StringBuilder errorListBuilder = new StringBuilder();
@@ -68,7 +68,7 @@ public class RuleInvokerService {
 
     }
 
-    private String invokePreConfiguredRule(String ruleClassName, String buildPath)
+    private String invokePreConfiguredRule(String ruleClassName, RootClassFolder buildPath)
             throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<?> ruleClass = loadClassWithContextClassLoader(ruleClassName);
 
@@ -86,7 +86,7 @@ public class RuleInvokerService {
         String errorMessage = "";
         try {
             Method method = ruleClass.getDeclaredMethod(EXECUTE_METHOD_NAME, String.class, ScopePathProvider.class, Collection.class);
-            method.invoke(ruleToExecute, buildPath, scopePathProvider,excludedPaths);
+            method.invoke(ruleToExecute, buildPath.getValue(), scopePathProvider,excludedPaths);
         } catch (ReflectiveOperationException re) {
             errorMessage = re.getCause().toString();
         }
@@ -103,10 +103,10 @@ public class RuleInvokerService {
 
         InvokableRules invokableRules = InvokableRules.of(rule.getRule(), rule.getChecks(),log);
 
-        String packageOnRuleToApply = getPackageNameOnWhichToApplyRules(rule);
+        String fullPathFromRootTopackage = getPackageNameOnWhichToApplyRules(rule);
 
-        log.info("invoking ConfigurableRule "+rule.toString()+" on "+packageOnRuleToApply);
-        JavaClasses classes = archUtils.importAllClassesInPackage("", packageOnRuleToApply,excludedPaths);
+        log.info("invoking ConfigurableRule "+rule.toString()+" on "+fullPathFromRootTopackage);
+        JavaClasses classes = archUtils.importAllClassesInPackage(new RootClassFolder(""), fullPathFromRootTopackage,excludedPaths);
 
         InvocationResult result = invokableRules.invokeOn(classes);
         return result.getMessage();
@@ -118,10 +118,10 @@ public class RuleInvokerService {
 
         if (rule.getApplyOn() != null) {
             if (rule.getApplyOn().getScope() != null && "test".equals(rule.getApplyOn().getScope())) {
-                packageNameBuilder.append(scopePathProvider.getTestClassesPath());
+                packageNameBuilder.append(scopePathProvider.getTestClassesPath().getValue());
             }
             else{
-                packageNameBuilder.append(scopePathProvider.getMainClassesPath());
+                packageNameBuilder.append(scopePathProvider.getMainClassesPath().getValue());
             }
 
             if(!packageNameBuilder.toString().endsWith("/")){
