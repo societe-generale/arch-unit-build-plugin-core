@@ -1,20 +1,19 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static java.util.Collections.emptySet;
-import static org.assertj.core.api.Assertions.assertThatCode;
-
+import com.societegenerale.aut.test.TestSpecificScopeProvider;
+import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.societegenerale.commons.plugin.SilentLog;
-import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
-import com.societegenerale.commons.plugin.utils.ArchUtils;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class StringFieldsThatAreActuallyDatesRuleTestTest {
 
-	private String pathClassWithStringsEndingWithTheWordDate = "./target/aut-target/test-classes/com/societegenerale/aut/test/ClassWithStringsEndingWithTheWordDate.class";
+	private String pathClassWithStringsEndingWithTheWordDate = "com/societegenerale/aut/main/ClassWithStringsEndingWithTheWordDate.class";
 
-	private String pathClassWithoutStringsEndingWithTheWordDate = "./target/aut-target/test-classes/com/societegenerale/aut/test/ClassWithoutStringsEndingWithTheWordDate.class";
+	private String pathClassWithoutStringsEndingWithTheWordDate = "com/societegenerale/aut/main/ClassWithoutStringsEndingWithTheWordDate.class";
 
 	@Before
 	public void setup() {
@@ -27,7 +26,7 @@ public class StringFieldsThatAreActuallyDatesRuleTestTest {
 	public void shouldThrowViolationTest() {
 
 		new StringFieldsThatAreActuallyDatesRuleTest().execute(pathClassWithStringsEndingWithTheWordDate,
-				new DefaultScopePathProvider(), emptySet());
+				new TestSpecificScopeProvider(), emptySet());
 
 	}
 
@@ -35,7 +34,7 @@ public class StringFieldsThatAreActuallyDatesRuleTestTest {
 	public void shouldNotThrowAnyViolationTest() {
 
 		assertThatCode(() -> new StringFieldsThatAreActuallyDatesRuleTest()
-				.execute(pathClassWithoutStringsEndingWithTheWordDate, new DefaultScopePathProvider(), emptySet()))
+				.execute(pathClassWithoutStringsEndingWithTheWordDate, new TestSpecificScopeProvider(), emptySet()))
 						.doesNotThrowAnyException();
 
 	}

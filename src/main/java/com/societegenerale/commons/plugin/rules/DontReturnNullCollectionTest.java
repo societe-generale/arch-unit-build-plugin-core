@@ -25,12 +25,12 @@ public class DontReturnNullCollectionTest implements ArchRuleTest {
   protected static final String NO_NULL_COLLECTION_MESSAGE = "we don't want callers to perform null check every time. Return an empty collection, not null. Please annotate the method with "+Nonnull.class.getCanonicalName();
 
   @Override
-  public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+  public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
     ArchRule rule = methods().that().haveRawReturnType(List.class).or().haveRawReturnType(Set.class).should().beAnnotatedWith(Nonnull.class)
             .because(NO_NULL_COLLECTION_MESSAGE);
 
-    rule.check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+    rule.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
   }
 
 }

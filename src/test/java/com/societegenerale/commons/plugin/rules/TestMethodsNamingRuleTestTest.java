@@ -1,22 +1,21 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static java.util.Collections.emptySet;
-import static org.assertj.core.api.Assertions.assertThatCode;
-
+import com.societegenerale.aut.test.TestSpecificScopeProvider;
+import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.societegenerale.commons.plugin.SilentLog;
-import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
-import com.societegenerale.commons.plugin.utils.ArchUtils;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class TestMethodsNamingRuleTestTest {
 
-	private String pathMethodWithIncorrectNameTest = "./target/aut-target/test-classes/com/societegenerale/aut/test/MethodWithIncorrectNameTest.class";
+	private String pathMethodWithIncorrectNameTest = "com/societegenerale/aut/test/MethodWithIncorrectNameTest.class";
 
-	private String pathMethodWithCorrectNameStartingWithShouldTest = "./target/aut-target/test-classes/com/societegenerale/aut/test/MethodWithCorrectNameStartingWithShouldTest.class";
+	private String pathMethodWithCorrectNameStartingWithShouldTest = "com/societegenerale/aut/test/MethodWithCorrectNameStartingWithShouldTest.class";
 
-	private String pathMethodWithCorrectNameStartingWithTestTest = "./target/aut-target/test-classes/com/societegenerale/aut/test/MethodWithCorrectNameStartingWithTestTest.class";
+	private String pathMethodWithCorrectNameStartingWithTestTest = "com/societegenerale/aut/test/MethodWithCorrectNameStartingWithTestTest.class";
 
 	@Before
 	public void setup() {
@@ -28,7 +27,7 @@ public class TestMethodsNamingRuleTestTest {
 	@Test(expected = AssertionError.class)
 	public void shouldThrowViolation() {
 
-		new TestMethodsNamingRuleTest().execute(pathMethodWithIncorrectNameTest, new DefaultScopePathProvider(),
+		new TestMethodsNamingRuleTest().execute(pathMethodWithIncorrectNameTest, new TestSpecificScopeProvider(),
 				emptySet());
 
 	}
@@ -37,10 +36,10 @@ public class TestMethodsNamingRuleTestTest {
 	public void testShouldNotThrowAnyViolationTest() {
 
 		assertThatCode(() -> new TestMethodsNamingRuleTest().execute(pathMethodWithCorrectNameStartingWithShouldTest,
-				new DefaultScopePathProvider(), emptySet())).doesNotThrowAnyException();
+				new TestSpecificScopeProvider(), emptySet())).doesNotThrowAnyException();
 
 		assertThatCode(() -> new TestMethodsNamingRuleTest().execute(pathMethodWithCorrectNameStartingWithTestTest,
-				new DefaultScopePathProvider(), emptySet())).doesNotThrowAnyException();
+				new TestSpecificScopeProvider(), emptySet())).doesNotThrowAnyException();
 
 	}
 

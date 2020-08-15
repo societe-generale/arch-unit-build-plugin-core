@@ -25,8 +25,8 @@ public class NoTestIgnoreRuleTest implements ArchRuleTest  {
   protected static final String NO_JUNIT_IGNORE_VIOLATION_MESSAGE = "Tests shouldn't been ignored";
 
   @Override
-  public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-    classes().should(notBeenIgnore()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(),excludedPaths));
+  public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+    classes().should(notBeenIgnore()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
   }
 
   public static ArchCondition<JavaClass> notBeenIgnore() {

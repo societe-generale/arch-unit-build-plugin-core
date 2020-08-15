@@ -19,12 +19,12 @@ public class NoPublicFieldRuleTest implements ArchRuleTest {
 	public static final String NO_PUBLIC_FIELD_VIOLATION_MESSAGE = "you should respect encapsulation";
 
 	@Override
-	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		ArchRule rulePublic = fields().that().areNotStatic().or().areNotFinal().should().notBePublic()
 				.because(NO_PUBLIC_FIELD_VIOLATION_MESSAGE);
 
-		rulePublic.check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+		rulePublic.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
 
 	}
 

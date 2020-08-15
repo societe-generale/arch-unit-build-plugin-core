@@ -21,9 +21,9 @@ public class NoInjectedFieldTest implements ArchRuleTest  {
     protected static final String NO_INJECTED_FIELD_MESSAGE = "Favor constructor injection and avoid field injection - ";
 
     @Override
-    public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+    public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-        fields().should(notBeInjected()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+        fields().should(notBeInjected()).check(ArchUtils.importAllClassesInPackage( scopePathProvider.getMainClassesPath(),packagePath,excludedPaths));
     }
 
     protected static ArchCondition<JavaField> notBeInjected() {

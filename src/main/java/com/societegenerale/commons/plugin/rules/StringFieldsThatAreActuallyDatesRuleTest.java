@@ -26,10 +26,10 @@ public class StringFieldsThatAreActuallyDatesRuleTest implements ArchRuleTest {
 	private static final Pattern STRING_FIELDS_THAT_ARE_ACTUALLY_DATES_PATTERN = Pattern.compile(".*Date$");
 
 	@Override
-	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		fields().that().haveRawType(String.class).and(endWithDate).should(beDates()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+				ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,excludedPaths));
 
 	}
 

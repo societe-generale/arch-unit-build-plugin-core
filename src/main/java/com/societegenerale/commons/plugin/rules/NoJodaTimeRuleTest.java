@@ -28,8 +28,8 @@ public class NoJodaTimeRuleTest implements ArchRuleTest {
   protected static final String NO_JODA_VIOLATION_MESSAGE = "Use Java8 Date API instead of Joda library";
 
   @Override
-  public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-    classes().should(notUseJodaTime()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+  public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+    classes().should(notUseJodaTime()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
   }
 
   protected static ArchCondition<JavaClass> notUseJodaTime() {

@@ -38,8 +38,8 @@ public class NoJavaUtilDateRuleTest implements ArchRuleTest {
 	protected static final String NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE = "Use Java8 java.time or java.util.GregorianCalendar or java.text.DateFormat  to parse and format dates instead of java.util.Date library because they  support internationalization better";
 
 	@Override
-	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-		classes().should(notUseJavaUtilDate()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+		classes().should(notUseJavaUtilDate()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath, excludedPaths));
 	}
 
 	protected static ArchCondition<JavaClass> notUseJavaUtilDate() {

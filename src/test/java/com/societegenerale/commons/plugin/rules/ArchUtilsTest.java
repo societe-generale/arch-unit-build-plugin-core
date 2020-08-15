@@ -2,14 +2,13 @@ package com.societegenerale.commons.plugin.rules;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Arrays;
-
-import org.junit.Test;
-
 import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
+import java.util.Arrays;
+import org.junit.Test;
 
 /**
  * These are not great test, as they will fail when new classes are added in the
@@ -22,27 +21,27 @@ public class ArchUtilsTest {
 
 	@Test
 	public void shouldLoadClassesFromGivenPackage() {
-		JavaClasses classes = ArchUtils.importAllClassesInPackage("./target/classes/",
+		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target/classes/"),
 				"com/societegenerale/commons/plugin/model");
 
 		long noOfClassesInPackage = classes.stream().count();
 
-		assertThat(noOfClassesInPackage).isEqualTo(3);
+		assertThat(noOfClassesInPackage).isEqualTo(4);
 	}
 
 	@Test
 	public void shouldLoadAllClassesWhenGivenPakageDoesntExist() {
-		JavaClasses classes = ArchUtils.importAllClassesInPackage("./target/classes", "someNotExistingFolder");
+		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target/classes"), "someNotExistingFolder");
 
 		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
 
-		assertThat(noOfClasses).isEqualTo(32);
+		assertThat(noOfClasses).isEqualTo(34);
 	}
 
 	@Test
 	public void shouldIgnoreClassesFromConfiguredPaths() {
 
-		JavaClasses classes = ArchUtils.importAllClassesInPackage("./target", "");
+		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target"), "");
 
 		assertThat(classes).isNotEmpty();
 
@@ -51,7 +50,7 @@ public class ArchUtilsTest {
 		assertThat(classToExclude).as("when no exclusion pattern configured, ClassToExclude should be found")
 				.isNotNull();
 
-		JavaClasses classesWithTestClassesExclusions = ArchUtils.importAllClassesInPackage("./target", "",
+		JavaClasses classesWithTestClassesExclusions = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target"), "",
 				Arrays.asList("test-classes"));
 
 		assertThat(containsClassWithPattern(classesWithTestClassesExclusions, "ClassToExclude"))
@@ -60,7 +59,7 @@ public class ArchUtilsTest {
 		assertThat(classes.size()).as("There should be less classes loaded when we apply the test-classes exclusion")
 				.isGreaterThan(classesWithTestClassesExclusions.size());
 
-		JavaClasses classesWithTestClassesAndSpecificExclusions = ArchUtils.importAllClassesInPackage("./target", "",
+		JavaClasses classesWithTestClassesAndSpecificExclusions = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target"), "",
 				Arrays.asList("test-classes", "ClassToExclude"));
 
 		assertThat(containsClassWithPattern(classesWithTestClassesAndSpecificExclusions, "ClassToExclude"))

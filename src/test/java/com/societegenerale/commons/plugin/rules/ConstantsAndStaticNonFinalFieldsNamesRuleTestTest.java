@@ -1,5 +1,11 @@
 package com.societegenerale.commons.plugin.rules;
 
+import com.societegenerale.aut.test.TestSpecificScopeProvider;
+import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.utils.ArchUtils;
+import org.junit.Before;
+import org.junit.Test;
+
 import static com.societegenerale.commons.plugin.rules.ConstantsAndStaticNonFinalFieldsNamesRuleTest.CONSTANTS_VIOLATION_MESSAGE;
 import static com.societegenerale.commons.plugin.rules.ConstantsAndStaticNonFinalFieldsNamesRuleTest.ENUM_CONSTANTS_VIOLATION_MESSAGE;
 import static com.societegenerale.commons.plugin.rules.ConstantsAndStaticNonFinalFieldsNamesRuleTest.STATIC_NON_FINAL_FIELDS_VIOLATION_MESSAGE;
@@ -7,26 +13,19 @@ import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import org.junit.Before;
-import org.junit.Test;
-
-import com.societegenerale.commons.plugin.SilentLog;
-import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
-import com.societegenerale.commons.plugin.utils.ArchUtils;
-
 public class ConstantsAndStaticNonFinalFieldsNamesRuleTestTest {
 
-	private String pathClassWithConstantNamesNotWrittenCorrectly = "./target/aut-target/test-classes/com/societegenerale/aut/test/ClassWithConstantNamesNotWrittenCorrectly.class";
+	private String pathClassWithConstantNamesNotWrittenCorrectly = "com/societegenerale/aut/main/ClassWithConstantNamesNotWrittenCorrectly.class";
 
-	private String pathClassWithConstantNamesWrittenCorrectly = "./target/aut-target/test-classes/com/societegenerale/aut/test/ClassWithConstantNamesWrittenCorrectly.class";
+	private String pathClassWithConstantNamesWrittenCorrectly = "com/societegenerale/aut/main/ClassWithConstantNamesWrittenCorrectly.class";
 
-	private String pathClassWithStaticNonFinalFieldsNotWrittenCorrectly = "./target/aut-target/test-classes/com/societegenerale/aut/test/ClassWithStaticNonFinalFieldsNotWrittenCorrectly.class";
+	private String pathClassWithStaticNonFinalFieldsNotWrittenCorrectly = "com/societegenerale/aut/main/ClassWithStaticNonFinalFieldsNotWrittenCorrectly.class";
 
-	private String pathClassWithStaticNonFinalFieldsWrittenCorrectly = "./target/aut-target/test-classes/com/societegenerale/aut/test/ClassWithStaticNonFinalFieldsWrittenCorrectly.class";
+	private String pathClassWithStaticNonFinalFieldsWrittenCorrectly = "com/societegenerale/aut/main/ClassWithStaticNonFinalFieldsWrittenCorrectly.class";
 
-	private String pathEnumWithValuesNotWrittenCorrectly = "./target/aut-target/test-classes/com/societegenerale/aut/test/EnumWithValuesNotWrittenCorrectly.class";
+	private String pathEnumWithValuesNotWrittenCorrectly = "com/societegenerale/aut/main/EnumWithValuesNotWrittenCorrectly.class";
 
-	private String pathEnumWithValuesWrittenCorrectly = "./target/aut-target/test-classes/com/societegenerale/aut/test/EnumWithValuesWrittenCorrectly.class";
+	private String pathEnumWithValuesWrittenCorrectly = "com/societegenerale/aut/main/EnumWithValuesWrittenCorrectly.class";
 
 	@Before
 	public void setup() {
@@ -78,17 +77,17 @@ public class ConstantsAndStaticNonFinalFieldsNamesRuleTestTest {
 
 	}
 
-	private void assertExceptionIsThrown(String path, String violationMessage) {
+	private void assertExceptionIsThrown(String packagePath, String violationMessage) {
 
 		assertThatThrownBy(() -> {
-			new ConstantsAndStaticNonFinalFieldsNamesRuleTest().execute(path, new DefaultScopePathProvider(), emptySet());
+			new ConstantsAndStaticNonFinalFieldsNamesRuleTest().execute(packagePath, new TestSpecificScopeProvider(), emptySet());
 		}).hasMessageContaining(violationMessage);
 
 	}
 
 	private void assertNoExceptionIsThrown(String path) {
 
-		assertThatCode(() -> new ConstantsAndStaticNonFinalFieldsNamesRuleTest().execute(path, new DefaultScopePathProvider(), emptySet()))
+		assertThatCode(() -> new ConstantsAndStaticNonFinalFieldsNamesRuleTest().execute(path, new TestSpecificScopeProvider(), emptySet()))
 				.doesNotThrowAnyException();
 
 	}

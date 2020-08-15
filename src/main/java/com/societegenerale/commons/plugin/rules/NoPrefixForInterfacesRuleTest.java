@@ -24,9 +24,9 @@ public class NoPrefixForInterfacesRuleTest implements ArchRuleTest {
   private static Character upperCaseI = 'I';
 
   @Override
-  public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+  public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-    classes().that().areInterfaces().should(notBePrefixed()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+    classes().that().areInterfaces().should(notBePrefixed()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
 
   }
 

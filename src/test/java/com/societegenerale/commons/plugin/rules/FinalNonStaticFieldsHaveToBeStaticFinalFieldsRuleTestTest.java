@@ -1,20 +1,19 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static java.util.Collections.emptySet;
-import static org.assertj.core.api.Assertions.assertThatCode;
-
+import com.societegenerale.aut.test.TestSpecificScopeProvider;
+import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.societegenerale.commons.plugin.SilentLog;
-import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
-import com.societegenerale.commons.plugin.utils.ArchUtils;
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class FinalNonStaticFieldsHaveToBeStaticFinalFieldsRuleTestTest {
 
-	private String pathClassWithFinalNonStaticFields = "./target/aut-target/test-classes/com/societegenerale/aut/test/ClassWithFinalNonStaticFields.class";
+	private String pathClassWithFinalNonStaticFields = "com/societegenerale/aut/main/ClassWithFinalNonStaticFields.class";
 
-	private String pathClassWithStaticFinalFields = "./target/aut-target/test-classes/com/societegenerale/aut/test/ClassWithStaticFinalFields.class";
+	private String pathClassWithStaticFinalFields = "com/societegenerale/aut/main/ClassWithStaticFinalFields.class";
 
 	@Before
 	public void setup() {
@@ -27,7 +26,7 @@ public class FinalNonStaticFieldsHaveToBeStaticFinalFieldsRuleTestTest {
 	public void shouldThrowViolation() {
 
 		new FinalNonStaticFieldsHaveToBeStaticFinalFieldsRuleTest().execute(pathClassWithFinalNonStaticFields,
-				new DefaultScopePathProvider(), emptySet());
+				new TestSpecificScopeProvider(), emptySet());
 
 	}
 
@@ -35,7 +34,7 @@ public class FinalNonStaticFieldsHaveToBeStaticFinalFieldsRuleTestTest {
 	public void shouldNotThrowAnyViolation() {
 
 		assertThatCode(() -> new FinalNonStaticFieldsHaveToBeStaticFinalFieldsRuleTest()
-				.execute(pathClassWithStaticFinalFields, new DefaultScopePathProvider(), emptySet()))
+				.execute(pathClassWithStaticFinalFields, new TestSpecificScopeProvider(), emptySet()))
 						.doesNotThrowAnyException();
 
 	}

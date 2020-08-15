@@ -19,9 +19,9 @@ public class NoAutowiredFieldTest implements ArchRuleTest  {
     protected static final String NO_AUTOWIRED_FIELD_MESSAGE = "Favor constructor injection and avoid autowiring fields - ";
 
     @Override
-    public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+    public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-        fields().should(notBeAutowired()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+        fields().should(notBeAutowired()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,excludedPaths));
     }
 
     protected static ArchCondition<JavaField> notBeAutowired() {

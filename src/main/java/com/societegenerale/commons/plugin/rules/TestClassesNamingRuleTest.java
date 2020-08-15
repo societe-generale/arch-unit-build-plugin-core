@@ -1,14 +1,10 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
-import org.junit.Test;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -20,6 +16,9 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
+import org.junit.Test;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 /**
  * This rule raises an issue when a test class name does not match the provided
@@ -41,10 +40,10 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 	public static final String TEST_CLASS_VIOLATION_MESSAGE = "Test classes should comply with a naming convention";
 
 	@Override
-	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		classes().that(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
-				ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(), excludedPaths));
+				ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
 
 	}
 

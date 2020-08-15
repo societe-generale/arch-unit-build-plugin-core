@@ -94,32 +94,32 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
 
 
     @Override
-    public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+    public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
         classes().that().resideInAPackage(DOMAIN)
                 .should(notHaveAnameEndingBy_ignoringCase(FORBIDDEN_SUFFIX_DTO))
                 .andShould(notHaveAnameEndingBy_ignoringCase(FORBIDDEN_SUFFIX_VO))
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "DTO / VO classes shouldn't be located in domain, as they are not business oriented")
-                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+                .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath,excludedPaths));
 
         noClasses().that().resideInAPackage(DOMAIN)
                 .should().accessClassesThat().resideInAPackage("..infrastructure..")
                 .orShould().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should not know about infrastructure or config code")
-                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+                .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
 
 
         noClasses().that().resideInAPackage("..infrastructure..")
                 .should().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE+"infrastructure classes should not know about config code")
-                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+                .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
 
 
         classes().that().resideInAPackage(DOMAIN)
                 .should().onlyAccessClassesThat().resideInAnyPackage(allowedPackageInDomain)
                 .andShould().notBeAnnotatedWith(invalidAnnotations)
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should use only a limited set of core libraries, ie no external framework")
-                .check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getMainClassesPath(),excludedPaths));
+                .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
     }
 
 

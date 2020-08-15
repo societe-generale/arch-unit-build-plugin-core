@@ -6,7 +6,9 @@ import com.tngtech.archunit.lang.ArchRule;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 /**
- * A dummy class with rules to configure through plugin config
+ * A dummy class with rules to configure through plugin config.
+ *
+ * This class can be used in the build specific projects (Gradle or Maven)
  */
 @SuppressWarnings("unused")
 public class MyCustomAndDummyRules {

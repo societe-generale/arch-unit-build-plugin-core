@@ -27,8 +27,8 @@ public class NoJunitAssertRuleTest implements ArchRuleTest {
     private static final String PACKAGE_SEPARATOR = ".";
 
     @Override
-    public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-        classes().should(notUseJunitAssertRule()).check(ArchUtils.importAllClassesInPackage(path, scopePathProvider.getTestClassesPath(), excludedPaths));
+    public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+        classes().should(notUseJunitAssertRule()).check(ArchUtils.importAllClassesInPackage( scopePathProvider.getTestClassesPath(),packagePath, excludedPaths));
     }
 
     protected static ArchCondition<JavaClass> notUseJunitAssertRule() {

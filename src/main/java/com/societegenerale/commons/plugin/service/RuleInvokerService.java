@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
+import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.model.Rules;
 import com.societegenerale.commons.plugin.rules.ArchRuleTest;
 import com.societegenerale.commons.plugin.service.InvokableRules.InvocationResult;
@@ -49,18 +50,18 @@ public class RuleInvokerService {
     }
 
 
-    public String invokeRules(Rules rules, String buildPath)
-            throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public String invokeRules(Rules rules)
+            throws InvocationTargetException, InstantiationException, IllegalAccessException {
 
         StringBuilder errorListBuilder = new StringBuilder();
 
         for (String rule : rules.getPreConfiguredRules()) {
-            String errorMessage = invokePreConfiguredRule(rule, buildPath);
+            String errorMessage = invokePreConfiguredRule(rule);
             errorListBuilder.append(prepareErrorMessageForRuleFailures(rule, errorMessage));
         }
 
         for (ConfigurableRule rule : rules.getConfigurableRules()) {
-            String errorMessage = invokeConfigurableRules(rule, buildPath);
+            String errorMessage = invokeConfigurableRules(rule);
             errorListBuilder.append(prepareErrorMessageForRuleFailures(rule.getRule(), errorMessage));
         }
 
@@ -68,8 +69,8 @@ public class RuleInvokerService {
 
     }
 
-    private String invokePreConfiguredRule(String ruleClassName, String buildPath)
-            throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    private String invokePreConfiguredRule(String ruleClassName)
+            throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<?> ruleClass = loadClassWithContextClassLoader(ruleClassName);
 
         ArchRuleTest ruleToExecute;
@@ -86,14 +87,14 @@ public class RuleInvokerService {
         String errorMessage = "";
         try {
             Method method = ruleClass.getDeclaredMethod(EXECUTE_METHOD_NAME, String.class, ScopePathProvider.class, Collection.class);
-            method.invoke(ruleToExecute, buildPath, scopePathProvider,excludedPaths);
+            method.invoke(ruleToExecute, "", scopePathProvider,excludedPaths);
         } catch (ReflectiveOperationException re) {
             errorMessage = re.getCause().toString();
         }
         return errorMessage;
     }
 
-    private String invokeConfigurableRules(ConfigurableRule rule, String buildPath) {
+    private String invokeConfigurableRules(ConfigurableRule rule) {
         if(rule.isSkip()) {
             if(log.isInfoEnabled()) {
                 log.info("Skipping rule " + rule.getRule());
@@ -103,32 +104,38 @@ public class RuleInvokerService {
 
         InvokableRules invokableRules = InvokableRules.of(rule.getRule(), rule.getChecks(),log);
 
-        String packageOnRuleToApply = getPackageNameOnWhichToApplyRules(rule,buildPath);
+        String fullPathFromRootTopackage = getPackageNameOnWhichToApplyRules(rule);
 
-        log.info("invoking ConfigurableRule "+rule.toString()+" on "+buildPath+" - "+packageOnRuleToApply);
-        JavaClasses classes = archUtils.importAllClassesInPackage(buildPath, packageOnRuleToApply,excludedPaths);
+        log.info("invoking ConfigurableRule "+rule.toString()+" on "+fullPathFromRootTopackage);
+        JavaClasses classes = archUtils.importAllClassesInPackage(new RootClassFolder(""), fullPathFromRootTopackage,excludedPaths);
 
         InvocationResult result = invokableRules.invokeOn(classes);
         return result.getMessage();
     }
 
-    private String getPackageNameOnWhichToApplyRules(ConfigurableRule rule,String buildPath) {
+    private String getPackageNameOnWhichToApplyRules(ConfigurableRule rule) {
 
-        StringBuilder packageNameBuilder = new StringBuilder(buildPath);
+        StringBuilder packageNameBuilder = new StringBuilder();
 
         if (rule.getApplyOn() != null) {
             if (rule.getApplyOn().getScope() != null && "test".equals(rule.getApplyOn().getScope())) {
-                packageNameBuilder = new StringBuilder(scopePathProvider.getTestClassesPath());
+                packageNameBuilder.append(scopePathProvider.getTestClassesPath().getValue());
             }
             else{
-                packageNameBuilder = new StringBuilder(scopePathProvider.getMainClassesPath());
+                packageNameBuilder.append(scopePathProvider.getMainClassesPath().getValue());
             }
+
+            if(!packageNameBuilder.toString().endsWith("/")){
+                packageNameBuilder.append("/");
+            }
+
             if (rule.getApplyOn().getPackageName() != null) {
-                packageNameBuilder.append("/").append(rule.getApplyOn().getPackageName());
+                packageNameBuilder.append(rule.getApplyOn().getPackageName());
             }
 
         }
-        return packageNameBuilder.toString().replace(".", "/");
+
+        return DotsToSlashesReplacer.replace(packageNameBuilder.toString());
     }
 
 
