@@ -7,7 +7,7 @@ public class DotsToSlashesReplacer {
 
     /**
      * package names, usually provided as dot separated string, need to be converted in file path, which are slash separated.
-     * This method will do the replacement, excluding the dots that may there at the beginning of the string
+     * This method will do the replacement, excluding the dots that may be there at the beginning of the string
      */
     static String replace(String input) {
 
