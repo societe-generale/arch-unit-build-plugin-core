@@ -25,10 +25,10 @@ public class FinalNonStaticFieldsHaveToBeStaticFinalFieldsRuleTest implements Ar
 	public static final String FINAL_NON_STATIC_FIELDS_VIOLATION_MESSAGE = "you are duplicating its value for every instance of the class, uselessly increasing the amount of memory required to execute the application.";
 
 	@Override
-	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		fields().that().areFinal().and().areNotStatic().should().beStatic().andShould().beFinal()
-				.because(FINAL_NON_STATIC_FIELDS_VIOLATION_MESSAGE).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),path,
+				.because(FINAL_NON_STATIC_FIELDS_VIOLATION_MESSAGE).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,
 						 excludedPaths));
 
 	}

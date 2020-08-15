@@ -40,10 +40,10 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 	public static final String TEST_CLASS_VIOLATION_MESSAGE = "Test classes should comply with a naming convention";
 
 	@Override
-	public void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
+	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		classes().that(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
-				ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(),path , excludedPaths));
+				ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
 
 	}
 

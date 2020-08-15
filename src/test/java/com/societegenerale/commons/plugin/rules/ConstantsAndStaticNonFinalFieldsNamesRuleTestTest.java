@@ -77,10 +77,10 @@ public class ConstantsAndStaticNonFinalFieldsNamesRuleTestTest {
 
 	}
 
-	private void assertExceptionIsThrown(String path, String violationMessage) {
+	private void assertExceptionIsThrown(String packagePath, String violationMessage) {
 
 		assertThatThrownBy(() -> {
-			new ConstantsAndStaticNonFinalFieldsNamesRuleTest().execute(path, new TestSpecificScopeProvider(), emptySet());
+			new ConstantsAndStaticNonFinalFieldsNamesRuleTest().execute(packagePath, new TestSpecificScopeProvider(), emptySet());
 		}).hasMessageContaining(violationMessage);
 
 	}
