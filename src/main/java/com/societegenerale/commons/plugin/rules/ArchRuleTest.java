@@ -10,6 +10,12 @@ import com.societegenerale.commons.plugin.service.ScopePathProvider;
 @FunctionalInterface
 public interface ArchRuleTest {
 
-  void execute(String path, ScopePathProvider scopePathProvider, Collection<String> excludedPaths);
+  /**
+   *
+   * @param packagePath the package from which classes should be loaded, for example "com.societegenerale"
+   * @param scopePathProvider from which root directory we should load classes, either for "main" or "test" classes
+   * @param excludedPaths
+   */
+  void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths);
 
 }

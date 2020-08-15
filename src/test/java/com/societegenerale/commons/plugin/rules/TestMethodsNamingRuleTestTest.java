@@ -1,14 +1,13 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static java.util.Collections.emptySet;
-import static org.assertj.core.api.Assertions.assertThatCode;
-
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
-import com.societegenerale.commons.plugin.service.DefaultScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
+
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThatCode;
 
 public class TestMethodsNamingRuleTestTest {
 
@@ -37,10 +36,10 @@ public class TestMethodsNamingRuleTestTest {
 	public void testShouldNotThrowAnyViolationTest() {
 
 		assertThatCode(() -> new TestMethodsNamingRuleTest().execute(pathMethodWithCorrectNameStartingWithShouldTest,
-				new DefaultScopePathProvider(), emptySet())).doesNotThrowAnyException();
+				new TestSpecificScopeProvider(), emptySet())).doesNotThrowAnyException();
 
 		assertThatCode(() -> new TestMethodsNamingRuleTest().execute(pathMethodWithCorrectNameStartingWithTestTest,
-				new DefaultScopePathProvider(), emptySet())).doesNotThrowAnyException();
+				new TestSpecificScopeProvider(), emptySet())).doesNotThrowAnyException();
 
 	}
 

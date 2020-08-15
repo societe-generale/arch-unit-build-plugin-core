@@ -8,7 +8,6 @@ import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.model.ApplyOn;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
-import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.model.Rules;
 import com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest;
 import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
@@ -22,9 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class RuleInvokerServiceTest {
 
-  private static final RootClassFolder ROOT_CLASS_FOLDER=new RootClassFolder("./target/aut-target/");
-
-    RuleInvokerService ruleInvokerService = new RuleInvokerService(new SilentLog(),new TestSpecificScopeProvider());
+    RuleInvokerService ruleInvokerService = new RuleInvokerService(new SilentLog(), new TestSpecificScopeProvider());
 
     ConfigurableRule configurableRule = new ConfigurableRule();
 
@@ -32,11 +29,11 @@ public class RuleInvokerServiceTest {
 
     @Test
     public void shouldInvokePreConfiguredRulesMethod()
-            throws NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        Rules rules=new Rules(Arrays.asList(NoStandardStreamRuleTest.class.getName()),emptyList());
+        Rules rules = new Rules(Arrays.asList(NoStandardStreamRuleTest.class.getName()), emptyList());
 
-        String errorMessage = ruleInvokerService.invokeRules(rules,ROOT_CLASS_FOLDER );
+        String errorMessage = ruleInvokerService.invokeRules(rules);
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
@@ -47,30 +44,29 @@ public class RuleInvokerServiceTest {
     public void shouldInvokePreConfiguredRuleThatCanLog()
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        Rules rules=new Rules(Arrays.asList(HexagonalArchitectureTest.class.getName()),emptyList());
+        Rules rules = new Rules(Arrays.asList(HexagonalArchitectureTest.class.getName()), emptyList());
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
+        String errorMessage = ruleInvokerService.invokeRules(rules);
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
         assertThat(errorMessage).contains("Rule 'classes that reside in a package");
     }
 
-
     @Test
     public void shouldNotExecuteSkippedConfigurableRules()
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","test");
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "test");
 
         configurableRule.setRule(DummyCustomRule.class.getName());
         configurableRule.setApplyOn(applyOn);
-        configurableRule.setChecks(Arrays.asList("annotatedWithTest","resideInMyPackage"));
+        configurableRule.setChecks(Arrays.asList("annotatedWithTest", "resideInMyPackage"));
         configurableRule.setSkip(true);
 
-        Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
+        String errorMessage = ruleInvokerService.invokeRules(rules);
         assertThat(errorMessage).isEmpty();
     }
 
@@ -78,15 +74,15 @@ public class RuleInvokerServiceTest {
     public void shouldExecuteConfigurableRuleWithNoPackageProvided_OnlyOnClassesOfScope()
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn(null,"test");
+        ApplyOn applyOn = new ApplyOn(null, "test");
 
         configurableRule.setRule(DummyCustomRule.class.getName());
         configurableRule.setApplyOn(applyOn);
         configurableRule.setChecks(Arrays.asList("annotatedWithTest"));
 
-        Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
+        String errorMessage = ruleInvokerService.invokeRules(rules);
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).doesNotContain("Class <com.societegenerale.aut.main.ObjectWithAdateField>");
         assertThat(errorMessage).contains("Class <com.societegenerale.aut.test.TestClassWithOutJunitAsserts>");
@@ -96,15 +92,15 @@ public class RuleInvokerServiceTest {
     public void shouldExecute2ConfigurableRulesOnTest()
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","test");
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "test");
 
         configurableRule.setRule(DummyCustomRule.class.getName());
         configurableRule.setApplyOn(applyOn);
-        configurableRule.setChecks(Arrays.asList("annotatedWithTest","resideInMyPackage"));
+        configurableRule.setChecks(Arrays.asList("annotatedWithTest", "resideInMyPackage"));
 
-        Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
+        String errorMessage = ruleInvokerService.invokeRules(rules);
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
         assertThat(errorMessage).contains("classes should be annotated with @Test");
@@ -115,34 +111,33 @@ public class RuleInvokerServiceTest {
     public void shouldExecuteOnlyTheConfiguredRule()
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","test");
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "test");
 
         configurableRule.setRule(DummyCustomRule.class.getName());
         configurableRule.setApplyOn(applyOn);
         configurableRule.setChecks(singletonList("annotatedWithTest"));
 
-        Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
+        String errorMessage = ruleInvokerService.invokeRules(rules);
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
         assertThat(errorMessage).contains("classes should be annotated with @Test");
         assertThat(errorMessage).doesNotContain("classes should reside in a package 'myPackage'");
     }
 
-
     @Test
     public void shouldExecuteAllRulesFromConfigurableClassByDefault()
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules","main");
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "main");
 
         configurableRule.setRule(DummyCustomRule.class.getName());
         configurableRule.setApplyOn(applyOn);
 
-        Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, ROOT_CLASS_FOLDER);
+        String errorMessage = ruleInvokerService.invokeRules(rules);
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
@@ -154,14 +149,14 @@ public class RuleInvokerServiceTest {
     public void shouldExecuteAllRulesOnSpecificPackageInTest()
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase","test");
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase", "test");
 
         configurableRule.setRule(DummyCustomRule.class.getName());
         configurableRule.setApplyOn(applyOn);
 
-        Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules,ROOT_CLASS_FOLDER);
+        String errorMessage = ruleInvokerService.invokeRules(rules);
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
@@ -173,18 +168,20 @@ public class RuleInvokerServiceTest {
     public void shouldExecuteAllRulesFromArchUnit_GeneralCodingRule()
             throws InstantiationException, IllegalAccessException, InvocationTargetException {
 
-        ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase","test");
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase", "test");
 
         configurableRule.setRule(GeneralCodingRules.class.getName());
         configurableRule.setApplyOn(applyOn);
 
-        Rules rules=new Rules(emptyList(),Arrays.asList(configurableRule));
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
 
-        String errorMessage = ruleInvokerService.invokeRules(rules, new RootClassFolder(""));
+        String errorMessage = ruleInvokerService.invokeRules(rules);
 
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
-        assertThat(errorMessage).contains("Rule 'no classes should use JodaTime, because modern Java projects use the [java.time] API instead' was violated (1 times)");
-        assertThat(errorMessage).contains("Field <com.societegenerale.aut.test.specificCase.DummyClassToValidate.anyJodaTimeObject> has type <org.joda.time.JodaTimePermission");
+        assertThat(errorMessage).contains(
+                "Rule 'no classes should use JodaTime, because modern Java projects use the [java.time] API instead' was violated (1 times)");
+        assertThat(errorMessage).contains(
+                "Field <com.societegenerale.aut.test.specificCase.DummyClassToValidate.anyJodaTimeObject> has type <org.joda.time.JodaTimePermission");
     }
 }

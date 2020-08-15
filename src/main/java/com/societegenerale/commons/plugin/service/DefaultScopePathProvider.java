@@ -8,11 +8,11 @@ import com.societegenerale.commons.plugin.model.RootClassFolder;
 public class DefaultScopePathProvider implements ScopePathProvider {
     @Override
     public RootClassFolder getMainClassesPath() {
-        return new RootClassFolder("/classes");
+        return new RootClassFolder("target/classes");
     }
 
     @Override
     public RootClassFolder getTestClassesPath() {
-        return new RootClassFolder("/test-classes");
+        return new RootClassFolder("target/test-classes");
     }
 }

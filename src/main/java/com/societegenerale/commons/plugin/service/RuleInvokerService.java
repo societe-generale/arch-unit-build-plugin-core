@@ -1,8 +1,8 @@
 package com.societegenerale.commons.plugin.service;
 
-import static com.societegenerale.commons.plugin.utils.ReflectionUtils.loadClassWithContextClassLoader;
-import static java.lang.System.lineSeparator;
-import static java.util.Collections.emptySet;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
 
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
@@ -12,10 +12,11 @@ import com.societegenerale.commons.plugin.rules.ArchRuleTest;
 import com.societegenerale.commons.plugin.service.InvokableRules.InvocationResult;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClasses;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.Collection;
 import org.apache.commons.lang3.StringUtils;
+
+import static com.societegenerale.commons.plugin.utils.ReflectionUtils.loadClassWithContextClassLoader;
+import static java.lang.System.lineSeparator;
+import static java.util.Collections.emptySet;
 
 public class RuleInvokerService {
     private static final String EXECUTE_METHOD_NAME = "execute";
@@ -49,13 +50,13 @@ public class RuleInvokerService {
     }
 
 
-    public String invokeRules(Rules rules, RootClassFolder buildPath)
+    public String invokeRules(Rules rules)
             throws InvocationTargetException, InstantiationException, IllegalAccessException {
 
         StringBuilder errorListBuilder = new StringBuilder();
 
         for (String rule : rules.getPreConfiguredRules()) {
-            String errorMessage = invokePreConfiguredRule(rule,buildPath);
+            String errorMessage = invokePreConfiguredRule(rule);
             errorListBuilder.append(prepareErrorMessageForRuleFailures(rule, errorMessage));
         }
 
@@ -68,7 +69,7 @@ public class RuleInvokerService {
 
     }
 
-    private String invokePreConfiguredRule(String ruleClassName, RootClassFolder buildPath)
+    private String invokePreConfiguredRule(String ruleClassName)
             throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<?> ruleClass = loadClassWithContextClassLoader(ruleClassName);
 
@@ -86,7 +87,7 @@ public class RuleInvokerService {
         String errorMessage = "";
         try {
             Method method = ruleClass.getDeclaredMethod(EXECUTE_METHOD_NAME, String.class, ScopePathProvider.class, Collection.class);
-            method.invoke(ruleToExecute, buildPath.getValue(), scopePathProvider,excludedPaths);
+            method.invoke(ruleToExecute, "", scopePathProvider,excludedPaths);
         } catch (ReflectiveOperationException re) {
             errorMessage = re.getCause().toString();
         }
