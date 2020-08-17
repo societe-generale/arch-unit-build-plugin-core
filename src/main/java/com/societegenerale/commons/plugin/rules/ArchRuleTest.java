@@ -14,7 +14,7 @@ public interface ArchRuleTest {
    *
    * @param packagePath the package from which classes should be loaded, for example "com.societegenerale"
    * @param scopePathProvider from which root directory we should load classes, either for "main" or "test" classes
-   * @param excludedPaths
+   * @param excludedPaths a list of paths to exclude from the analysis
    */
   void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths);
 

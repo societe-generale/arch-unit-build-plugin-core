@@ -19,16 +19,14 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 /**
  * 
  * Constants and Enum values have to be written in uppercase.
- * 
+ *
+ * Fields that are static and not final should not use constants naming.
+ *
  * It's possible to add underscore but not at the beginning or the end of the
  * name.
  * 
  * @see <a href= "https://rules.sonarsource.com/java/RSPEC-115">Constant names
  *      should comply with a naming convention</a>
- * 
- *      Fields that are static and not final should not use constants naming.
- * 
- * 
  * @see <a href=
  *      "https://rules.sonarsource.com/java/tag/convention/RSPEC-3008">Static
  *      non-final field names should comply with a naming convention</a>
