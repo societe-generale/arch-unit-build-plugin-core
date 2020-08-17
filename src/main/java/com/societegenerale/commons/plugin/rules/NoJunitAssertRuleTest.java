@@ -14,7 +14,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 /**
  * Junit's asserts are pretty poor. We favor the use of AssertJ which is much richer and enables developers to write easily fluent assertions. Therefore we don't want to see people use basic Junit assertions.
  *
- * @see : http://joel-costigliola.github.io/assertj/assertj-core.html
+ * @see <a href="http://joel-costigliola.github.io/assertj/assertj-core.html">AssertJ</a>
  */
 public class NoJunitAssertRuleTest implements ArchRuleTest {
 
