@@ -12,6 +12,12 @@
 
 ### Fixed
 
+## [2.6.0] - 2020-08-17
+
+### Changed
+- PR-39 : BREAKING change in some interfaces. Introducing `RootClassFolder` for strong typing, and using it as return type in ScopePathProvider.
+- PR-38 : BREAKING change in `Log` interface
+
 ## [2.5.3] - 2020-06-03
 
 ### Changed
