@@ -1,16 +1,17 @@
 package com.societegenerale.commons.plugin.utils;
 
-import static java.util.Collections.emptyList;
-
-import com.societegenerale.commons.plugin.Log;
-import com.societegenerale.commons.plugin.model.RootClassFolder;
-import com.tngtech.archunit.core.domain.JavaClasses;
-import com.tngtech.archunit.core.importer.ClassFileImporter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collection;
+
+import com.societegenerale.commons.plugin.Log;
+import com.societegenerale.commons.plugin.model.RootClassFolder;
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+
+import static java.util.Collections.emptyList;
 
 /**
  * Created by agarg020917 on 11/17/2017.
@@ -39,7 +40,7 @@ public class ArchUtils {
         if (!classesPath.toFile().exists()) {
             StringBuilder warnMessage=new StringBuilder("classpath ").append(classesPath.toFile())
                     .append(" doesn't exist : loading all classes from root, ie ")
-                    .append(rootClassFolder)
+                    .append(rootClassFolder.getValue())
                     .append(" even though it's probably not what you want to achieve..");
             log.warn(warnMessage.toString());
 
