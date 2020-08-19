@@ -12,7 +12,12 @@
 
 ### Fixed
 
-## [2.6.0] - 2020-08-17
+## [2.6.1] - 2020-08-19
+
+### Fixed
+- logging properly the full path when we fail to load the resources to analyze
+
+## [2.6.0] - 2020-08-19
 
 ### Changed
 - PR-39 : BREAKING change in some interfaces. Introducing `RootClassFolder` for strong typing, and using it as return type in ScopePathProvider.
