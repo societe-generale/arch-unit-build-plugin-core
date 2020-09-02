@@ -3,6 +3,7 @@ package com.societegenerale.commons.plugin.service;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,7 +40,7 @@ class InvokableRules {
         rulesLocation = loadClassWithContextClassLoader(rulesClassName);
 
         Set<Field> allFieldsWhichAreArchRules = getAllFieldsWhichAreArchRules(rulesLocation.getDeclaredFields());
-        Set<Method> allMethodsWhichAreArchRules = getAllMethodsWhichAreArchRules(rulesLocation.getDeclaredMethods());
+        Set<Method> allMethodsWhichAreArchRules = getAllMethodsWhichAreArchRules(rulesLocation.getMethods());
         validateRuleChecks(Sets.union(allMethodsWhichAreArchRules, allFieldsWhichAreArchRules), ruleChecks);
 
         Predicate<String> isChosenCheck = ruleChecks.isEmpty() ? check -> true : ruleChecks::contains;
@@ -81,7 +82,10 @@ class InvokableRules {
 
     private Set<Method> getAllMethodsWhichAreArchRules(Method[] methods) {
         return stream(methods)
-                .filter(m -> m.getParameterCount() == 1 && JavaClasses.class.isAssignableFrom(m.getParameterTypes()[0]))
+                .filter(m -> m.getParameterCount() == 1
+                        && JavaClasses.class.isAssignableFrom(m.getParameterTypes()[0])
+                        && !Modifier.isProtected(m.getModifiers())
+                )
                 .collect(toSet());
     }
 

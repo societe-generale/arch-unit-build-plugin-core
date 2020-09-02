@@ -1,8 +1,5 @@
 package com.societegenerale.commons.plugin.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
@@ -14,6 +11,9 @@ import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
 import com.societegenerale.commons.plugin.rules.classesForTests.DummyCustomRule;
 import com.tngtech.archunit.library.GeneralCodingRules;
 import org.junit.Test;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -51,6 +51,19 @@ public class RuleInvokerServiceTest {
         assertThat(errorMessage).isNotEmpty();
         assertThat(errorMessage).contains("Architecture Violation");
         assertThat(errorMessage).contains("Rule 'classes that reside in a package");
+    }
+
+    @Test
+    public void shouldInvokeConfigurableRuleMethodWithInheritanceAbstractClass()
+            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+
+        ConfigurableRule configurableRule= new ConfigurableRule();
+        configurableRule.setRule(ForTestForTestRule.class.getCanonicalName());
+        configurableRule.setApplyOn(new ApplyOn(ForTestForTestRule.class.getPackage().getName(), "test"));
+        Rules rules = new Rules(emptyList(), singletonList(configurableRule));
+
+        String errorMessage = ruleInvokerService.invokeRules(rules);
+        assertThat(errorMessage).containsOnlyOnce("okVerify");
     }
 
     @Test
