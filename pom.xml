@@ -76,7 +76,7 @@
 
         <tng.archunit.version>0.13.1</tng.archunit.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <lombok.version>1.18.10</lombok.version>
         <jacoco.version>0.8.3</jacoco.version>
         <mockito.version>3.0.0</mockito.version>
