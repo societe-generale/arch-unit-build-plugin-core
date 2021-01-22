@@ -57,7 +57,9 @@ public class NoJodaTimeRuleTest implements ArchRuleTest {
 
         for(JavaMethodCall methodCall : methodsUsingJodaTimeInternally){
           events.add(SimpleConditionEvent.violated(methodCall.getOriginOwner(), NO_JODA_VIOLATION_MESSAGE
-                  +" - class: "+methodCall.getOriginOwner().getName()+ " - line: "+methodCall.getLineNumber()));
+                  +" - class: "+methodCall.getOriginOwner().getName()
+                  +" - method: "+methodCall.getTarget().getOwner().getSimpleName()+"."+methodCall.getTarget().getName()
+                  +" - line: "+methodCall.getLineNumber()));
         }
       }
 
