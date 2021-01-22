@@ -34,9 +34,10 @@ public class NoJodaTimeRuleTestTest {
         });
 
         assertThat(validationExceptionThrown).isInstanceOf(AssertionError.class)
-                .hasMessageContaining("was violated (2 times)")
+                .hasMessageContaining("was violated (3 times)")
                 .hasMessageContaining("ObjectWithJodaTimeReferences - field name: jodaDatTime")
-                .hasMessageContaining("ObjectWithJodaTimeReferences - line: 17");
+                .hasMessageContaining("ObjectWithJodaTimeReferences - method: DateTimeFormat.forPattern - line: 17")
+                .hasMessageContaining("ObjectWithJodaTimeReferences - method: DateTimeFormatter.getParser - line: 17");
 
         assertThat(validationExceptionThrown).hasMessageStartingWith("Architecture Violation")
                 .hasMessageContaining(ObjectWithJodaTimeReferences.class.getName())
