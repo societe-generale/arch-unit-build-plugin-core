@@ -130,12 +130,12 @@ public class RuleInvokerService {
             }
 
             if (rule.getApplyOn().getPackageName() != null) {
-                packageNameBuilder.append(rule.getApplyOn().getPackageName());
+                packageNameBuilder.append(DotsToSlashesReplacer.replace(rule.getApplyOn().getPackageName()));
             }
 
         }
 
-        return DotsToSlashesReplacer.replace(packageNameBuilder.toString());
+        return packageNameBuilder.toString();
     }
 
 

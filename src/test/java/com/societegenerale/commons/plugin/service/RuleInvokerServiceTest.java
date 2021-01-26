@@ -8,6 +8,7 @@ import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.model.ApplyOn;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
+import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.model.Rules;
 import com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest;
 import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
@@ -18,6 +19,9 @@ import org.junit.Test;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class RuleInvokerServiceTest {
 
@@ -183,5 +187,25 @@ public class RuleInvokerServiceTest {
                 "Rule 'no classes should use JodaTime, because modern Java projects use the [java.time] API instead' was violated (1 times)");
         assertThat(errorMessage).contains(
                 "Field <com.societegenerale.aut.test.specificCase.DummyClassToValidate.anyJodaTimeObject> has type <org.joda.time.JodaTimePermission");
+    }
+
+    @Test
+    public void testScopeProviderWithDots() throws InstantiationException, IllegalAccessException, InvocationTargetException {
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase", "test");
+
+        configurableRule.setRule(DummyCustomRule.class.getName());
+        configurableRule.setApplyOn(applyOn);
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
+
+        ScopePathProvider scopeProvider = mock(ScopePathProvider.class);
+        when(scopeProvider.getTestClassesPath()).thenReturn(new RootClassFolder("minor-1.2"));
+
+        Log log = mock(Log.class);
+
+        RuleInvokerService ruleInvokerService = new RuleInvokerService(log, scopeProvider);
+
+        ruleInvokerService.invokeRules(rules);
+
+        verify(log).info("invoking ConfigurableRule "+configurableRule.toString()+" on minor-1.2/com/societegenerale/aut/test/specificCase");
     }
 }
