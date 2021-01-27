@@ -6,6 +6,7 @@ import java.util.Arrays;
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.SilentLogWithMemory;
 import com.societegenerale.commons.plugin.model.ApplyOn;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
 import com.societegenerale.commons.plugin.model.RootClassFolder;
@@ -19,17 +20,12 @@ import org.junit.Test;
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class RuleInvokerServiceTest {
 
     RuleInvokerService ruleInvokerService = new RuleInvokerService(new SilentLog(), new TestSpecificScopeProvider());
 
     ConfigurableRule configurableRule = new ConfigurableRule();
-
-    private Log testLogger = new SilentLog();
 
     @Test
     public void shouldInvokePreConfiguredRulesMethod()
@@ -197,15 +193,24 @@ public class RuleInvokerServiceTest {
         configurableRule.setApplyOn(applyOn);
         Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
 
-        ScopePathProvider scopeProvider = mock(ScopePathProvider.class);
-        when(scopeProvider.getTestClassesPath()).thenReturn(new RootClassFolder("minor-1.2"));
+        SilentLogWithMemory logger = new SilentLogWithMemory();
 
-        Log log = mock(Log.class);
-
-        RuleInvokerService ruleInvokerService = new RuleInvokerService(log, scopeProvider);
+        ruleInvokerService = new RuleInvokerService(logger, new TestSpecificScopeProviderWithDotsInPath());
 
         ruleInvokerService.invokeRules(rules);
 
-        verify(log).info("invoking ConfigurableRule "+configurableRule.toString()+" on minor-1.2/com/societegenerale/aut/test/specificCase");
+        assertThat(logger.getInfoLogs()).contains("invoking ConfigurableRule "+configurableRule.toString()+" on test/minor-1.2/com/societegenerale/aut/test/specificCase");
+    }
+
+    private class TestSpecificScopeProviderWithDotsInPath  implements ScopePathProvider{
+        @Override
+        public RootClassFolder getMainClassesPath() {
+            return new RootClassFolder("main/minor-1.2");
+        }
+
+        @Override
+        public RootClassFolder getTestClassesPath() {
+            return new RootClassFolder("test/minor-1.2");
+        }
     }
 }
