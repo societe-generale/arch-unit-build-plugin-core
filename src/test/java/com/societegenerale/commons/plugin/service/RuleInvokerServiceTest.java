@@ -6,8 +6,10 @@ import java.util.Arrays;
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
+import com.societegenerale.commons.plugin.SilentLogWithMemory;
 import com.societegenerale.commons.plugin.model.ApplyOn;
 import com.societegenerale.commons.plugin.model.ConfigurableRule;
+import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.model.Rules;
 import com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest;
 import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
@@ -24,8 +26,6 @@ public class RuleInvokerServiceTest {
     RuleInvokerService ruleInvokerService = new RuleInvokerService(new SilentLog(), new TestSpecificScopeProvider());
 
     ConfigurableRule configurableRule = new ConfigurableRule();
-
-    private Log testLogger = new SilentLog();
 
     @Test
     public void shouldInvokePreConfiguredRulesMethod()
@@ -183,5 +183,34 @@ public class RuleInvokerServiceTest {
                 "Rule 'no classes should use JodaTime, because modern Java projects use the [java.time] API instead' was violated (1 times)");
         assertThat(errorMessage).contains(
                 "Field <com.societegenerale.aut.test.specificCase.DummyClassToValidate.anyJodaTimeObject> has type <org.joda.time.JodaTimePermission");
+    }
+
+    @Test
+    public void testScopeProviderWithDots() throws InstantiationException, IllegalAccessException, InvocationTargetException {
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase", "test");
+
+        configurableRule.setRule(DummyCustomRule.class.getName());
+        configurableRule.setApplyOn(applyOn);
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
+
+        SilentLogWithMemory logger = new SilentLogWithMemory();
+
+        ruleInvokerService = new RuleInvokerService(logger, new TestSpecificScopeProviderWithDotsInPath());
+
+        ruleInvokerService.invokeRules(rules);
+
+        assertThat(logger.getInfoLogs()).contains("invoking ConfigurableRule "+configurableRule.toString()+" on test/minor-1.2/com/societegenerale/aut/test/specificCase");
+    }
+
+    private class TestSpecificScopeProviderWithDotsInPath  implements ScopePathProvider{
+        @Override
+        public RootClassFolder getMainClassesPath() {
+            return new RootClassFolder("main/minor-1.2");
+        }
+
+        @Override
+        public RootClassFolder getTestClassesPath() {
+            return new RootClassFolder("test/minor-1.2");
+        }
     }
 }
