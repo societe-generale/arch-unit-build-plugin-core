@@ -12,6 +12,11 @@
 
 ### Fixed
 
+## [2.7.2] - 2021-02-01
+
+### Changed
+- upgrading to ArchUnit 0.16
+
 ## [2.7.1] - 2021-01-27
 
 ### Fixed
@@ -20,7 +25,7 @@
 ## [2.7.0] - 2021-01-22
 
 ### Changed
-- PR-43 : upgrading to ArchUnit - thanks @nvervelle !! 
+- PR-43 : upgrading to ArchUnit 0.15 - thanks @nvervelle !! 
 
 ## [2.6.1] - 2020-08-19
 
