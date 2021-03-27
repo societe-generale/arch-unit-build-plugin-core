@@ -20,7 +20,7 @@ public class ExclusionImportOption implements ImportOption {
     }
 
     private URI toUri(@Nonnull final String excludePath){
-        boolean endWithClass = excludePath.endsWith(CLASS);
+        boolean excludePathEndsWithDotClass = excludePath.endsWith(CLASS);
         String stringToConvert = excludePath;
 
         if(excludePath.endsWith(CLASS)) {
@@ -30,16 +30,16 @@ public class ExclusionImportOption implements ImportOption {
 
         // assuming a package based exclude path
         if(stringToConvert.contains(".")){
-            stringToConvert = stringToConvert.replaceAll("\\Q.\\E", "/");
+            stringToConvert = stringToConvert.replaceAll("\\.", "/");
         }
         // assuming a directory based exclude path
         else {
             // replace backslash by slash
-            stringToConvert = stringToConvert.replaceAll("\\Q\\\\E", "/");
+            stringToConvert = stringToConvert.replaceAll("\\\\", "/");
         }
 
-        if(endWithClass){
-            // append .class
+        if(excludePathEndsWithDotClass){
+            // appends again .class that we removed initially
             stringToConvert = stringToConvert.concat(CLASS);
         }
 
