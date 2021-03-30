@@ -13,10 +13,17 @@ public class ExclusionImportOption implements ImportOption {
 
     private URI patternToExcludeDirectoryBased;
 
-
     public ExclusionImportOption(@Nonnull final String patternToExclude) {
         // assuming a directory based exclude path
         this.patternToExcludeDirectoryBased = toUri(patternToExclude);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean includes(Location location) {
+        return location != null && !location.contains(patternToExcludeDirectoryBased.toString());
     }
 
     private URI toUri(@Nonnull final String excludePath){
@@ -43,15 +50,6 @@ public class ExclusionImportOption implements ImportOption {
             stringToConvert = stringToConvert.concat(CLASS);
         }
 
-        stringToConvert = stringToConvert.replaceAll("://*", ":/");
         return URI.create(stringToConvert);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean includes(Location location) {
-        return location != null && !location.contains(patternToExcludeDirectoryBased.toString());
     }
 }
