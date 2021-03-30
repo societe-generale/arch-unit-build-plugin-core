@@ -12,6 +12,14 @@
 
 ### Fixed
 
+## [2.7.3] - 2021-03-30
+
+### Changed
+- upgrading to ArchUnit 0.17
+
+### Added
+- PR-47 : ExclusionImportOption supports package excludes - thanks @KayWeinert !!
+
 ## [2.7.2] - 2021-02-01
 
 ### Changed
