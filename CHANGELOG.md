@@ -16,6 +16,7 @@
 
 ### Changed
 - upgrading to ArchUnit 0.17
+- PR-48 : upgrading to Guava 30.1.1-jre
 
 ### Added
 - PR-47 : ExclusionImportOption supports package excludes - thanks @KayWeinert !!
