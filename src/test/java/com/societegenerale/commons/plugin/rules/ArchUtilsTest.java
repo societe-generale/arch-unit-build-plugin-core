@@ -1,14 +1,15 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.Arrays;
 
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
-import java.util.Arrays;
 import org.junit.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * These are not great test, as they will fail when new classes are added in the
@@ -35,7 +36,7 @@ public class ArchUtilsTest {
 
 		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
 
-		assertThat(noOfClasses).isEqualTo(34);
+		assertThat(noOfClasses).isEqualTo(36);
 	}
 
 	@Test

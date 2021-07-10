@@ -26,4 +26,14 @@ public class SilentLog implements Log {
     public void warn(String toString) {
 
     }
+
+    @Override
+    public void warn(String toString, Throwable e) {
+
+    }
+
+    @Override
+    public void debug(String s, Throwable e) {
+
+    }
 }

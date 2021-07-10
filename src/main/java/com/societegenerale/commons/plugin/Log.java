@@ -11,4 +11,8 @@ public interface Log {
     void debug(String s);
 
     void warn(String toString);
+
+    void warn(String s, Throwable e);
+
+    void debug(String s, Throwable e);
 }
