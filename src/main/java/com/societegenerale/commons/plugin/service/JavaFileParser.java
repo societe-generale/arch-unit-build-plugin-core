@@ -107,13 +107,13 @@ class JavaFileParser
      * Extracts the class name.
      *
      * @param javaFileContent - file content as String
-     * @param mavenLogger     -   not null
+     * @param logger     -   not null
      *
      * @return class name or null
      */
     @VisibleForTesting
     @Nullable
-    String extractClassName(final String javaFileContent, @Nonnull final Log mavenLogger)
+    String extractClassName(final String javaFileContent, @Nonnull final Log logger)
     {
         if (javaFileContent == null || javaFileContent.isEmpty() || !javaFileContent.contains(CLASS))
         {
@@ -128,14 +128,14 @@ class JavaFileParser
         // there should be at least 1 part which contains the class declaration
         if (split.length < 1)
         {
-            mavenLogger.warn("unexpected file content: " + javaFileContent);
+            logger.warn("unexpected file content: " + javaFileContent);
             return null;
         }
 
         final String classDeclaration = split[0].trim();
         if (!classDeclaration.contains(CLASS))
         {
-            mavenLogger.warn("unabble to find class declaration in: " + classDeclaration);
+            logger.warn("unabble to find class declaration in: " + classDeclaration);
             return null;
         }
 
