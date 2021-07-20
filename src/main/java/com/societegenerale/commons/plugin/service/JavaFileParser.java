@@ -10,11 +10,11 @@ import javax.annotation.Nullable;
 import com.societegenerale.commons.plugin.Log;
 import com.tngtech.archunit.thirdparty.com.google.common.annotations.VisibleForTesting;
 
-class JavaFileParser
+public class JavaFileParser
 {
+    protected static final String REGEX_LINE_BREAKS   = "[\n\r]";
     private static final String PACKAGE             = "package";
     private static final String CLASS               = "class";
-    static final         String REGEX_LINE_BREAKS   = "[\n\r]";
     private static final String BLOCK_COMMENT_START = "/**";
     private static final String BLOCK_COMMENT_END   = "*/";
     private static final String LINE_COMMENT_START  = "//";
@@ -28,7 +28,7 @@ class JavaFileParser
      *
      * @return not null
      */
-    JavaFile parse(final Path javafilePath, final Log logger) throws IOException
+    public JavaFile parse(final Path javafilePath, final Log logger) throws IOException
     {
         final String fileContent = readFile(javafilePath);
         String packageString = null;
@@ -92,7 +92,7 @@ class JavaFileParser
      *
      * @return the file content as String if there is a content, not null
      *
-     * @throws IOException when
+     * @throws IOException
      */
     @VisibleForTesting
     String readFile(@Nonnull final Path javafilePath) throws IOException
