@@ -100,7 +100,7 @@ class ExcludedPathsPreProcessor implements Serializable
         }
         catch (final IOException e)
         {
-            logger.warn("unabble to collect java files in path: " + path, e);
+            logger.warn("unable to collect java files in path: " + path, e);
         }
 
         return files;
