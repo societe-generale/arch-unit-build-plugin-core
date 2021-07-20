@@ -154,7 +154,6 @@ class ExcludedPathsPreProcessor implements Serializable
 
             if (!Files.exists(result))
             {
-                logger.warn("invalid exclusion path: " + pathAsString);
                 logger.warn("invalid exclusion path: " + concatPath);
                 result = null;
             }
