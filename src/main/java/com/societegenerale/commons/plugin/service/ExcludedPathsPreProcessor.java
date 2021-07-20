@@ -23,7 +23,7 @@ import org.apache.commons.io.FilenameUtils;
  * This class analyses exclusion paths. It looks in directories and sub directories for java files and collects them to
  * an exclusion set.
  */
-class ExcludedPathsPreProcessor implements Serializable
+public class ExcludedPathsPreProcessor implements Serializable
 {
     private static final String FILE_TYPE_JAVA = ".java";
 
@@ -41,7 +41,7 @@ class ExcludedPathsPreProcessor implements Serializable
      *
      * @return a set of classes to be exclude, not null
      */
-    Set<String> processExcludedPaths(@Nonnull final Log logger, final String projectBuildDir,
+    public Set<String> processExcludedPaths(@Nonnull final Log logger, final String projectBuildDir,
                                      final Collection<String> excludedPaths)
     {
         final Set<String> result = excludedPaths != null ? new HashSet<>(excludedPaths) : new HashSet<>();
