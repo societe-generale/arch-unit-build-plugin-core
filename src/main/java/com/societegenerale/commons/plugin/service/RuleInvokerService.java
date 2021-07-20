@@ -41,12 +41,12 @@ public class RuleInvokerService {
         this.scopePathProvider=scopePathProvider;
     }
 
-    public RuleInvokerService(Log log, ScopePathProvider scopePathProvider,Collection<String> excludedPaths) {
+    public RuleInvokerService(Log log, ScopePathProvider scopePathProvider,Collection<String> excludedPaths, String projectBuildDir) {
         this.log=log;
         archUtils =new ArchUtils(log);
 
         this.scopePathProvider=scopePathProvider;
-        this.excludedPaths=excludedPaths;
+        this.excludedPaths=new ExcludedPathsPreProcessor().processExcludedPaths(log, projectBuildDir, excludedPaths);
     }
 
 

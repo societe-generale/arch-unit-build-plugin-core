@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
 import com.societegenerale.commons.plugin.Log;
 import com.tngtech.archunit.thirdparty.com.google.common.annotations.VisibleForTesting;
 
-public class JavaFileParser
+class JavaFileParser
 {
     protected static final String REGEX_LINE_BREAKS   = "[\n\r]";
     private static final String PACKAGE             = "package";
@@ -28,7 +28,7 @@ public class JavaFileParser
      *
      * @return not null
      */
-    public JavaFile parse(final Path javafilePath, final Log logger) throws IOException
+    JavaFile parse(final Path javafilePath, final Log logger) throws IOException
     {
         final String fileContent = readFile(javafilePath);
         String packageString = null;
