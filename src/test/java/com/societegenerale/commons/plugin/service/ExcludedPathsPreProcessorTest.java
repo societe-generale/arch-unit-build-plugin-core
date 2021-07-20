@@ -66,7 +66,7 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
         assertThat(actual).doesNotContain(notAJavaFilePath);
         assertThat(actual).doesNotContain(packageInfoFilePath);
         assertThat(actual).hasSameSizeAs(expected);
-        assertThat(actual).containsExactlyElementsOf(expected);
+        assertThat(actual).containsOnlyElementsOf(expected);
     }
 
     @Test
