@@ -20,8 +20,11 @@ import org.apache.commons.io.FilenameUtils;
 
 
 /**
- * This class analyses exclusion paths. It looks in directories and sub directories for java files and collects them to
- * an exclusion set.
+ * This class analyses exclusion paths : this is especially useful for generated source code.
+ *
+ * It looks in directories and sub directories for java files and collects them to an exclusion set.
+ * By listing all the source files to be excluded, we can reuse that list later when the compiled generated classes
+ * are mixed with the non-generated classes.
  */
 class ExcludedPathsPreProcessor implements Serializable
 {
