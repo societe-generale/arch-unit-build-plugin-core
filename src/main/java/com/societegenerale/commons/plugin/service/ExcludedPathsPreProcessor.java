@@ -27,7 +27,7 @@ class ExcludedPathsPreProcessor implements Serializable
 {
     private static final String FILE_TYPE_JAVA = ".java";
 
-    static final String GENERATTED_SOURCES = "generated-sources";
+    static final String GENERATED_SOURCES = "generated-sources";
     static final String PACKAGE_INFO_JAVA  = "package-info.java";
 
     /**

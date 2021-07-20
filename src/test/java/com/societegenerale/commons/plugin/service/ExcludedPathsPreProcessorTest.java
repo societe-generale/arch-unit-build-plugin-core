@@ -105,10 +105,10 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
         final Path targetDir = AbstractExcludePathTest.getTestProjectBuildDirectory();
 
         final Path generatedSourcesDir = Files.createDirectory(
-                Paths.get(targetDir.toString(), ExcludedPathsPreProcessor.GENERATTED_SOURCES));
+                Paths.get(targetDir.toString(), ExcludedPathsPreProcessor.GENERATED_SOURCES));
 
         final Path actualGenSrc = preProcessor.convertToPath(getLogger(), targetDir.toString(),
-                                                             ExcludedPathsPreProcessor.GENERATTED_SOURCES);
+                                                             ExcludedPathsPreProcessor.GENERATED_SOURCES);
         assertEquals(generatedSourcesDir, actualGenSrc);
 
         // Directory outsite of the project
