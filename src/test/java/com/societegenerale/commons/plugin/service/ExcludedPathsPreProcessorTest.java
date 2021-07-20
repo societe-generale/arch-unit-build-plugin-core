@@ -15,10 +15,8 @@ import org.junit.runner.RunWith;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import static com.societegenerale.commons.plugin.service.ExcludedPathsPreProcessor.PACKAGE_INFO_JAVA;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThat;
+
 
 @RunWith (MockitoJUnitRunner.class)
 public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
@@ -45,8 +43,7 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
 
         final Set<Path> actual = preProcessor.findJavaFiles(emptyDir, getLogger());
 
-        assertNotNull(actual);
-        assertTrue(actual.isEmpty());
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -66,19 +63,17 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
 
         final Set<Path> actual = preProcessor.findJavaFiles(getTestTempRootDirectory(), getLogger());
 
-        assertNotNull(actual);
-        assertFalse(actual.contains(notAJavaFilePath));
-        assertFalse(actual.contains(packageInfoFilePath));
-        assertEquals(expected.size(), actual.size());
-        assertEquals(expected, actual);
+        assertThat(actual).doesNotContain(notAJavaFilePath);
+        assertThat(actual).doesNotContain(packageInfoFilePath);
+        assertThat(actual).hasSameSizeAs(expected);
+        assertThat(actual).containsExactlyElementsOf(expected);
     }
 
     @Test
     public void testDetermineClassNames_EmptySet()
     {
         final Set<String> actual = preProcessor.determineClassNames(new HashSet<>(), getLogger());
-        assertNotNull(actual);
-        assertTrue(actual.isEmpty());
+        assertThat(actual).isEmpty();
     }
 
     @Test
@@ -95,8 +90,8 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
         paths.add(AbstractExcludePathTest.getTempJavaFileWithFileComment());
 
         final Set<String> actual = preProcessor.determineClassNames(paths, getLogger());
-        assertNotNull(actual);
-        assertEquals(expected, actual);
+
+        assertThat(actual).containsExactlyElementsOf(expected);
     }
 
     @Test
@@ -109,27 +104,28 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
 
         final Path actualGenSrc = preProcessor.convertToPath(getLogger(), targetDir.toString(),
                                                              ExcludedPathsPreProcessor.GENERATED_SOURCES);
-        assertEquals(generatedSourcesDir, actualGenSrc);
 
-        // Directory outsite of the project
-        final Path dirOutsiteTarget =
+        assertThat(actualGenSrc).isEqualTo(generatedSourcesDir);
+
+        // Directory outside of the project
+        final Path dirOutsideTarget =
                 Files.createDirectory(Paths.get(getTestTempRootDirectory().toString(), "outsideDir"));
 
-        final Path actualOutsiteDir = preProcessor.convertToPath(getLogger(), targetDir.toString(),
-                                                                 dirOutsiteTarget.toString());
-        assertEquals(dirOutsiteTarget, actualOutsiteDir);
+        final Path actualOutsideDir = preProcessor.convertToPath(getLogger(), targetDir.toString(),
+                                                                 dirOutsideTarget.toString());
+        assertThat(actualOutsideDir).isEqualTo(dirOutsideTarget);
 
         // path that point a to a file
         final Path javaFile = AbstractExcludePathTest.getTempJavaFileWithFileComment();
         final Path actualJavaFile = preProcessor.convertToPath(getLogger(), targetDir.toString(),
                                                                javaFile.toString());
-        assertEquals(javaFile, actualJavaFile);
+        assertThat(actualJavaFile).isEqualTo(javaFile);
     }
 
     @Test
     public void testProcessExcludedPaths()
     {
-        assertNotNull(preProcessor.processExcludedPaths(getLogger(), null, null));
+        assertThat(preProcessor.processExcludedPaths(getLogger(), null, null)).isNotNull();
 
         final Path targetDir = AbstractExcludePathTest.getTestProjectBuildDirectory();
 
@@ -137,31 +133,31 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
         final Set<String> excludes = preProcessor.processExcludedPaths(getLogger(), targetDir.toString(),
                                                                        Collections.singletonList("com"));
 
-        assertNotNull(excludes);
-        assertEquals(3, excludes.size());
-        assertTrue(excludes.contains("com"));
-        assertTrue(excludes.contains(AbstractExcludePathTest.PACKAGE_NAME + "." + AbstractExcludePathTest.CLASS_NAME));
-        assertTrue(excludes.contains(
-                AbstractExcludePathTest.PACKAGE_NAME + "." + AbstractExcludePathTest.CLASS_NAME_WITH_FILE_COMMENT));
+        assertThat(excludes).hasSize(3);
+
+        assertThat(excludes).contains("com");
+        assertThat(excludes).contains(AbstractExcludePathTest.PACKAGE_NAME + "." + AbstractExcludePathTest.CLASS_NAME);
+        assertThat(excludes).contains(
+                AbstractExcludePathTest.PACKAGE_NAME + "." + AbstractExcludePathTest.CLASS_NAME_WITH_FILE_COMMENT);
     }
 
     @Test
     public void testIsJavaFile()
     {
-        assertFalse(preProcessor.isJavaFile(null));
-        assertFalse(preProcessor.isJavaFile(""));
-        assertFalse(preProcessor.isJavaFile("abc"));
+        assertThat(preProcessor.isJavaFile(null)).isFalse();
+        assertThat(preProcessor.isJavaFile("")).isFalse();
+        assertThat(preProcessor.isJavaFile("abc")).isFalse();
 
-        assertFalse(preProcessor.isJavaFile("c:\\" + PACKAGE_INFO_JAVA.toUpperCase()));
-        assertFalse(preProcessor.isJavaFile("c:\\" + PACKAGE_INFO_JAVA.toLowerCase()));
-        assertFalse(preProcessor.isJavaFile("c:\\" + PACKAGE_INFO_JAVA + "   "));
-        assertFalse(preProcessor.isJavaFile("c:\\" + PACKAGE_INFO_JAVA));
+        assertThat(preProcessor.isJavaFile("c:\\" + PACKAGE_INFO_JAVA.toUpperCase())).isFalse();
+        assertThat(preProcessor.isJavaFile("c:\\" + PACKAGE_INFO_JAVA.toLowerCase())).isFalse();
+        assertThat(preProcessor.isJavaFile("c:\\" + PACKAGE_INFO_JAVA + "   ")).isFalse();
+        assertThat(preProcessor.isJavaFile("c:\\" + PACKAGE_INFO_JAVA)).isFalse();
 
         final String pathString = "c:\\MyJavaFile.java";
-        assertTrue(preProcessor.isJavaFile(pathString.toUpperCase()));
-        assertTrue(preProcessor.isJavaFile(pathString.toLowerCase()));
-        assertTrue(preProcessor.isJavaFile(pathString + "   "));
-        assertTrue(preProcessor.isJavaFile(pathString));
+        assertThat(preProcessor.isJavaFile(pathString.toUpperCase())).isTrue();
+        assertThat(preProcessor.isJavaFile(pathString.toLowerCase())).isTrue();
+        assertThat(preProcessor.isJavaFile(pathString + "   ")).isTrue();
+        assertThat(preProcessor.isJavaFile(pathString)).isTrue();
 
     }
 }
