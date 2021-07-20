@@ -175,12 +175,12 @@ class ExcludedPathsPreProcessor implements Serializable
      * class name within the file content.
      *
      * @param javaFilePaths -   not null
-     * @param mavenLogger   -   not null
+     * @param logger   -   not null
      *
      * @return not null
      */
     @VisibleForTesting
-    Set<String> determineClassNames(final Set<Path> javaFilePaths, final Log mavenLogger)
+    Set<String> determineClassNames(final Set<Path> javaFilePaths, final Log logger)
     {
         final JavaFileParser fileParser = new JavaFileParser();
 
@@ -191,7 +191,7 @@ class ExcludedPathsPreProcessor implements Serializable
             final JavaFileParser.JavaFile file;
             try
             {
-                file = fileParser.parse(path, mavenLogger);
+                file = fileParser.parse(path, logger);
 
                 if (file.getClassName() != null)
                 {
@@ -203,7 +203,7 @@ class ExcludedPathsPreProcessor implements Serializable
             }
             catch (final IOException e)
             {
-                mavenLogger.warn("unable to read file: " + path);
+                logger.warn("unable to read file: " + path);
             }
         }
 
