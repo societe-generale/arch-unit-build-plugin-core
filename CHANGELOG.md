@@ -12,6 +12,15 @@
 
 ### Fixed
 
+## [2.8.0] - 2021-07-22
+
+### Added
+- PR-49 : BREAKING  RuleInvokerService constructor signature has changed + some new logging methods need to be implemented. 
+  Can exclude generated source code that will be merged with the rest of the code later, based on a directory. thanks @KayWeinert !! 
+
+### Changed
+- PR-50 : upgrading to ArchUnit 0.20.1
+
 ## [2.7.3] - 2021-03-30
 
 ### Changed
