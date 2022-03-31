@@ -1,12 +1,11 @@
 package com.societegenerale.commons.plugin.rules;
 
-import java.util.Collection;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.lang.ArchRule;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import java.util.Collection;
 
 /**
  * It is important to respect encapsulation.
@@ -22,6 +21,7 @@ public class NoPublicFieldRuleTest implements ArchRuleTest {
 	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		ArchRule rulePublic = fields().that().areNotStatic().or().areNotFinal().should().notBePublic()
+				.allowEmptyShould(true)
 				.because(NO_PUBLIC_FIELD_VIOLATION_MESSAGE);
 
 		rulePublic.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));

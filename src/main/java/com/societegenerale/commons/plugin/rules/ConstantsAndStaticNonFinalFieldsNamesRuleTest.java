@@ -1,8 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
-import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -12,9 +11,9 @@ import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -55,15 +54,18 @@ public class ConstantsAndStaticNonFinalFieldsNamesRuleTest implements ArchRuleTe
 	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
 		fields().that().areDeclaredInClassesThat().areNotEnums().and().areStatic().and().areFinal()
-				.should(beInUpperCaseAndUseUnderscore()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,
-						 excludedPaths));
+				.should(beInUpperCaseAndUseUnderscore())
+				.allowEmptyShould(true)
+				.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,excludedPaths));
 
 		fields().that().areDeclaredInClassesThat().areNotEnums().and().areStatic().and().areNotFinal()
-				.should(notBeInUpperCaseAndUseUnderscore()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,
-						excludedPaths));
+				.should(notBeInUpperCaseAndUseUnderscore())
+				.allowEmptyShould(true)
+				.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,excludedPaths));
 
-		classes().that().areEnums().should(haveConstantsInUpperCaseAndUseUnderscore()).check(
-				ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath, excludedPaths));
+		classes().that().areEnums().should(haveConstantsInUpperCaseAndUseUnderscore())
+				.allowEmptyShould(true)
+				.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath, excludedPaths));
 
 	}
 
