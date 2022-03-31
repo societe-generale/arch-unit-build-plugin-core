@@ -1,16 +1,17 @@
 package com.societegenerale.commons.plugin.rules;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.Nonnull;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
+import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchRule;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import javax.annotation.Nonnull;
 
 /**
  * Returning null collections (List, Set) forces the caller to always perform a null check, which hinders readability. It's much better to never return a null Collection, and instead return an empty one.
@@ -27,10 +28,37 @@ public class DontReturnNullCollectionTest implements ArchRuleTest {
   @Override
   public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-    ArchRule rule = methods().that().haveRawReturnType(List.class).or().haveRawReturnType(Set.class).should().beAnnotatedWith(Nonnull.class)
-            .because(NO_NULL_COLLECTION_MESSAGE);
+    JavaClasses classesToCheck = ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths);
 
-    rule.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
+    ArchRule rule = methods().that(returnCollections).and(areNotLambdas)
+        .should().beAnnotatedWith(Nonnull.class)
+        .because(NO_NULL_COLLECTION_MESSAGE)
+        .allowEmptyShould(true);
+
+    rule.check(classesToCheck);
   }
+
+  DescribedPredicate<JavaMethod> areNotLambdas =
+      new DescribedPredicate<JavaMethod>("are not lambda"){
+        @Override
+        public boolean apply(JavaMethod input) {
+
+          return !input.getName().contains("lambda$new");
+
+        }
+      };
+
+  DescribedPredicate<JavaMethod> returnCollections =
+      new DescribedPredicate<JavaMethod>("return collections"){
+        @Override
+        public boolean apply(JavaMethod input) {
+
+          Class returnedClass = input.getReturnType().toErasure().reflect();
+
+          return returnedClass.equals(List.class) || returnedClass.equals(Set.class) ;
+
+        }
+      };
+
 
 }

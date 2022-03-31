@@ -1,21 +1,23 @@
 package com.societegenerale.commons.plugin.rules;
 
+import static java.util.Collections.emptySet;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.catchThrowable;
+
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
 import org.junit.Test;
 
-import static java.util.Collections.emptySet;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.catchThrowable;
-
 public class DontReturnNullCollectionTestTest {
 
     String pathObjectWithAmethodReturningAnullList = "com/societegenerale/aut/main/ObjectWithMethodsReturningNullCollections.class";
 
     String pathProperlyAnnotatedObjectWithAmethodReturningAlist = "com/societegenerale/aut/main/ObjectWithProperlyAnnotatedMethodsReturningCollections.class";
+
+    String pathObjectWithLambdasReturningListsInside = "com/societegenerale/aut/main/ObjectWithLambdasReturningListsInside.class";
 
     @Before
     public void setup(){
@@ -40,6 +42,16 @@ public class DontReturnNullCollectionTestTest {
 
         assertThatCode(() -> new DontReturnNullCollectionTest().execute(pathProperlyAnnotatedObjectWithAmethodReturningAlist, new TestSpecificScopeProvider(),emptySet()))
                 .doesNotThrowAnyException();
+
+    }
+
+
+    @Test
+    public void shouldNotThrowViolationsOnLambdas() {
+
+        assertThatCode(() -> new DontReturnNullCollectionTest()
+            .execute(pathObjectWithLambdasReturningListsInside, new TestSpecificScopeProvider(),emptySet()))
+            .doesNotThrowAnyException();
 
     }
 }
