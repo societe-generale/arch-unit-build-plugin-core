@@ -1,7 +1,6 @@
 package com.societegenerale.commons.plugin.rules;
 
-import java.util.Collection;
-import java.util.regex.Pattern;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -10,8 +9,8 @@ import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import java.util.Collection;
+import java.util.regex.Pattern;
 
 /**
  * 
@@ -28,8 +27,9 @@ public class StringFieldsThatAreActuallyDatesRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		fields().that().haveRawType(String.class).and(endWithDate).should(beDates()).check(
-				ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,excludedPaths));
+		fields().that().haveRawType(String.class).and(endWithDate).should(beDates())
+				.allowEmptyShould(true)
+				.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,excludedPaths));
 
 	}
 

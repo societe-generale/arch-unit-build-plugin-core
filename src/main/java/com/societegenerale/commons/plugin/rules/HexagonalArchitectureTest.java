@@ -1,10 +1,8 @@
 package com.societegenerale.commons.plugin.rules;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static java.util.stream.Collectors.toList;
 
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
@@ -15,10 +13,11 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
-import static java.util.stream.Collectors.toList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 /**
  * Hexagonal architecture is a way to arrange our code to enforce concerns are separated : we want to make sure that core domain code is not polluted by infrastructure code.
@@ -100,18 +99,21 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
                 .should(notHaveAnameEndingBy_ignoringCase(FORBIDDEN_SUFFIX_DTO))
                 .andShould(notHaveAnameEndingBy_ignoringCase(FORBIDDEN_SUFFIX_VO))
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "DTO / VO classes shouldn't be located in domain, as they are not business oriented")
+            .allowEmptyShould(true)
                 .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath,excludedPaths));
 
         noClasses().that().resideInAPackage(DOMAIN)
                 .should().accessClassesThat().resideInAPackage("..infrastructure..")
                 .orShould().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should not know about infrastructure or config code")
+            .allowEmptyShould(true)
                 .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
 
 
         noClasses().that().resideInAPackage("..infrastructure..")
                 .should().accessClassesThat().resideInAPackage("..config..")
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE+"infrastructure classes should not know about config code")
+                .allowEmptyShould(true)
                 .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
 
 
@@ -119,6 +121,7 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
                 .should().onlyAccessClassesThat().resideInAnyPackage(allowedPackageInDomain)
                 .andShould().notBeAnnotatedWith(invalidAnnotations)
                 .because(WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE + "domain classes should use only a limited set of core libraries, ie no external framework")
+                .allowEmptyShould(true)
                 .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
     }
 
