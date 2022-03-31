@@ -5,6 +5,7 @@
 ### Added
 
 ### Changed
+- PR 54 : upgrading to ArchUnit 0.23.1
 
 ### Deprecated
 
