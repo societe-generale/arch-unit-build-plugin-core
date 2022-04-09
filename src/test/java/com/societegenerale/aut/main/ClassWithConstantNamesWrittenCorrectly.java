@@ -8,4 +8,7 @@ public class ClassWithConstantNamesWrittenCorrectly {
 
 	private static final long NUMBER_SIX_LONG = 6l;
 
+	// serialVersionUID is the exception : the only one accepted, as per https://docs.oracle.com/javase/8/docs/api/java/io/Serializable.html
+	static final long serialVersionUID = 42L;
+
 }

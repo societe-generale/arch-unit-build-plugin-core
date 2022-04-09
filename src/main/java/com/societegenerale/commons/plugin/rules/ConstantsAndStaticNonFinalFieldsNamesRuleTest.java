@@ -1,19 +1,21 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import java.util.Collection;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
+import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaEnumConstant;
 import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import java.util.Collection;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 /**
  * 
@@ -53,7 +55,7 @@ public class ConstantsAndStaticNonFinalFieldsNamesRuleTest implements ArchRuleTe
 	@Override
 	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		fields().that().areDeclaredInClassesThat().areNotEnums().and().areStatic().and().areFinal()
+		fields().that().areDeclaredInClassesThat().areNotEnums().and().areStatic().and().areFinal().and(areNotSerialVersionUID)
 				.should(beInUpperCaseAndUseUnderscore())
 				.allowEmptyShould(true)
 				.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath,excludedPaths));
@@ -68,6 +70,15 @@ public class ConstantsAndStaticNonFinalFieldsNamesRuleTest implements ArchRuleTe
 				.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath, excludedPaths));
 
 	}
+
+	DescribedPredicate<JavaField> areNotSerialVersionUID =
+			new DescribedPredicate<JavaField>("are not serialVersionUID"){
+				@Override
+				public boolean apply(JavaField input) {
+
+					return !(input.getName().equals("serialVersionUID") );
+				}
+			};
 
 	protected static ArchCondition<JavaField> beInUpperCaseAndUseUnderscore() {
 
