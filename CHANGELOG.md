@@ -5,13 +5,20 @@
 ### Added
 
 ### Changed
-- PR 54 : upgrading to ArchUnit 0.23.1
 
 ### Deprecated
 
 ### Removed
 
 ### Fixed
+
+## [2.9.0] - 2022-04-10
+
+### Changed
+- PR 54 : upgrading to ArchUnit 0.23.1 - there may be breaking changes due to this
+- PR 55 : tweak in DontReturnNullCollectionTest to avoid failing on lambdas. 
+- PR 58 : exception on serialVersionUID in ConstantsAndStaticNonFinalFieldsNamesRuleTest
+
 
 ## [2.8.0] - 2021-07-22
 
