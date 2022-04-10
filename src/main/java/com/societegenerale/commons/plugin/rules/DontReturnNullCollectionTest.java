@@ -1,6 +1,10 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
+import javax.annotation.Nonnull;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -8,16 +12,14 @@ import com.tngtech.archunit.base.DescribedPredicate;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchRule;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-import javax.annotation.Nonnull;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
 /**
  * Returning null collections (List, Set) forces the caller to always perform a null check, which hinders readability. It's much better to never return a null Collection, and instead return an empty one.
  * This rule enforces that all methods returning a Collection must be annotated with @Nonnull
  *
- * @see: there is no agreed standard for notNull annotation, see <a href= "https://stackoverflow.com/questions/4963300/which-notnull-java-annotation-should-i-use/">here</a>
+ * @see <a href= "https://stackoverflow.com/questions/4963300/which-notnull-java-annotation-should-i-use/">there is no agreed standard for notNull annotation</a>
  *
  *
  */

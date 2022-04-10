@@ -1,6 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import java.util.Collection;
+import java.util.regex.Pattern;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -9,14 +10,14 @@ import com.tngtech.archunit.core.domain.JavaField;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import java.util.Collection;
-import java.util.regex.Pattern;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
 
 /**
  * 
  * We regularly see date fields that are not typed properly. However, it's quite
  * easy to identify them by name, because they usually finish by "Date", like
- * <b>String startDate<b/> . We need a rule that will look at all the class's
+ * <b>String startDate</b> . We need a rule that will look at all the class's
  * String fields.
  */
 
