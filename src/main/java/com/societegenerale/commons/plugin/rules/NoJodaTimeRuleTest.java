@@ -29,7 +29,9 @@ public class NoJodaTimeRuleTest implements ArchRuleTest {
 
   @Override
   public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-    classes().should(notUseJodaTime()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
+    classes().should(notUseJodaTime())
+            .allowEmptyShould(true)
+            .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(), packagePath, excludedPaths));
   }
 
   protected static ArchCondition<JavaClass> notUseJodaTime() {

@@ -44,8 +44,9 @@ public class TestMethodsNamingRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		methods().that().areAnnotatedWith(Test.class).should(respectNamingConvention()).check(
-				ArchUtils.importAllClassesInPackage( scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
+		methods().that().areAnnotatedWith(Test.class).should(respectNamingConvention())
+				.allowEmptyShould(true)
+				.check(ArchUtils.importAllClassesInPackage( scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
 
 	}
 

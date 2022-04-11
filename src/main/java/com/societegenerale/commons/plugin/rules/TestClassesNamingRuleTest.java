@@ -42,12 +42,13 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		classes().that(haveAMethodAnnotatedWithTest).should(respectNamingConvention()).check(
-				ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
+		classes().that(haveAMethodAnnotatedWithTest).should(respectNamingConvention())
+				.allowEmptyShould(true)
+				.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
 
 	}
 
-	private DescribedPredicate<JavaClass> haveAMethodAnnotatedWithTest = new DescribedPredicate<JavaClass>(
+	private final DescribedPredicate<JavaClass> haveAMethodAnnotatedWithTest = new DescribedPredicate<JavaClass>(
 			"have a method annotated with @Test") {
 		@Override
 		public boolean apply(JavaClass input) {
