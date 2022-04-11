@@ -12,6 +12,11 @@
 
 ### Fixed
 
+## [2.9.1] - 2022-04-11
+
+### Fixed
+- PR 59 : fixed regression : now all rules allow empty class lists without failing
+
 ## [2.9.0] - 2022-04-10
 
 ### Changed
