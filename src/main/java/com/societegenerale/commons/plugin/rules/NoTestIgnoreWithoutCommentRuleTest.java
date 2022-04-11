@@ -28,7 +28,9 @@ public class NoTestIgnoreWithoutCommentRuleTest implements ArchRuleTest  {
     protected static final String NO_JUNIT_IGNORE_WITHOUT_COMMENT_VIOLATION_MESSAGE = "Tests shouldn't been ignored without providing a comment explaining why";
 
     public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths)  {
-        classes().should(notBeIgnoredWithoutAComment()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(),packagePath,excludedPaths));
+        classes().should(notBeIgnoredWithoutAComment())
+                .allowEmptyShould(true)
+                .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(),packagePath,excludedPaths));
     }
 
     public static ArchCondition<JavaClass> notBeIgnoredWithoutAComment() {
@@ -56,9 +58,7 @@ public class NoTestIgnoreWithoutCommentRuleTest implements ArchRuleTest  {
             }
 
             private void addViolationEvent(Optional<ConditionEvent> violation, ConditionEvents events) {
-                if(violation.isPresent()){
-                    events.add(violation.get());
-                }
+                violation.ifPresent(events::add);
             }
 
             private Optional<ConditionEvent> buildViolationIfAnnotationWithNoValueFound(HasAnnotations item, Class annotation, String violationMessage) {

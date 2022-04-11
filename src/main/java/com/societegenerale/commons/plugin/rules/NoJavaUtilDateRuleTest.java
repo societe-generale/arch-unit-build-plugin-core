@@ -39,7 +39,9 @@ public class NoJavaUtilDateRuleTest implements ArchRuleTest {
 
 	@Override
 	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-		classes().should(notUseJavaUtilDate()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath, excludedPaths));
+		classes().should(notUseJavaUtilDate())
+				.allowEmptyShould(true)
+				.check(ArchUtils.importAllClassesInPackage(scopePathProvider.getMainClassesPath(),packagePath, excludedPaths));
 	}
 
 	protected static ArchCondition<JavaClass> notUseJavaUtilDate() {

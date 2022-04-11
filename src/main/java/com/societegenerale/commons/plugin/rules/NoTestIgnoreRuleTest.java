@@ -26,7 +26,9 @@ public class NoTestIgnoreRuleTest implements ArchRuleTest  {
 
   @Override
   public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
-    classes().should(notBeenIgnore()).check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
+    classes().should(notBeenIgnore())
+            .allowEmptyShould(true)
+            .check(ArchUtils.importAllClassesInPackage(scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
   }
 
   public static ArchCondition<JavaClass> notBeenIgnore() {
@@ -56,9 +58,7 @@ public class NoTestIgnoreRuleTest implements ArchRuleTest  {
       }
 
       private void addViolationEvent(Optional<ConditionEvent> violation, ConditionEvents events) {
-          if(violation.isPresent()){
-            events.add(violation.get());
-          }
+          violation.ifPresent(events::add);
       }
 
       private Optional<ConditionEvent> buildViolationIfAnnotationWithNoValueFound(HasAnnotations item, Class annotation, String violationMessage) {
