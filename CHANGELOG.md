@@ -12,6 +12,12 @@
 
 ### Fixed
 
+## [2.9.2] - 2022-04-18
+
+### Fixed
+- somehow, the published 2.9.1 jar seemed to NOT contain the ifx it was supposed to contain (see https://github.com/societe-generale/arch-unit-build-plugin-core/issues/61). Performed a new release, and it seemed to be OK now.
+- now publishing to most recent Nexus OSS server (see https://issues.sonatype.org/browse/OSSRH-79883)
+
 ## [2.9.1] - 2022-04-11
 
 ### Fixed
