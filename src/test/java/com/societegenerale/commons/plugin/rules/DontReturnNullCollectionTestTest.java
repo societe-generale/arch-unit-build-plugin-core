@@ -19,6 +19,8 @@ public class DontReturnNullCollectionTestTest {
 
     String pathObjectWithLambdasReturningListsInside = "com/societegenerale/aut/main/ObjectWithLambdasReturningListsInside.class";
 
+    String pathObjectWithLombokBuilder = "com/societegenerale/aut/main/ObjectWithLombokBuilder.class$ObjectWithLombokBuilderBuilder";
+
     @Before
     public void setup(){
         //in the normal lifecycle, ArchUtils is instantiated, which enables a static field there to be initialized
@@ -51,6 +53,15 @@ public class DontReturnNullCollectionTestTest {
 
         assertThatCode(() -> new DontReturnNullCollectionTest()
             .execute(pathObjectWithLambdasReturningListsInside, new TestSpecificScopeProvider(),emptySet()))
+            .doesNotThrowAnyException();
+
+    }
+
+    @Test
+    public void shouldNotThrowViolationsOnClassesUsingLombokBuilder() {
+
+        assertThatCode(() -> new DontReturnNullCollectionTest()
+            .execute("com/societegenerale/aut/main/lombok_builder", new TestSpecificScopeProvider(),emptySet()))
             .doesNotThrowAnyException();
 
     }
