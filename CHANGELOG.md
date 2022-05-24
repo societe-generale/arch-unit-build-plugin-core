@@ -12,6 +12,12 @@
 
 ### Fixed
 
+## [2.9.3] - 2022-05-24
+
+### Changed
+- PR 62 : ApplyOn and ConfigurableRule are now serializable
+- PR 63 : changed the implementation for DontReturnNullCollectionTest rule
+
 ## [2.9.2] - 2022-04-18
 
 ### Fixed
