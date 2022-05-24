@@ -1,8 +1,8 @@
 package com.societegenerale.commons.plugin.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -10,7 +10,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class ConfigurableRule {
+public class ConfigurableRule implements Serializable {
+
+  static final long serialVersionUID = 1L;
 
   private String rule;
 

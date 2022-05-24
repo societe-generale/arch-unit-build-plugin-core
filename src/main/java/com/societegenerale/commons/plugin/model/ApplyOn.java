@@ -1,7 +1,10 @@
 package com.societegenerale.commons.plugin.model;
 
 
-public class ApplyOn {
+import java.io.Serializable;
+
+public class ApplyOn implements Serializable {
+  static final long serialVersionUID = 1L;
 
   private String packageName;
 
