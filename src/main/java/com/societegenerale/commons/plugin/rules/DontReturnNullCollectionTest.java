@@ -55,7 +55,7 @@ public class DontReturnNullCollectionTest implements ArchRuleTest {
           JavaClass returnedJavaClass = input.getReturnType().toErasure();
 
           return returnedJavaClass.getAllRawInterfaces().stream()
-              .anyMatch(implementedInterface -> implementedInterface.isAssignableFrom(Collection.class));
+              .anyMatch(implementedInterface -> implementedInterface.isAssignableTo(Collection.class));
 
         }
       };
