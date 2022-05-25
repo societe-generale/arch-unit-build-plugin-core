@@ -9,6 +9,10 @@ public class ObjectWithMethodsReturningInterfaceOtherThanCollections {
 		return null;
 	}
 
+	public Object someObject(){
+		return null;
+	}
+
 
 	private class SomeImplementation implements InterfaceWithCorrectName{
 
