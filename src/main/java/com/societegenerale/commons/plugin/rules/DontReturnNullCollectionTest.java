@@ -10,6 +10,7 @@ import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchRule;
 import java.util.Collection;
+import java.util.Set;
 import javax.annotation.Nonnull;
 
 /**
@@ -54,9 +55,14 @@ public class DontReturnNullCollectionTest implements ArchRuleTest {
 
           JavaClass returnedJavaClass = input.getReturnType().toErasure();
 
-          return returnedJavaClass.getAllRawInterfaces().stream()
-              .anyMatch(implementedInterface -> implementedInterface.isAssignableFrom(Collection.class));
+          Set<JavaClass> implementedInterfaces=returnedJavaClass.getAllRawInterfaces();
 
+          boolean isReturnedTypeACollection=returnedJavaClass.getAllRawInterfaces().stream()
+              .anyMatch(implementedInterface -> implementedInterface.isAssignableTo(Collection.class));
+
+          System.out.println("nb implemented interfaces : "+implementedInterfaces.size()+". is "+returnedJavaClass.getFullName()+" a collection ? "+isReturnedTypeACollection);
+
+          return isReturnedTypeACollection;
         }
       };
 

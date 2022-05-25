@@ -19,7 +19,9 @@ public class DontReturnNullCollectionTestTest {
 
     String pathObjectWithLambdasReturningListsInside = "com/societegenerale/aut/main/ObjectWithLambdasReturningListsInside.class";
 
-    String pathObjectWithLombokBuilder = "com/societegenerale/aut/main/ObjectWithLombokBuilder.class$ObjectWithLombokBuilderBuilder";
+    String pathObjectReturningSomeNonCollectionInterface = "com/societegenerale/aut/main/ObjectWithMethodsReturningInterfaceOtherThanCollections.class";
+
+
 
     @Before
     public void setup(){
@@ -62,6 +64,15 @@ public class DontReturnNullCollectionTestTest {
 
         assertThatCode(() -> new DontReturnNullCollectionTest()
             .execute("com/societegenerale/aut/main/lombok_builder", new TestSpecificScopeProvider(),emptySet()))
+            .doesNotThrowAnyException();
+
+    }
+
+    @Test
+    public void shouldNotThrowViolationsOnClassesInterfacesThatAreNotCollection() {
+
+        assertThatCode(() -> new DontReturnNullCollectionTest()
+            .execute(pathObjectReturningSomeNonCollectionInterface, new TestSpecificScopeProvider(),emptySet()))
             .doesNotThrowAnyException();
 
     }
