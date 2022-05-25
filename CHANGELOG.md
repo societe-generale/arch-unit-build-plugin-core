@@ -14,6 +14,7 @@
 
 ## [2.9.4] - 2022-05-25
 
+### Changed
 - optimized implementation of DontReturnNullCollectionTest, according to https://github.com/TNG/ArchUnit/issues/872#issuecomment-1136561118
 
 ## [2.9.3] - 2022-05-24
