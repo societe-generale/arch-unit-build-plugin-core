@@ -12,6 +12,12 @@
 
 ### Fixed
 
+## [2.9.5] - 2022-05-29
+### Changed
+- fixed potential bug in DontReturnNullCollectionTest using isAssignableTo instead of isAssignableFrom. see also https://github.com/TNG/ArchUnit/issues/872
+- simplified code in TestClassesNamingRuleTest
+
+
 ## [2.9.4] - 2022-05-25
 
 ### Changed
