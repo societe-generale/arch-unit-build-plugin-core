@@ -45,10 +45,10 @@ public class ArchUtils {
             log.warn(warnMessage.toString());
 
             //logging content of directory, to help with debugging..
-            log.warn("existing folders and files under root project : ");
+            log.debug("existing folders and files under root project : ");
             try {
                 Files.walk(Paths.get(rootClassFolder.getValue()))
-                        .forEach(f -> log.warn(f.toFile().getName()));
+                        .forEach(f -> log.debug(f.toFile().getName()));
             } catch (IOException e) {
                 e.printStackTrace();
             }
