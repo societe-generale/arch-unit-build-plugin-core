@@ -38,10 +38,11 @@ public class ArchUtils {
         Path classesPath = Paths.get(rootClassFolder.getValue() + packagePath);
 
         if (!classesPath.toFile().exists()) {
-            StringBuilder warnMessage=new StringBuilder("classpath ").append(classesPath.toFile())
+            StringBuilder warnMessage=new StringBuilder("Classpath ").append(classesPath.toFile())
                     .append(" doesn't exist : loading all classes from root, ie ")
                     .append(rootClassFolder.getValue())
-                    .append(" even though it's probably not what you want to achieve..");
+                    .append(" even though it's probably not what you want to achieve.")
+                    .append(" Enable debug logs in your build to see the list of actual resources being loaded and analyzed by the plugin.");
             log.warn(warnMessage.toString());
 
             //logging content of directory, to help with debugging..
