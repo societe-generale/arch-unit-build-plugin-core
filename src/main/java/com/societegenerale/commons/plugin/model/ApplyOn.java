@@ -2,7 +2,9 @@ package com.societegenerale.commons.plugin.model;
 
 
 import java.io.Serializable;
+import lombok.ToString;
 
+@ToString
 public class ApplyOn implements Serializable {
   static final long serialVersionUID = 1L;
 
