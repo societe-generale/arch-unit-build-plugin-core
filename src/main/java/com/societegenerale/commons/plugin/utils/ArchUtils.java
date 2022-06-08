@@ -68,7 +68,7 @@ public class ArchUtils {
         ClassFileImporter classFileImporter=new ClassFileImporter();
 
         for(String excludedPath : excludedPaths){
-            ExclusionImportOption exclusionImportOption=new ExclusionImportOption(excludedPath);
+            ExclusionImportOption exclusionImportOption=new ExclusionImportOption(log,excludedPath);
             classFileImporter=classFileImporter.withImportOption(exclusionImportOption);
         }
 

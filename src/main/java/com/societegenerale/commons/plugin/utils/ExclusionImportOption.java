@@ -1,21 +1,26 @@
 package com.societegenerale.commons.plugin.utils;
 
-import java.net.URI;
-
-import javax.annotation.Nonnull;
-
+import com.societegenerale.commons.plugin.Log;
 import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.core.importer.Location;
+import java.net.URI;
+import javax.annotation.Nonnull;
 
 public class ExclusionImportOption implements ImportOption {
 
     private static final String CLASS = ".class";
 
-    private URI patternToExcludeDirectoryBased;
+    private final URI patternToExcludeDirectoryBased;
 
-    public ExclusionImportOption(@Nonnull final String patternToExclude) {
+    private final Log log;
+
+    public ExclusionImportOption(Log log, @Nonnull final String patternToExclude) {
+
+        this.log=log;
         // assuming a directory based exclude path
+        log.debug("configuring a pattern to exclude : "+patternToExclude);
         this.patternToExcludeDirectoryBased = toUri(patternToExclude);
+        log.debug("\t pattern converted into : "+patternToExcludeDirectoryBased.toString());
     }
 
     /**
@@ -30,7 +35,7 @@ public class ExclusionImportOption implements ImportOption {
         boolean excludePathEndsWithDotClass = excludePath.endsWith(CLASS);
         String stringToConvert = excludePath;
 
-        if(excludePath.endsWith(CLASS)) {
+        if(excludePathEndsWithDotClass) {
             // remove .class for easier replacements
             stringToConvert = excludePath.substring(0, excludePath.length() - CLASS.length());
         }

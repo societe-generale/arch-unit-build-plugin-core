@@ -7,6 +7,8 @@ public class SilentLogWithMemory extends SilentLog {
 
     List<String> infoLogs=new ArrayList();
 
+    List<String> debugLogs=new ArrayList();
+
     @Override
     public void info(String s) {
         infoLogs.add(s);
@@ -14,5 +16,14 @@ public class SilentLogWithMemory extends SilentLog {
 
     public List<String> getInfoLogs() {
         return infoLogs;
+    }
+
+    @Override
+    public void debug(String s) {
+        debugLogs.add(s);
+    }
+
+    public List<String> getDebugLogs() {
+        return debugLogs;
     }
 }

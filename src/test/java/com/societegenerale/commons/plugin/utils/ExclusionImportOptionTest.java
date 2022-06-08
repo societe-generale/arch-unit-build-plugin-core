@@ -1,17 +1,18 @@
 package com.societegenerale.commons.plugin.utils;
 
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import com.societegenerale.commons.plugin.Log;
+import com.societegenerale.commons.plugin.SilentLogWithMemory;
+import com.tngtech.archunit.core.importer.Location;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import com.tngtech.archunit.core.importer.Location;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 
 public class ExclusionImportOptionTest {
 
@@ -19,6 +20,8 @@ public class ExclusionImportOptionTest {
 
     private static Location locationToBeExcluded;
     private static Location locationToBeIncluded;
+
+    private final Log log = new SilentLogWithMemory();
 
     @BeforeClass
     public static void init() throws IOException {
@@ -36,7 +39,7 @@ public class ExclusionImportOptionTest {
 
     @Test
     public void includes_LocationNull() {
-        ExclusionImportOption exclusionImportOptionPackage = new ExclusionImportOption("somePattern");
+        ExclusionImportOption exclusionImportOptionPackage = new ExclusionImportOption(log, "somePattern");
         assertFalse(exclusionImportOptionPackage.includes(null));
     }
 
@@ -47,12 +50,12 @@ public class ExclusionImportOptionTest {
         String excludePathDirectoryBackslashes = "com\\societegenerale\\commons\\plugin\\utils";
 
         ExclusionImportOption exclusionByDirectoryPatternSlashes = new ExclusionImportOption(
-                excludePathDirectorySlashes);
+            log, excludePathDirectorySlashes);
         assertFalse(exclusionByDirectoryPatternSlashes.includes(locationToBeExcluded));
         assertTrue(exclusionByDirectoryPatternSlashes.includes(locationToBeIncluded));
 
         ExclusionImportOption exclusionByDirectoryPatternBackslashes = new ExclusionImportOption(
-                excludePathDirectoryBackslashes);
+            log, excludePathDirectoryBackslashes);
         assertFalse(exclusionByDirectoryPatternBackslashes.includes(locationToBeExcluded));
         assertTrue(exclusionByDirectoryPatternBackslashes.includes(locationToBeIncluded));
     }
@@ -62,7 +65,7 @@ public class ExclusionImportOptionTest {
 
         String excludePathPackage = "com.societegenerale.commons.plugin.utils";
 
-        ExclusionImportOption exclusionByPackage = new ExclusionImportOption(excludePathPackage);
+        ExclusionImportOption exclusionByPackage = new ExclusionImportOption(log, excludePathPackage);
         assertFalse(exclusionByPackage.includes(locationToBeExcluded));
         assertTrue(exclusionByPackage.includes(locationToBeIncluded));
     }
@@ -77,22 +80,22 @@ public class ExclusionImportOptionTest {
         String excludePathClassfileWithTypeAndBackslashes = "com\\societegenerale\\commons\\plugin\\utils\\Foo.class";
 
         ExclusionImportOption exclusionByClassfileWithSlashes = new ExclusionImportOption(
-                excludePathClassfileWithSlashes);
+            log, excludePathClassfileWithSlashes);
         assertFalse(exclusionByClassfileWithSlashes.includes(locationToBeExcluded));
         assertTrue(exclusionByClassfileWithSlashes.includes(locationToBeIncluded));
 
         ExclusionImportOption exclusionByClassfileWithTypeAndSlashes = new ExclusionImportOption(
-                excludePathClassfileWithTypeAndSlashes);
+            log, excludePathClassfileWithTypeAndSlashes);
         assertFalse(exclusionByClassfileWithTypeAndSlashes.includes(locationToBeExcluded));
         assertTrue(exclusionByClassfileWithTypeAndSlashes.includes(locationToBeIncluded));
 
         ExclusionImportOption exclusionByClassfileWithBackslashes = new ExclusionImportOption(
-                excludePathClassfileWithBackslashes);
+            log, excludePathClassfileWithBackslashes);
         assertFalse(exclusionByClassfileWithBackslashes.includes(locationToBeExcluded));
         assertTrue(exclusionByClassfileWithBackslashes.includes(locationToBeIncluded));
 
         ExclusionImportOption exclusionByClassfileWithTypeAndBackslashes = new ExclusionImportOption(
-                excludePathClassfileWithTypeAndBackslashes);
+            log, excludePathClassfileWithTypeAndBackslashes);
         assertFalse(exclusionByClassfileWithTypeAndBackslashes.includes(locationToBeExcluded));
         assertTrue(exclusionByClassfileWithTypeAndBackslashes.includes(locationToBeIncluded));
     }
@@ -103,11 +106,11 @@ public class ExclusionImportOptionTest {
         String excludePathClassfileWithPackage = "com.societegenerale.commons.plugin.utils.Foo";
         String excludePathClassfileWithTypeAndPackage = "com.societegenerale.commons.plugin.utils.Foo.class";
 
-        ExclusionImportOption exclusionByPackage = new ExclusionImportOption(excludePathClassfileWithPackage);
+        ExclusionImportOption exclusionByPackage = new ExclusionImportOption(log, excludePathClassfileWithPackage);
         assertFalse(exclusionByPackage.includes(locationToBeExcluded));
         assertTrue(exclusionByPackage.includes(locationToBeIncluded));
 
-        ExclusionImportOption exclusionByTypeAndPackage = new ExclusionImportOption(excludePathClassfileWithTypeAndPackage);
+        ExclusionImportOption exclusionByTypeAndPackage = new ExclusionImportOption(log, excludePathClassfileWithTypeAndPackage);
         assertFalse(exclusionByTypeAndPackage.includes(locationToBeExcluded));
         assertTrue(exclusionByTypeAndPackage.includes(locationToBeIncluded));
     }
