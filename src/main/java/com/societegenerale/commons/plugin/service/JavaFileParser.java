@@ -115,12 +115,18 @@ class JavaFileParser
     @Nullable
     String extractClassName(final String javaFileContent, @Nonnull final Log logger)
     {
-        if (javaFileContent == null || javaFileContent.isEmpty() || !javaFileContent.contains(CLASS))
+        if (javaFileContent == null || javaFileContent.isEmpty())
         {
             return null;
         }
 
         final String commentsRemoved = removeComments(javaFileContent);
+        if (!commentsRemoved.contains(CLASS))
+        {
+            logger.warn("no class found in file with content: " + javaFileContent);
+            return null;
+        }
+
         final String classOffsetContent = commentsRemoved.substring(commentsRemoved.indexOf(CLASS));
 
         // split at the first "{"
