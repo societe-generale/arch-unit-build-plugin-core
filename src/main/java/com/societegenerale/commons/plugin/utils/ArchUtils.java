@@ -1,17 +1,16 @@
 package com.societegenerale.commons.plugin.utils;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collection;
+import static java.util.Collections.emptyList;
 
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-
-import static java.util.Collections.emptyList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collection;
 
 /**
  * Created by agarg020917 on 11/17/2017.
@@ -55,6 +54,15 @@ public class ArchUtils {
             }
 
             classesPath= Paths.get(rootClassFolder.getValue());
+        }
+        else{
+            if(log.isDebugEnabled()) {
+                try {
+                    log.debug("loading classes from a location that exists : " + classesPath.toFile().getCanonicalPath());
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
         }
 
         ClassFileImporter classFileImporter=new ClassFileImporter();
