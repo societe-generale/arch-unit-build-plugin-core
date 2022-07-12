@@ -111,7 +111,7 @@ public class JavaFileParserTest extends AbstractExcludePathTest
     }
 
     @Test
-    public void testExtractClassName_ClassInComments()
+    public void testExtractClassNameClassInComments()
     {
         final String className = javaFileParser.extractClassName(
                 AbstractExcludePathTest.CONTENT_WITH_CLASS_IN_COMMENT_AND_PACKAGE,
