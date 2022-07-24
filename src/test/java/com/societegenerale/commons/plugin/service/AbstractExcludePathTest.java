@@ -35,6 +35,13 @@ abstract class AbstractExcludePathTest
                                                             + "   public static class InnerClass{}"
                                                             + "}";
 
+    private static final String CONTENT_WITH_CLASS_IN_COMMENT = "/** \r\n"
+                                                            + "public class " + CLASS_NAME_WITH_FILE_COMMENT
+                                                            + "{ \r\n"
+                                                            + "   public static class InnerClass{}"
+                                                            + "}"
+                                                            + "*/\n";
+
     static final String PACKAGE_NAME         = AbstractExcludePathTest.class.getPackage().getName();
     static final String CONTENT_WITH_PACKAGE = "package " + PACKAGE_NAME + ";\r\n"
                                                + CONTENT_WITH_DEFAULT_PACKAGE;
@@ -42,6 +49,10 @@ abstract class AbstractExcludePathTest
     static final String CONTENT_WITH_FILE_COMMENT_AND_PACKAGE =
             fileComment + "package " + PACKAGE_NAME + ";\r\n"
             + CONTENT_WITH_FILE_COMMENT;
+
+    static final String CONTENT_WITH_CLASS_IN_COMMENT_AND_PACKAGE =
+            fileComment + "package " + PACKAGE_NAME + ";\r\n"
+            + CONTENT_WITH_CLASS_IN_COMMENT;
 
     private static final String PROJECT_BUILD_DIR_NAME = "target";
 

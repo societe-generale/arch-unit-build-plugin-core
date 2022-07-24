@@ -111,6 +111,15 @@ public class JavaFileParserTest extends AbstractExcludePathTest
     }
 
     @Test
+    public void testExtractClassNameClassInComments()
+    {
+        final String className = javaFileParser.extractClassName(
+                AbstractExcludePathTest.CONTENT_WITH_CLASS_IN_COMMENT_AND_PACKAGE,
+                getLogger());
+        assertNull(className);
+    }
+
+    @Test
     public void testRemoveComments()
     {
         final String blockComment = "/**\n\r"
