@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 
 import com.societegenerale.commons.plugin.Log;
 import com.tngtech.archunit.thirdparty.com.google.common.annotations.VisibleForTesting;
+import org.apache.commons.lang3.StringUtils;
 
 class JavaFileParser
 {
@@ -58,7 +59,7 @@ class JavaFileParser
     @VisibleForTesting
     String extractPackage(final String javaFileContent, @Nonnull final Log logger)
     {
-        if (javaFileContent == null || javaFileContent.isEmpty() || !javaFileContent.contains(PACKAGE))
+        if (StringUtils.isEmpty(javaFileContent) || !javaFileContent.contains(PACKAGE))
         {
             return null;
         }
@@ -115,7 +116,7 @@ class JavaFileParser
     @Nullable
     String extractClassName(final String javaFileContent, @Nonnull final Log logger)
     {
-        if (javaFileContent == null || javaFileContent.isEmpty())
+        if (StringUtils.isEmpty(javaFileContent))
         {
             return null;
         }
