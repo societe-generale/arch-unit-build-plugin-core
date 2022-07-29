@@ -65,6 +65,13 @@ public class ArchUtils {
             }
         }
 
+        if(log.isDebugEnabled()) {
+            ClassFileImporter classFileImporterForDebug=new ClassFileImporter();
+            JavaClasses classesImportedBeforeExclusion=classFileImporterForDebug.importPath(classesPath);
+
+            log.debug("nb classes imported before exclusion : "+classesImportedBeforeExclusion.size());
+        }
+
         ClassFileImporter classFileImporter=new ClassFileImporter();
 
         for(String excludedPath : excludedPaths){
@@ -72,8 +79,13 @@ public class ArchUtils {
             classFileImporter=classFileImporter.withImportOption(exclusionImportOption);
         }
 
-        return classFileImporter.importPath(classesPath);
+        JavaClasses classesImportedAfterExclusionProcessing= classFileImporter.importPath(classesPath);
 
+        if(log.isDebugEnabled()) {
+              log.debug("nb classes imported after exclusion : "+classesImportedAfterExclusionProcessing.size());
+        }
+
+        return classesImportedAfterExclusionProcessing;
     }
 
 }
