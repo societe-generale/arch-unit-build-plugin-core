@@ -12,11 +12,22 @@
 
 ### Fixed
 
+## [2.9.6] - 2022-08-02
+
+### Changed
+- upgraded Lombok (to 1.18.24) to enable building with jdk 17
+- PR 65 : finer logs to avoid cluttering when nothing gets analyzed - thanks @Treehopper !!
+- various log related changes
+
+### Fixed
+- PR 67 : fix when parsing java file content - thanks @Treehopper !!
+
+
 ## [2.9.5] - 2022-05-29
+
 ### Changed
 - fixed potential bug in DontReturnNullCollectionTest using isAssignableTo instead of isAssignableFrom. see also https://github.com/TNG/ArchUnit/issues/872
 - simplified code in TestClassesNamingRuleTest
-
 
 ## [2.9.4] - 2022-05-25
 
