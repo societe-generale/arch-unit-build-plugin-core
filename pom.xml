@@ -78,7 +78,7 @@
 
         <junit.version>4.13.1</junit.version>
         <lombok.version>1.18.24</lombok.version>
-        <jacoco.version>0.8.3</jacoco.version>
+        <jacoco.version>0.8.8</jacoco.version>
         <mockito.version>3.0.0</mockito.version>
 
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
