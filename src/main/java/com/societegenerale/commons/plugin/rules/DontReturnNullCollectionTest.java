@@ -1,6 +1,8 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
+import java.util.Collection;
+
+import javax.annotation.Nonnull;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -9,8 +11,8 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchRule;
-import java.util.Collection;
-import javax.annotation.Nonnull;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
 /**
  * Returning null collections (List, Set) forces the caller to always perform a null check, which hinders readability. It's much better to never return a null Collection, and instead return an empty one.
@@ -40,7 +42,7 @@ public class DontReturnNullCollectionTest implements ArchRuleTest {
   DescribedPredicate<JavaMethod> areNotLambdas =
       new DescribedPredicate<JavaMethod>("are not lambda"){
         @Override
-        public boolean apply(JavaMethod input) {
+        public boolean test(JavaMethod input) {
 
           return !input.getName().contains("lambda$new");
 
@@ -50,7 +52,7 @@ public class DontReturnNullCollectionTest implements ArchRuleTest {
   DescribedPredicate<JavaMethod> returnCollections =
       new DescribedPredicate<JavaMethod>("return collections"){
         @Override
-        public boolean apply(JavaMethod input) {
+        public boolean test(JavaMethod input) {
 
           JavaClass returnedJavaClass = input.getReturnType().toErasure();
 
