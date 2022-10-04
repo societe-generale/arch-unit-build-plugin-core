@@ -12,6 +12,6 @@ To get a full documentation, we invite you to follow this link : https://github.
 
 ## Versions
 
-- v3.x is using `com.tngtech.archunit`.`archunit` 1.0.0+
-- v2.x is using `com.tngtech.archunit`.`archunit` 0.x.x
+  - v3.x is using `com.tngtech.archunit`.`archunit` 1.0.0+
+  - v2.x is using `com.tngtech.archunit`.`archunit` 0.x.x
 
