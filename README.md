@@ -9,3 +9,9 @@ The core logic for Maven or Gradle ArchUnit plugin
 ## Documentation
 
 To get a full documentation, we invite you to follow this link : https://github.com/societe-generale/arch-unit-maven-plugin
+
+## Versions
+
+- v3.x is using `com.tngtech.archunit`.`archunit` 1.0.0+
+- v2.x is using `com.tngtech.archunit`.`archunit` 0.x.x
+
