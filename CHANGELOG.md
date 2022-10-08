@@ -12,6 +12,12 @@
 
 ### Fixed
 
+## [3.0.0] - 2022-10-08
+
+### Changed
+- PR 68 : upgrading to archunit 1.0.0 and JDK 11
+- PR 69 : replacing custom java parsing code by Roaster library (https://github.com/forge/roaster)
+
 ## [2.9.6] - 2022-08-02
 
 ### Changed
