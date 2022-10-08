@@ -74,7 +74,7 @@ public class ConstantsAndStaticNonFinalFieldsNamesRuleTest implements ArchRuleTe
 	DescribedPredicate<JavaField> areNotSerialVersionUID =
 			new DescribedPredicate<JavaField>("are not serialVersionUID"){
 				@Override
-				public boolean apply(JavaField input) {
+				public boolean test(JavaField input) {
 
 					return !(input.getName().equals("serialVersionUID") );
 				}

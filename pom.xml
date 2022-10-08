@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.societegenerale.commons</groupId>
     <artifactId>arch-unit-build-plugin-core</artifactId>
-    <version>2.9.7-SNAPSHOT</version>
+    <version>3.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>ArchUnit plugin core</name>
@@ -70,11 +70,11 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <java.version>1.8</java.version>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
+        <java.version>11</java.version>
 
-        <tng.archunit.version>0.23.1</tng.archunit.version>
+        <tng.archunit.version>1.0.0</tng.archunit.version>
 
         <junit.version>4.13.1</junit.version>
         <lombok.version>1.18.24</lombok.version>

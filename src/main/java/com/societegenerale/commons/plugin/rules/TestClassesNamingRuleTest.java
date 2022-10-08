@@ -1,6 +1,10 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
@@ -12,12 +16,9 @@ import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Set;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.junit.Test;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
 /**
  * This rule raises an issue when a test class name does not match the provided
@@ -50,7 +51,7 @@ public class TestClassesNamingRuleTest implements ArchRuleTest {
 	private final DescribedPredicate<JavaClass> haveAMethodAnnotatedWithTest = new DescribedPredicate<JavaClass>(
 			"have a method annotated with @Test") {
 		@Override
-		public boolean apply(JavaClass input) {
+		public boolean test(JavaClass input) {
 
 			return isTestClass(input);
 

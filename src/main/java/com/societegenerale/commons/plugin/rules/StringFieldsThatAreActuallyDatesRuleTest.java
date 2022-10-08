@@ -37,7 +37,7 @@ public class StringFieldsThatAreActuallyDatesRuleTest implements ArchRuleTest {
 	private DescribedPredicate<JavaField> endWithDate = new DescribedPredicate<JavaField>(
 			"are finished by \"Date\"") {
 		@Override
-		public boolean apply(JavaField field) {
+		public boolean test(JavaField field) {
 
 			return STRING_FIELDS_THAT_ARE_ACTUALLY_DATES_PATTERN.matcher(field.getName()).matches();
 		}

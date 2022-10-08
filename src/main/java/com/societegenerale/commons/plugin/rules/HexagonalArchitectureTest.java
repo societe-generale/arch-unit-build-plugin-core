@@ -1,8 +1,10 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
-import static java.util.stream.Collectors.toList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.regex.Pattern;
 
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
@@ -13,11 +15,10 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
-import java.util.regex.Pattern;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Hexagonal architecture is a way to arrange our code to enforce concerns are separated : we want to make sure that core domain code is not polluted by infrastructure code.
@@ -50,7 +51,7 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
 
     private DescribedPredicate<JavaAnnotation> invalidAnnotations = new DescribedPredicate<JavaAnnotation>("invalid annotations, that don't belong to authorized packages") {
         @Override
-        public boolean apply(JavaAnnotation annotation) {
+        public boolean test(JavaAnnotation annotation) {
 
             String annotationName = annotation.getRawType().getPackage().getName();
 
