@@ -46,9 +46,7 @@ public class JavaFileParserTest extends AbstractExcludePathTest
         final JavaFileParser.JavaFile fileWithFileComment = javaFileParser.parse(
                 AbstractExcludePathTest.getTempJavaFileWithFileComment(), getLogger());
         assertThat(fileWithFileComment.getClassName()).isEqualTo(AbstractExcludePathTest.CLASS_NAME_WITH_FILE_COMMENT );
-
-        //package is actually commented
-        assertThat(fileWithFileComment.getPackageString()).isNull();
+        assertThat(fileWithFileComment.getPackageString()).isEqualTo(AbstractExcludePathTest.PACKAGE_NAME);
     }
 
 
