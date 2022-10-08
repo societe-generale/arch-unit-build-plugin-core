@@ -95,11 +95,7 @@
             <version>${tng.archunit.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.tngtech.archunit</groupId>
-            <artifactId>archunit-junit5-api</artifactId>
-            <version>${tng.archunit.version}</version>
-        </dependency>
+
 
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -195,10 +191,11 @@
             <version>1.7.25</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
-            <version>5.4.2</version>
+            <version>5.9.1</version>
         </dependency>
 
         <dependency>
