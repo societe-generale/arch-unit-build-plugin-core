@@ -43,7 +43,7 @@ abstract class AbstractExcludePathTest
                                                             + "*/\n";
 
     static final String PACKAGE_NAME         = AbstractExcludePathTest.class.getPackage().getName();
-    static final String CONTENT_WITH_PACKAGE = "package " + PACKAGE_NAME + ";\r\n"
+    static final String CONTENT_WITH_PACKAGE = "package " + PACKAGE_NAME + ";"+  System.lineSeparator()+ System.lineSeparator()
                                                + CONTENT_WITH_DEFAULT_PACKAGE;
 
     static final String CONTENT_WITH_FILE_COMMENT_AND_PACKAGE =

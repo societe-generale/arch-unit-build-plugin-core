@@ -5,11 +5,11 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import com.societegenerale.commons.plugin.Log;
 import com.tngtech.archunit.thirdparty.com.google.common.annotations.VisibleForTesting;
-import org.apache.commons.lang3.StringUtils;
+import org.jboss.forge.roaster.Roaster;
+import org.jboss.forge.roaster.model.source.JavaSource;
 
 class JavaFileParser
 {
@@ -31,60 +31,14 @@ class JavaFileParser
      */
     JavaFile parse(final Path javafilePath, final Log logger) throws IOException
     {
-        final String fileContent = readFile(javafilePath);
-        String packageString = null;
-        String className = null;
 
-        if (fileContent.isEmpty())
-        {
-            logger.warn("empty file: " + javafilePath);
-        }
-        else
-        {
-            packageString = extractPackage(fileContent, logger);
-            className = extractClassName(fileContent, logger);
-        }
+        var parsedJavaFile=Roaster.parseUnit(Files.newInputStream(javafilePath));
+        JavaSource myClass = parsedJavaFile.getGoverningType();
 
-        return new JavaFile(packageString, className);
+
+        return new JavaFile(myClass.getPackage(), myClass.getName());
     }
 
-    /**
-     * Extracts the package out of the file content.
-     *
-     * @param javaFileContent - file content as string
-     * @param logger     - not null
-     *
-     * @return null if the package could not be extracted
-     */
-    @VisibleForTesting
-    String extractPackage(final String javaFileContent, @Nonnull final Log logger)
-    {
-        if (StringUtils.isEmpty(javaFileContent) || !javaFileContent.contains(PACKAGE))
-        {
-            return null;
-        }
-
-        final String substring = javaFileContent.substring(javaFileContent.indexOf(PACKAGE));
-
-        // split at the first ";"
-        final String[] split = substring.split(";", 2);
-        // there should be at least 1 part which contains the package declaration
-        if (split.length < 1)
-        {
-            logger.warn("unexpected file content: " + javaFileContent);
-            return null;
-        }
-
-        final String packageDeclaration = split[0].trim();
-        if (!packageDeclaration.startsWith(PACKAGE))
-        {
-            logger.warn("unabble to find package declaration in: " + packageDeclaration);
-            return null;
-        }
-
-        // get the part after the keyword package
-        return packageDeclaration.substring(PACKAGE.length()).trim();
-    }
 
     /**
      * Reads the java file.
@@ -98,104 +52,16 @@ class JavaFileParser
     @VisibleForTesting
     String readFile(@Nonnull final Path javafilePath) throws IOException
     {
-        final StringBuilder builder = new StringBuilder();
-        Files.readAllLines(javafilePath).forEach(builder::append);
+        String fileContent=""; //StringBuilder builder = new StringBuilder();
+        var lines= Files.readAllLines(javafilePath);
 
-        return builder.toString();
-    }
-
-    /**
-     * Extracts the class name.
-     *
-     * @param javaFileContent - file content as String
-     * @param logger     -   not null
-     *
-     * @return class name or null
-     */
-    @VisibleForTesting
-    @Nullable
-    String extractClassName(final String javaFileContent, @Nonnull final Log logger)
-    {
-        if (StringUtils.isEmpty(javaFileContent))
-        {
-            return null;
+        for(var line : lines){
+            fileContent=fileContent+line;
         }
 
-        final String commentsRemoved = removeComments(javaFileContent);
-        if (!commentsRemoved.contains(CLASS))
-        {
-            logger.warn("no class found in file with content: " + javaFileContent);
-            return null;
-        }
-
-        final String classOffsetContent = commentsRemoved.substring(commentsRemoved.indexOf(CLASS));
-
-        // split at the first "{"
-        final String[] split = classOffsetContent.split("\\{", 2);
-        // there should be at least 1 part which contains the class declaration
-        if (split.length < 1)
-        {
-            logger.warn("unexpected file content: " + javaFileContent);
-            return null;
-        }
-
-        final String classDeclaration = split[0].trim();
-        if (!classDeclaration.contains(CLASS))
-        {
-            logger.warn("unabble to find class declaration in: " + classDeclaration);
-            return null;
-        }
-
-        // get the part after the keyword class
-        final String substring = classDeclaration.substring(classDeclaration.lastIndexOf(CLASS) + CLASS.length());
-        final String withoutLineBreaks = substring.replaceAll(REGEX_LINE_BREAKS, " ").trim();
-        // remove extends or implements to get only the class name
-        return withoutLineBreaks.split(" ", 2)[0];
+        return fileContent;
     }
 
-    @VisibleForTesting
-    String removeComments(@Nonnull final String javaFileContent)
-    {
-        final String withOutBlockComments = removeAllBlocks(javaFileContent, BLOCK_COMMENT_START, BLOCK_COMMENT_END);
-        return removeAllBlocks(withOutBlockComments, LINE_COMMENT_START, LINE_COMMENT_END);
-
-    }
-
-    /**
-     * Removes all text blocks defined by blockStartString and blockEndString.
-     *
-     * @param javaFileContent  -   not null
-     * @param blockStartString -   not null
-     * @param blockEndString   -   not null
-     *
-     * @return string without the defined text blocks
-     */
-    private String removeAllBlocks(@Nonnull final String javaFileContent,
-                                   @Nonnull final String blockStartString,
-                                   @Nonnull final String blockEndString)
-    {
-        int startIndex = javaFileContent.indexOf(blockStartString);
-        int endIndex = calEndIndex(blockEndString, startIndex, javaFileContent);
-        String content = javaFileContent;
-
-        while (startIndex >= 0 && endIndex > startIndex)
-        {
-            content = content.substring(0, startIndex) + content.substring(endIndex);
-
-            startIndex = content.indexOf(blockStartString);
-            endIndex = calEndIndex(blockEndString, startIndex, content);
-        }
-
-        return content;
-    }
-
-    private int calEndIndex(@Nonnull final String blockEndString,
-                            final int startIndex,
-                            @Nonnull final String content)
-    {
-        final int endIndex = content.indexOf(blockEndString, startIndex) + blockEndString.length();
-        return endIndex > content.length() ? content.length() : endIndex;
-    }
 
     /**
      * Class that holds relevant java file information
