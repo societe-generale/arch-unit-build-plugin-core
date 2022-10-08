@@ -5,12 +5,9 @@ import java.io.IOException;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@RunWith(MockitoJUnitRunner.class)
 public class JavaFileParserTest extends AbstractExcludePathTest
 {
     private final JavaFileParser javaFileParser = new JavaFileParser();
@@ -49,7 +46,9 @@ public class JavaFileParserTest extends AbstractExcludePathTest
         final JavaFileParser.JavaFile fileWithFileComment = javaFileParser.parse(
                 AbstractExcludePathTest.getTempJavaFileWithFileComment(), getLogger());
         assertThat(fileWithFileComment.getClassName()).isEqualTo(AbstractExcludePathTest.CLASS_NAME_WITH_FILE_COMMENT );
-        assertThat(fileWithFileComment.getPackageString()).isEqualTo(AbstractExcludePathTest.PACKAGE_NAME);
+
+        //package is actually commented
+        assertThat(fileWithFileComment.getPackageString()).isNull();
     }
 
 

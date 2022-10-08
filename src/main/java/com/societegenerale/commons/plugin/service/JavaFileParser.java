@@ -27,7 +27,7 @@ class JavaFileParser
      * @param javafilePath - not null
      * @param logger  - not null
      *
-     * @return not null
+     * @return a JavaFile. package attribute may be null if the class is in default package
      */
     JavaFile parse(final Path javafilePath, final Log logger) throws IOException
     {
