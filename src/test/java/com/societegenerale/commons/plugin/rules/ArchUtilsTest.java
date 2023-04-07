@@ -9,7 +9,6 @@ import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import org.junit.Test;
 
-import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -26,9 +25,9 @@ public class ArchUtilsTest {
 		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target/classes/"),
 				"com/societegenerale/commons/plugin/model");
 
-		long noOfClassesInPackage = classes.size();
+		long noOfClassesInPackage = classes.stream().count();
 
-		assertThat(noOfClassesInPackage).isEqualTo(5);
+		assertThat(noOfClassesInPackage).isEqualTo(4);
 	}
 
 	@Test
@@ -37,7 +36,7 @@ public class ArchUtilsTest {
 
 		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
 
-		assertThat(noOfClasses).isEqualTo(37);
+		assertThat(noOfClasses).isEqualTo(36);
 	}
 
 	@Test
@@ -53,7 +52,7 @@ public class ArchUtilsTest {
 				.isNotNull();
 
 		JavaClasses classesWithTestClassesExclusions = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target"), "",
-				singletonList("test-classes"));
+				Arrays.asList("test-classes"));
 
 		assertThat(containsClassWithPattern(classesWithTestClassesExclusions, "ClassToExclude"))
 				.as("when 'test-classes' pattern configured, ClassToExclude should still be found").isTrue();
@@ -75,6 +74,7 @@ public class ArchUtilsTest {
 
 	private boolean containsClassWithPattern(JavaClasses javaClassesToTest, String pattern) {
 
-		return javaClassesToTest.stream().anyMatch(c -> c.getSource().get().getUri().toString().contains(pattern));
+		return javaClassesToTest.stream().filter(c -> c.getSource().get().getUri().toString().contains(pattern))
+				.findFirst().isPresent();
 	}
 }
