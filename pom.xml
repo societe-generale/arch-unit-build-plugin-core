@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.societegenerale.commons</groupId>
   <artifactId>arch-unit-build-plugin-core</artifactId>
-  <version>3.0.1-SNAPSHOT</version>
+  <version>4.0.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>ArchUnit plugin core</name>
