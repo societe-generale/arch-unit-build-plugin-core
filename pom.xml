@@ -83,6 +83,8 @@
         <jacoco.version>0.8.8</jacoco.version>
         <mockito.version>3.0.0</mockito.version>
 
+        <jakarta.annotation-api.version>2.1.1</jakarta.annotation-api.version>
+
         <project.testresult.directory>${project.build.directory}/test-results</project.testresult.directory>
     </properties>
 
@@ -218,8 +220,11 @@
             <version>2.10.0</version>
         </dependency>
 
-
-
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>${jakarta.annotation-api.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
