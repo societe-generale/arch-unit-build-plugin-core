@@ -24,7 +24,7 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
  */
 public class DontReturnNullCollectionTest implements ArchRuleTest {
 
-  protected static final String NO_NULL_COLLECTION_MESSAGE = "we don't want callers to perform null check every time. Return an empty collection, not null. Please annotate the method with "+Nonnull.class.getCanonicalName();
+  protected static final String NO_NULL_COLLECTION_MESSAGE = "we don't want callers to perform null check every time. Return an empty collection, not null. Please annotate the method with "+Nonnull.class.getCanonicalName()+" or "+ jakarta.annotation.Nonnull.class.getCanonicalName();
 
   @Override
   public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
@@ -33,6 +33,7 @@ public class DontReturnNullCollectionTest implements ArchRuleTest {
 
     ArchRule rule = methods().that(returnCollections).and(areNotLambdas)
         .should().beAnnotatedWith(Nonnull.class)
+        .orShould().beAnnotatedWith(jakarta.annotation.Nonnull.class)
         .because(NO_NULL_COLLECTION_MESSAGE)
         .allowEmptyShould(true);
 
