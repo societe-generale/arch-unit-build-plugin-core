@@ -12,6 +12,12 @@
 
 ### Fixed
 
+## [3.1.0] - 2023-11-19
+
+### Added
+- PR 75 (cherry picked) : DontReturnNullCollectionTest now handles jakarta.annotation.Nonnull
+
+
 ## [3.0.0] - 2022-10-08
 
 ### Changed
