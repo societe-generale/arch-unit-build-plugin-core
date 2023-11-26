@@ -10,7 +10,7 @@ import com.tngtech.archunit.core.domain.JavaMethod;
 import com.tngtech.archunit.lang.ArchCondition;
 import com.tngtech.archunit.lang.ConditionEvents;
 import com.tngtech.archunit.lang.SimpleConditionEvent;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.methods;
 
@@ -44,7 +44,7 @@ public class TestMethodsNamingRuleTest implements ArchRuleTest {
 	@Override
 	public void execute(String packagePath, ScopePathProvider scopePathProvider, Collection<String> excludedPaths) {
 
-		methods().that().areAnnotatedWith(Test.class).should(respectNamingConvention())
+		methods().that().areAnnotatedWith(Test.class).or().areAnnotatedWith(org.junit.Test.class).should(respectNamingConvention())
 				.allowEmptyShould(true)
 				.check(ArchUtils.importAllClassesInPackage( scopePathProvider.getTestClassesPath(), packagePath, excludedPaths));
 

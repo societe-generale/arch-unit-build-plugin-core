@@ -1,18 +1,17 @@
 package com.societegenerale.commons.plugin.rules;
 
-import static com.societegenerale.commons.plugin.rules.NoJavaUtilDateRuleTest.NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
-import org.junit.Test;
-
 import com.societegenerale.aut.main.ObjectWithAdateField;
 import com.societegenerale.aut.main.ObjectWithJava8TimeLib;
 import com.societegenerale.aut.main.ObjectWithJavaTextDateFormat;
 import com.societegenerale.aut.main.ObjectWithJavaUtilGregorianCalendar;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
+import org.junit.jupiter.api.Test;
+
+import static com.societegenerale.commons.plugin.rules.NoJavaUtilDateRuleTest.NO_JAVA_UTIL_DATE_VIOLATION_MESSAGE;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class NoJavaUtilDateRuleTestTest {
 

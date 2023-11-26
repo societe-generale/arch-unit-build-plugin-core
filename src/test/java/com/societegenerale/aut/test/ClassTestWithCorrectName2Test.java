@@ -1,7 +1,7 @@
 package com.societegenerale.aut.test;
 
-import org.junit.Test;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 
 public class ClassTestWithCorrectName2Test {
 

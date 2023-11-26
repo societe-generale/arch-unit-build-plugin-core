@@ -2,9 +2,9 @@ package com.societegenerale.commons.plugin.service;
 
 import java.io.IOException;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -12,13 +12,13 @@ public class JavaFileParserTest extends AbstractExcludePathTest
 {
     private final JavaFileParser javaFileParser = new JavaFileParser();
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException
     {
         AbstractExcludePathTest.init();
     }
 
-    @AfterClass
+    @AfterAll
     public static void cleanup() throws IOException
     {
         AbstractExcludePathTest.cleanup();

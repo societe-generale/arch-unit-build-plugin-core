@@ -5,8 +5,8 @@ import com.societegenerale.aut.test.TestClassWithJunit5Asserts;
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.NoJunitAssertRuleTest.NO_JUNIT_ASSERT_DESCRIPTION;
 import static java.util.Collections.emptySet;
@@ -22,7 +22,7 @@ public class NoJunitAssertRuleTestTest {
 
 	private String pathTestClassWithOutJunitAsserts = "com/societegenerale/aut/test/TestClassWithOutJunitAsserts.class";
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
 		// field there to be initialized

@@ -8,28 +8,24 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.service.ExcludedPathsPreProcessor.PACKAGE_INFO_JAVA;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@RunWith (MockitoJUnitRunner.class)
 public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
 {
     private final ExcludedPathsPreProcessor preProcessor = new ExcludedPathsPreProcessor();
 
-    @BeforeClass
+    @BeforeAll
     public static void init() throws IOException
     {
         AbstractExcludePathTest.init();
     }
 
-    @AfterClass
+    @AfterAll
     public static void cleanup() throws IOException
     {
         AbstractExcludePathTest.cleanup();

@@ -3,8 +3,8 @@ package com.societegenerale.commons.plugin.rules;
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.ConstantsAndStaticNonFinalFieldsNamesRuleTest.CONSTANTS_VIOLATION_MESSAGE;
 import static com.societegenerale.commons.plugin.rules.ConstantsAndStaticNonFinalFieldsNamesRuleTest.ENUM_CONSTANTS_VIOLATION_MESSAGE;
@@ -27,7 +27,7 @@ public class ConstantsAndStaticNonFinalFieldsNamesRuleTestTest {
 
 	private String pathEnumWithValuesWrittenCorrectly = "com/societegenerale/aut/main/EnumWithValuesWrittenCorrectly.class";
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
 		// field there to be initialized

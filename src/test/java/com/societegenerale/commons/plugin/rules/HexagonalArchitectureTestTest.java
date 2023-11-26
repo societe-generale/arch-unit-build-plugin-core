@@ -4,8 +4,8 @@ import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest.WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE;
 import static java.util.Collections.emptySet;
@@ -37,7 +37,7 @@ public class HexagonalArchitectureTestTest {
 
     private Log silentLogger=new SilentLog();
 
-    @Before
+    @BeforeEach
     public void setup(){
         //in the normal lifecycle, ArchUtils is instantiated, which enables a static field there to be initialized
         ArchUtils archUtils=new ArchUtils(new SilentLog());
