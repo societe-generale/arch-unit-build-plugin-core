@@ -1,7 +1,7 @@
 # arch-unit-build-plugin-core
 
 ![Build Status](https://github.com/societe-generale/arch-unit-build-plugin-core/actions/workflows/build_workflow.yml/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/github/societe-generale/arch-unit-build-plugin-core/badge.svg?branch=master)](https://coveralls.io/github/societe-generale/arch-unit-build-plugin-core?branch=master)
+[![codecov](https://codecov.io/github/societe-generale/arch-unit-build-plugin-core/graph/badge.svg?token=Oubtsu6EMf)](https://codecov.io/github/societe-generale/arch-unit-build-plugin-core)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.societegenerale.commons/arch-unit-build-plugin-core/badge.svg?style=plastic)](https://maven-badges.herokuapp.com/maven-central/com.societegenerale.commons/arch-unit-build-plugin-core)
 
 The core logic for Maven or Gradle ArchUnit plugin
