@@ -7,7 +7,8 @@ import java.nio.file.Paths;
 
 import com.societegenerale.commons.plugin.Log;
 import org.apache.commons.io.FileUtils;
-import org.mockito.Mock;
+
+import static org.mockito.Mockito.mock;
 
 abstract class AbstractExcludePathTest
 {
@@ -58,8 +59,7 @@ abstract class AbstractExcludePathTest
     private static Path tempJavaFileWithFileComment    = null;
     private static Path tempJavaFileWithDefaultPackage = null;
 
-    @Mock
-    private Log logger;
+    private final Log logger=mock(Log.class);
 
     static void init() throws IOException
     {
