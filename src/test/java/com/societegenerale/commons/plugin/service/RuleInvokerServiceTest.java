@@ -4,7 +4,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
-import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.SilentLogWithMemory;
 import com.societegenerale.commons.plugin.model.ApplyOn;
@@ -15,7 +14,7 @@ import com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest;
 import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
 import com.societegenerale.commons.plugin.rules.classesForTests.DummyCustomRule;
 import com.tngtech.archunit.library.GeneralCodingRules;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;

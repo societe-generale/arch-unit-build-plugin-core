@@ -4,10 +4,11 @@ import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class TestMethodsNamingRuleTestTest {
 
@@ -24,12 +25,12 @@ public class TestMethodsNamingRuleTestTest {
 		ArchUtils archUtils = new ArchUtils(new SilentLog());
 	}
 
-	@Test(expected = AssertionError.class)
+	@Test
 	public void shouldThrowViolation() {
-
-		new TestMethodsNamingRuleTest().execute(pathMethodWithIncorrectNameTest, new TestSpecificScopeProvider(),
-				emptySet());
-
+		assertThatThrownBy(() -> {
+			new TestMethodsNamingRuleTest().execute(pathMethodWithIncorrectNameTest, new TestSpecificScopeProvider(),
+					emptySet());
+		}).isInstanceOf(AssertionError.class);
 	}
 
 	@Test

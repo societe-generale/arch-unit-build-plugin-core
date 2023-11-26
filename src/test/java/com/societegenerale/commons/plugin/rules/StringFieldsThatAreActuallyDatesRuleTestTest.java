@@ -4,10 +4,11 @@ import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class StringFieldsThatAreActuallyDatesRuleTestTest {
 
@@ -22,11 +23,14 @@ public class StringFieldsThatAreActuallyDatesRuleTestTest {
 		ArchUtils archUtils = new ArchUtils(new SilentLog());
 	}
 
-	@Test(expected = AssertionError.class)
+	@Test
 	public void shouldThrowViolationTest() {
 
-		new StringFieldsThatAreActuallyDatesRuleTest().execute(pathClassWithStringsEndingWithTheWordDate,
-				new TestSpecificScopeProvider(), emptySet());
+		assertThatThrownBy(() -> {
+			new StringFieldsThatAreActuallyDatesRuleTest().execute(pathClassWithStringsEndingWithTheWordDate,
+					new TestSpecificScopeProvider(), emptySet());
+		}).isInstanceOf(AssertionError.class);
+
 
 	}
 

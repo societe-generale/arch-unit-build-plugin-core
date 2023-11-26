@@ -5,7 +5,7 @@ import com.societegenerale.commons.plugin.Log;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest.WHEN_FOLLOWING_HEXAGONAL_ARCHITECTURE;
 import static java.util.Collections.emptySet;

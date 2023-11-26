@@ -1,18 +1,19 @@
 package com.societegenerale.commons.plugin.utils;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import com.societegenerale.commons.plugin.Log;
-import com.societegenerale.commons.plugin.SilentLogWithMemory;
-import com.tngtech.archunit.core.importer.Location;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import com.societegenerale.commons.plugin.Log;
+import com.societegenerale.commons.plugin.SilentLogWithMemory;
+import com.tngtech.archunit.core.importer.Location;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class ExclusionImportOptionTest {
 

@@ -4,7 +4,7 @@ import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.ConstantsAndStaticNonFinalFieldsNamesRuleTest.CONSTANTS_VIOLATION_MESSAGE;
 import static com.societegenerale.commons.plugin.rules.ConstantsAndStaticNonFinalFieldsNamesRuleTest.ENUM_CONSTANTS_VIOLATION_MESSAGE;

@@ -5,11 +5,13 @@ import com.societegenerale.aut.main.InterfaceWithCorrectName;
 import com.societegenerale.aut.main.TotallyGoodInterfaceName;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.NoPrefixForInterfacesRuleTest.NO_PREFIX_INTERFACE_VIOLATION_MESSAGE;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 public class NoPrefixForInterfacesRuleTestTest {
 

@@ -6,7 +6,7 @@ import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.NoJunitAssertRuleTest.NO_JUNIT_ASSERT_DESCRIPTION;
 import static java.util.Collections.emptySet;
