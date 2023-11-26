@@ -4,7 +4,7 @@ import com.societegenerale.aut.test.TestClassWithPowerMock;
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.NoPowerMockRuleTest.POWER_MOCK_VIOLATION_MESSAGE;
@@ -20,7 +20,7 @@ public class NoPowerMockRuleTestTest {
 
 	private String pathTestClassWithPowerMock = "com/societegenerale/aut/test/TestClassWithPowerMock.class";
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
 		// field there to be initialized

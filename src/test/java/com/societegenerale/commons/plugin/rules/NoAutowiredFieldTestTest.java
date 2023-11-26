@@ -4,7 +4,7 @@ import com.societegenerale.aut.main.ClassWithAutowiredField;
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.NoAutowiredFieldTest.NO_AUTOWIRED_FIELD_MESSAGE;
@@ -20,7 +20,7 @@ public class NoAutowiredFieldTestTest {
 	// injected fields should not trigger autowired violation - they have their own rule
 	private String pathTestClassWithInjectedField = "com/societegenerale/aut/main/ClassWithInjectedField.class";
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
 		// field there to be initialized

@@ -4,7 +4,7 @@ import com.societegenerale.aut.main.ObjectWithJodaTimeReferences;
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static com.societegenerale.commons.plugin.rules.NoJodaTimeRuleTest.NO_JODA_VIOLATION_MESSAGE;
@@ -19,7 +19,7 @@ public class NoJodaTimeRuleTestTest {
     private String pathObjectWithJodaTimeReferences = "com/societegenerale/aut/main/ObjectWithJodaTimeReferences.class";
     private String pathObjectWithJava8Library = "com/societegenerale/aut/main/ObjectWithJava8TimeLib.class";
 
-    @Before
+    @BeforeEach
     public void setup() {
         // in the normal lifecycle, ArchUtils is instantiated, which enables a static
         // field there to be initialized
