@@ -1,13 +1,14 @@
 package com.societegenerale.commons.plugin.rules;
 
 import java.util.Arrays;
+import java.util.List;
 
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.model.RootClassFolder;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
 import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +29,18 @@ public class ArchUtilsTest {
 		long noOfClassesInPackage = classes.stream().count();
 
 		assertThat(noOfClassesInPackage).isEqualTo(4);
+	}
+
+	@Test
+	public void shouldLoadClassesFromGivenListOfPackages() {
+		JavaClasses classes = ArchUtils.importAllClassesInPackages(new RootClassFolder("./target/classes/"),
+				List.of("com/societegenerale/commons/plugin/model",
+						"com/societegenerale/commons/plugin/utils"),
+				List.of());
+
+		long noOfClassesInPackage = classes.stream().count();
+
+		assertThat(noOfClassesInPackage).isEqualTo(8);
 	}
 
 	@Test

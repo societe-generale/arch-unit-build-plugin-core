@@ -1,8 +1,5 @@
 package com.societegenerale.commons.plugin.service;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.Arrays;
-
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.SilentLogWithMemory;
@@ -14,7 +11,10 @@ import com.societegenerale.commons.plugin.rules.HexagonalArchitectureTest;
 import com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest;
 import com.societegenerale.commons.plugin.rules.classesForTests.DummyCustomRule;
 import com.tngtech.archunit.library.GeneralCodingRules;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
@@ -198,7 +198,7 @@ public class RuleInvokerServiceTest {
 
         ruleInvokerService.invokeRules(rules);
 
-        assertThat(logger.getInfoLogs()).contains("invoking ConfigurableRule "+configurableRule.toString()+" on test/minor-1.2/com/societegenerale/aut/test/specificCase");
+        assertThat(logger.getInfoLogs()).contains("invoking ConfigurableRule "+configurableRule.toString()+" on [test/minor-1.2/com/societegenerale/aut/test/specificCase]");
     }
 
     private class TestSpecificScopeProviderWithDotsInPath  implements ScopePathProvider{
