@@ -36,6 +36,7 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
             "java..",
             "javax.validation..",
             "jakarta.validation..",
+            "jakarta.annotation..",
             "org.slf4j..",
             "lombok..",
             "org.apache.commons.."};
