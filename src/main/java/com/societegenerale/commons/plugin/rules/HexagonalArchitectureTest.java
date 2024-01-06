@@ -35,6 +35,8 @@ public class HexagonalArchitectureTest implements ArchRuleTest  {
     private static String[] allowedPackageInDomain= {DOMAIN,
             "java..",
             "javax.validation..",
+            "jakarta.validation..",
+            "jakarta.annotation..",
             "org.slf4j..",
             "lombok..",
             "org.apache.commons.."};
