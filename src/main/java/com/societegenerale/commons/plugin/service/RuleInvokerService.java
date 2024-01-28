@@ -29,6 +29,8 @@ public class RuleInvokerService {
 
     private Collection<String> excludedPaths= emptySet();
 
+    private boolean fallbackToRootDirectory = true;
+
     public RuleInvokerService(Log log) {
         this.log=log;
         archUtils =new ArchUtils(log);
@@ -49,6 +51,14 @@ public class RuleInvokerService {
         this.excludedPaths=new ExcludedPathsPreProcessor().processExcludedPaths(log, projectBuildDir, excludedPaths);
     }
 
+    public RuleInvokerService(Log log, ScopePathProvider scopePathProvider,Collection<String> excludedPaths, String projectBuildDir, boolean fallbackToRootDirectory) {
+        this.log=log;
+        archUtils =new ArchUtils(log);
+
+        this.scopePathProvider=scopePathProvider;
+        this.excludedPaths=new ExcludedPathsPreProcessor().processExcludedPaths(log, projectBuildDir, excludedPaths);
+        this.fallbackToRootDirectory = fallbackToRootDirectory;
+    }
 
     public String invokeRules(Rules rules)
             throws InvocationTargetException, InstantiationException, IllegalAccessException {
@@ -107,7 +117,7 @@ public class RuleInvokerService {
         String fullPathFromRootTopackage = getPackageNameOnWhichToApplyRules(rule);
 
         log.info("invoking ConfigurableRule "+rule.toString()+" on "+fullPathFromRootTopackage);
-        JavaClasses classes = archUtils.importAllClassesInPackage(new RootClassFolder(""), fullPathFromRootTopackage,excludedPaths);
+        JavaClasses classes = archUtils.importAllClassesInPackage(new RootClassFolder(""), fullPathFromRootTopackage, excludedPaths, fallbackToRootDirectory);
 
         InvocationResult result = invokableRules.invokeOn(classes);
         return result.getMessage();

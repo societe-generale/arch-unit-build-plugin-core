@@ -1,6 +1,7 @@
 package com.societegenerale.commons.plugin.rules;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import com.societegenerale.commons.plugin.SilentLog;
 import com.societegenerale.commons.plugin.model.RootClassFolder;
@@ -37,6 +38,15 @@ public class ArchUtilsTest {
 		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
 
 		assertThat(noOfClasses).isEqualTo(36);
+	}
+
+	@Test
+	public void shouldNotLoadAllClassesWhenFallbackIsDisabled() {
+		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target/classes"), "someNotExistingFolder", Collections.emptyList(), false);
+
+		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
+
+		assertThat(noOfClasses).isZero();
 	}
 
 	@Test
