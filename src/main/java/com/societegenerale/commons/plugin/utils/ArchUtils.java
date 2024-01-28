@@ -24,10 +24,14 @@ public class ArchUtils {
     }
 
     public static JavaClasses importAllClassesInPackage(RootClassFolder rootClassFolder, String packagePath){
-        return importAllClassesInPackage(rootClassFolder, packagePath,emptyList());
+        return importAllClassesInPackage(rootClassFolder, packagePath,emptyList(), true);
     }
 
     public static JavaClasses importAllClassesInPackage(RootClassFolder rootClassFolder, String packagePath, Collection<String> excludedPaths) {
+        return importAllClassesInPackage(rootClassFolder, packagePath, excludedPaths, true);
+    }
+
+    public static JavaClasses importAllClassesInPackage(RootClassFolder rootClassFolder, String packagePath, Collection<String> excludedPaths, boolean fallbackToRootDirectory) {
 
         //not great design, but since all the rules need to call this, it's very convenient to keep this method static
         if(log==null){
@@ -36,7 +40,7 @@ public class ArchUtils {
 
         Path classesPath = Paths.get(rootClassFolder.getValue() + packagePath);
 
-        if (!classesPath.toFile().exists()) {
+        if (fallbackToRootDirectory && !classesPath.toFile().exists()) {
             StringBuilder warnMessage=new StringBuilder("Classpath ").append(classesPath.toFile())
                     .append(" doesn't exist : loading all classes from root, ie ")
                     .append(rootClassFolder.getValue())
