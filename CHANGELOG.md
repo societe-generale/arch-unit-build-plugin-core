@@ -12,6 +12,14 @@
 
 ### Fixed
 
+## [3.1.1] - 2024-01-28
+
+### Changed
+- PR #86 : adding Jakarta validation and annotation in model domain
+- PR #87 : add configuration switch to disable fallback to root directory - Thanks @purnhar !
+
+
+
 ## [3.1.0] - 2023-11-19
 
 ### Added
