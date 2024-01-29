@@ -12,6 +12,29 @@
 
 ### Fixed
 
+## [4.0.1] - 2024-01-28
+
+### Changed
+- bumping jacoco for JDK 21
+- bumping github action versions
+- PR #82 : upgraded tests to Junit 5
+- PR #86 : adding Jakarta validation and annotation in model domain
+
+### Added
+
+
+### Changed
+- PR 73 : upgrade to archunit 1.2.0, and now building with JDK 21 - Thanks @RoqueIT !!
+- PR 75 : now considering jakarta.annotation.Nonnull - Thanks @paul58914080 !!
+
+
+## [4.0.0] - 2023-11-16
+
+### Changed
+- PR 73 : upgrade to archunit 1.2.0, and now building with JDK 21 - Thanks @RoqueIT !!
+- PR 75 : now considering jakarta.annotation.Nonnull - Thanks @paul58914080 !!
+
+
 ## [3.0.0] - 2022-10-08
 
 ### Changed
