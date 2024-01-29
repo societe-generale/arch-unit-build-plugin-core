@@ -19,13 +19,8 @@
 - bumping github action versions
 - PR #82 : upgraded tests to Junit 5
 - PR #86 : adding Jakarta validation and annotation in model domain
+- PR #88 : add configuration switch to disable fallback to root directory
 
-### Added
-
-
-### Changed
-- PR 73 : upgrade to archunit 1.2.0, and now building with JDK 21 - Thanks @RoqueIT !!
-- PR 75 : now considering jakarta.annotation.Nonnull - Thanks @paul58914080 !!
 
 
 ## [4.0.0] - 2023-11-16
