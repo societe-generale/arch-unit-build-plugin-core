@@ -110,6 +110,13 @@
       <version>${tng.archunit.version}</version>
     </dependency>
 
+    <!-- To be able to work with com.tngtech.archunit.junit.ArchTests -->
+    <dependency>
+      <groupId>com.tngtech.archunit</groupId>
+      <artifactId>archunit-junit5-api</artifactId>
+      <version>${tng.archunit.version}</version>
+    </dependency>
+
     <dependency>
       <groupId>com.google.guava</groupId>
       <artifactId>guava</artifactId>

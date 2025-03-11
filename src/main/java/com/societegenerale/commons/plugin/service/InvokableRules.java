@@ -3,8 +3,11 @@ package com.societegenerale.commons.plugin.service;
 import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -13,20 +16,20 @@ import java.util.function.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.societegenerale.commons.plugin.Log;
+import com.societegenerale.commons.plugin.utils.ReflectionUtils;
 import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.junit.ArchTests;
 import com.tngtech.archunit.lang.ArchRule;
 
 import static com.societegenerale.commons.plugin.utils.ReflectionUtils.getValue;
 import static com.societegenerale.commons.plugin.utils.ReflectionUtils.invoke;
 import static com.societegenerale.commons.plugin.utils.ReflectionUtils.loadClassWithContextClassLoader;
-import static com.societegenerale.commons.plugin.utils.ReflectionUtils.newInstance;
 import static java.lang.System.lineSeparator;
 import static java.util.Arrays.stream;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toSet;
 
 class InvokableRules {
-    private final Class<?> rulesLocation;
     private final Set<Field> archRuleFields;
     private final Set<Method> archRuleMethods;
 
@@ -36,11 +39,17 @@ class InvokableRules {
 
         this.log=log;
 
-        rulesLocation = loadClassWithContextClassLoader(rulesClassName);
+        Class<?> definedRulesClass = loadClassWithContextClassLoader(rulesClassName);
 
-        Set<Field> allFieldsWhichAreArchRules = getAllFieldsWhichAreArchRules(rulesLocation.getDeclaredFields());
-        Set<Method> allMethodsWhichAreArchRules = getAllMethodsWhichAreArchRules(rulesLocation.getDeclaredMethods());
-        validateRuleChecks(Sets.union(allMethodsWhichAreArchRules, allFieldsWhichAreArchRules), ruleChecks);
+        Set<Class<?>> rulesClasses = getAllClassesWhichAreArchTests(definedRulesClass);
+        rulesClasses.add(definedRulesClass);
+        Set<Field> allFieldsWhichAreArchRules = new HashSet<>();
+        Set<Method> allMethodsWhichAreArchRules = new HashSet<>();
+        for (Class<?> rulesClass : rulesClasses) {
+            allFieldsWhichAreArchRules.addAll(getAllFieldsWhichAreArchRules(rulesClass.getDeclaredFields()));
+            allMethodsWhichAreArchRules.addAll(getAllMethodsWhichAreArchRules(rulesClass.getDeclaredMethods()));
+        }
+        validateRuleChecks(definedRulesClass, Sets.union(allMethodsWhichAreArchRules, allFieldsWhichAreArchRules), ruleChecks);
 
         Predicate<String> isChosenCheck = ruleChecks.isEmpty() ? check -> true : ruleChecks::contains;
 
@@ -64,7 +73,7 @@ class InvokableRules {
 
     }
 
-    private void validateRuleChecks(Set<? extends Member> allFieldsAndMethods, Collection<String> ruleChecks) {
+    private void validateRuleChecks(Class<?> rulesLocation, Set<? extends Member> allFieldsAndMethods, Collection<String> ruleChecks) {
         Set<String> allFieldAndMethodNames = allFieldsAndMethods.stream().map(Member::getName).collect(toSet());
         Set<String> illegalChecks = Sets.difference(ImmutableSet.copyOf(ruleChecks), allFieldAndMethodNames);
 
@@ -91,9 +100,26 @@ class InvokableRules {
                 .collect(toSet());
     }
 
-    InvocationResult invokeOn(JavaClasses importedClasses) {
+    private Set<Class<?>> getAllClassesWhichAreArchTests(Class<?> startClass) {
+        Set<Class<?>> allClassesWhichAreArchTests = new HashSet<>();
+        Deque<Class<?>> stack = new ArrayDeque<>();
+        stack.push(startClass);
+        while (!stack.isEmpty()) {
+            Class<?> currentClass = stack.pop();
+            stream(currentClass.getDeclaredFields())
+                    .filter(f -> ArchTests.class.isAssignableFrom(f.getType()))
+                    .map(f -> getValue(f, null))
+                    .map(ArchTests.class::cast)
+                    .map(ArchTests::getDefinitionLocation)
+                    .forEach(childClass -> {
+                        allClassesWhichAreArchTests.add(childClass);
+                        stack.push(childClass);
+                    });
+        }
+        return allClassesWhichAreArchTests;
+    }
 
-        Object instance = newInstance(rulesLocation);
+    InvocationResult invokeOn(JavaClasses importedClasses) {
 
         if(log.isInfoEnabled()) {
             log.info("applying rules on "+importedClasses.size()+" classe(s). To see the details, enable debug logs");
@@ -105,11 +131,11 @@ class InvokableRules {
 
         InvocationResult result = new InvocationResult();
         for (Method method : archRuleMethods) {
-            checkForFailure(() -> invoke(method, instance, importedClasses))
+            checkForFailure(() -> invoke(method, null, importedClasses))
                     .ifPresent(result::add);
         }
         for (Field field : archRuleFields) {
-            ArchRule rule = getValue(field, instance);
+            ArchRule rule = getValue(field, null);
             checkForFailure(() -> rule.check(importedClasses))
                     .ifPresent(result::add);
         }
