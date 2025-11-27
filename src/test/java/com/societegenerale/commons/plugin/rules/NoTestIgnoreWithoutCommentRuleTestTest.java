@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class NoTestIgnoreWithoutCommentRuleTestTest {
+class NoTestIgnoreWithoutCommentRuleTestTest {
 
     private JavaClasses testClassWithIgnoreButNoComment = new ClassFileImporter().importClasses(TestClassWithIgnoreAtMethodLevel.class,
                                                                                                 TestClassWithIgnoreAtClassLevel.class,
@@ -35,7 +35,7 @@ public class NoTestIgnoreWithoutCommentRuleTestTest {
     private JavaClasses testClassWithoutIgnoreAtAll= new ClassFileImporter().importClasses(TestClassWithOutJunitAsserts.class);
 
     @Test
-    public void shouldNotThrowAnyViolation(){
+    void shouldNotThrowAnyViolation(){
         assertThatCode(
                 () -> classes().should(NoTestIgnoreWithoutCommentRuleTest.notBeIgnoredWithoutAComment()).check(testClassWithoutIgnoreAtAll))
                 .doesNotThrowAnyException();
@@ -46,7 +46,7 @@ public class NoTestIgnoreWithoutCommentRuleTestTest {
     }
 
     @Test
-    public void shouldThrowViolations(){
+    void shouldThrowViolations(){
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 

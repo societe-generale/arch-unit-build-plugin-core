@@ -9,13 +9,13 @@ import static com.societegenerale.commons.plugin.rules.NoStandardStreamRuleTest.
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class NoStandardStreamRuleTestTest {
+class NoStandardStreamRuleTestTest {
 
   private JavaClasses classesUsingStandardStream = new ClassFileImporter().importClasses(
       TestClassWithStandardStream.class);
 
-  @Test
-  public void shouldThrowViolations() {
+    @Test
+    void shouldThrowViolations() {
 
     Throwable validationExceptionThrown = catchThrowable(() -> {
 

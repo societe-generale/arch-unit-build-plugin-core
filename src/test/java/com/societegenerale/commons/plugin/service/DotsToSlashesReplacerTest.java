@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-public class DotsToSlashesReplacerTest {
+class DotsToSlashesReplacerTest {
 
     @Test
-    public void shouldNotReplaceFirstDot(){
+    void shouldNotReplaceFirstDot(){
 
         String input=".blabla.hello.world";
         assertThat(DotsToSlashesReplacer.replace(input)).isEqualTo(".blabla/hello/world");
@@ -16,7 +16,7 @@ public class DotsToSlashesReplacerTest {
     }
 
     @Test
-    public void shouldReplaceAllDotsExceptFirstOnes(){
+    void shouldReplaceAllDotsExceptFirstOnes(){
 
         String input2="..blabla.hello.world";
         assertThat(DotsToSlashesReplacer.replace(input2)).isEqualTo("..blabla/hello/world");

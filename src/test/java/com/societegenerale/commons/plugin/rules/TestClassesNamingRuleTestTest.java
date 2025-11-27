@@ -10,7 +10,7 @@ import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class TestClassesNamingRuleTestTest {
+class TestClassesNamingRuleTestTest {
 
 	private String pathTestClassWithIncorrectName1 = "com/societegenerale/aut/test/ClassTestWithIncorrectName1.class";
 
@@ -20,23 +20,23 @@ public class TestClassesNamingRuleTestTest {
 
 	private String pathClassWithCorrectName2Test = "com/societegenerale/aut/test/ClassTestWithCorrectName2Test.class";
 
-	@BeforeEach
-	public void setup() {
+    @BeforeEach
+    void setup() {
 		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
 		// field there to be initialized
 		ArchUtils archUtils = new ArchUtils(new SilentLog());
 	}
 
-	@Test
-	public void shouldThrowViolation1Test() {
+    @Test
+    void shouldThrowViolation1Test() {
 		assertThatThrownBy(() -> {
 			new TestClassesNamingRuleTest().execute(pathTestClassWithIncorrectName1, new TestSpecificScopeProvider(),
 					emptySet());
 		}).isInstanceOf(AssertionError.class);
 	}
 
-	@Test
-	public void shouldThrowViolation2Test() {
+    @Test
+    void shouldThrowViolation2Test() {
 		assertThatThrownBy(() -> {
 			new TestClassesNamingRuleTest().execute(pathTestClassWithIncorrectName2, new TestSpecificScopeProvider(),
 					emptySet());
@@ -44,8 +44,8 @@ public class TestClassesNamingRuleTestTest {
 
 	}
 
-	@Test
-	public void shouldNotThrowAnyViolationTest() {
+    @Test
+    void shouldNotThrowAnyViolationTest() {
 
 		assertThatCode(() -> new TestClassesNamingRuleTest().execute(pathClassWithCorrectName1Test,
 				new TestSpecificScopeProvider(), emptySet())).doesNotThrowAnyException();

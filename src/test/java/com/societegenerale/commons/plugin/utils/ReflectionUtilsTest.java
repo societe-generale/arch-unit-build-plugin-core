@@ -4,10 +4,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ReflectionUtilsTest {
+class ReflectionUtilsTest {
 
     @Test
-    public void shouldLoadRuleClassEvenIfConstructorIsPrivate() throws ClassNotFoundException {
+    void shouldLoadRuleClassEvenIfConstructorIsPrivate() throws Exception {
 
         assertThat(ReflectionUtils.newInstance(Class.forName("com.tngtech.archunit.library.GeneralCodingRules"))).isNotNull();
     }

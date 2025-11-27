@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class NoTestIgnoreRuleTestTest {
+class NoTestIgnoreRuleTestTest {
 
     private JavaClasses testClassWithIgnore = new ClassFileImporter().importClasses(TestClassWithIgnoreAtMethodLevel.class,
                                                                                     TestClassWithIgnoreAtClassLevel.class,
@@ -25,21 +25,21 @@ public class NoTestIgnoreRuleTestTest {
     private JavaClasses testClassWithoutIgnoreAtAll= new ClassFileImporter().importClasses(TestClassWithOutJunitAsserts.class);
 
     @Test
-    public void classesWithNoIgnore_shouldNotThrowAnyViolation(){
+    void classesWithNoIgnore_shouldNotThrowAnyViolation(){
         assertThatCode(
                 () -> classes().should(NoTestIgnoreRuleTest.notBeenIgnore()).check(testClassWithoutIgnoreAtAll))
                 .doesNotThrowAnyException();
     }
 
     @Test
-    public void classesWithNoJunit5DisableNorJunit4Ignore_shouldNotThrowAnyViolation(){
+    void classesWithNoJunit5DisableNorJunit4Ignore_shouldNotThrowAnyViolation(){
         assertThatCode(
                 () -> classes().should(NoTestIgnoreRuleTest.notBeenIgnore()).check(testClassWithoutIgnoreAtAll))
                 .doesNotThrowAnyException();
     }
 
     @Test
-    public void shouldThrowViolations(){
+    void shouldThrowViolations(){
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 

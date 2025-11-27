@@ -1,8 +1,8 @@
 package com.societegenerale.commons.plugin.rules;
 
+import jakarta.inject.Inject;
 import java.util.Collection;
 
-import javax.inject.Inject;
 
 import com.societegenerale.commons.plugin.service.ScopePathProvider;
 import com.societegenerale.commons.plugin.utils.ArchUtils;
