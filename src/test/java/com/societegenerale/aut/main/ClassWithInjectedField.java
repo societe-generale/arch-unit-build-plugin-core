@@ -1,7 +1,6 @@
 package com.societegenerale.aut.main;
 
-import javax.inject.Inject;
-
+import jakarta.inject.Inject;
 
 public class ClassWithInjectedField {
 
