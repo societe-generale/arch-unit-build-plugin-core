@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
 
-public class HexagonalArchitectureTestTest {
+class HexagonalArchitectureTestTest {
 
 
     private String pathForDomainClassUsingSpring = "com/societegenerale/aut/main/myproject/domain/DomainClassUsingSpring.class";
@@ -38,14 +38,14 @@ public class HexagonalArchitectureTestTest {
     private Log silentLogger=new SilentLog();
 
     @BeforeEach
-    public void setup(){
+    void setup(){
         //in the normal lifecycle, ArchUtils is instantiated, which enables a static field there to be initialized
         ArchUtils archUtils=new ArchUtils(new SilentLog());
     }
 
 
     @Test
-    public void domainClassUsingSpringFrameworkShouldThrowViolations(){
+    void domainClassUsingSpringFrameworkShouldThrowViolations(){
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
@@ -63,7 +63,7 @@ public class HexagonalArchitectureTestTest {
     }
 
     @Test
-    public void domainClassAnnotatedWithJacksonShouldThrowViolations(){
+    void domainClassAnnotatedWithJacksonShouldThrowViolations(){
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
@@ -83,14 +83,14 @@ public class HexagonalArchitectureTestTest {
     }
 
     @Test
-    public void domainClassAnnotatedWithLombokShould_Not_ThrowViolations(){
+    void domainClassAnnotatedWithLombokShould_Not_ThrowViolations(){
 
         assertThatCode(() -> new HexagonalArchitectureTest(silentLogger).execute(pathForDomainClassAnnotatedWithLombok, new TestSpecificScopeProvider(),emptySet())).doesNotThrowAnyException();
 
     }
 
     @Test
-    public void infraClassUsingSpringFrameworkShould_Not_ThrowViolations() {
+    void infraClassUsingSpringFrameworkShould_Not_ThrowViolations() {
 
         assertThatCode(() -> new NoPublicFieldRuleTest().execute(pathForInfraClassUsingSpring, new TestSpecificScopeProvider(),emptySet()))
                 .doesNotThrowAnyException();
@@ -98,7 +98,7 @@ public class HexagonalArchitectureTestTest {
     }
 
     @Test
-    public void infraClassUsingConfigShouldThrowViolations(){
+    void infraClassUsingConfigShouldThrowViolations(){
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 
@@ -116,7 +116,7 @@ public class HexagonalArchitectureTestTest {
     }
 
     @Test
-    public void domainClassEndingWithDtoIgnoringCaseShouldThrowViolation(){
+    void domainClassEndingWithDtoIgnoringCaseShouldThrowViolation(){
 
         Throwable validationExceptionThrownForDto = catchThrowable(() -> {
 
@@ -137,7 +137,7 @@ public class HexagonalArchitectureTestTest {
     }
 
     @Test
-    public void domainClassEndingWithVoShouldThrowViolation(){
+    void domainClassEndingWithVoShouldThrowViolation(){
 
         Throwable validationExceptionThrownForDto = catchThrowable(() -> {
 

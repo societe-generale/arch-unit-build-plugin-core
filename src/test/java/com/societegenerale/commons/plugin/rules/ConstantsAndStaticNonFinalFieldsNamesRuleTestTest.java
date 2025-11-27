@@ -13,7 +13,7 @@ import static java.util.Collections.emptySet;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class ConstantsAndStaticNonFinalFieldsNamesRuleTestTest {
+class ConstantsAndStaticNonFinalFieldsNamesRuleTestTest {
 
 	private String pathClassWithConstantNamesNotWrittenCorrectly = "com/societegenerale/aut/main/ClassWithConstantNamesNotWrittenCorrectly.class";
 
@@ -27,51 +27,51 @@ public class ConstantsAndStaticNonFinalFieldsNamesRuleTestTest {
 
 	private String pathEnumWithValuesWrittenCorrectly = "com/societegenerale/aut/main/EnumWithValuesWrittenCorrectly.class";
 
-	@BeforeEach
-	public void setup() {
+    @BeforeEach
+    void setup() {
 		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
 		// field there to be initialized
 		ArchUtils archUtils = new ArchUtils(new SilentLog());
 	}
 
-	@Test
-	public void shouldThrowViolationsConstants() {
+    @Test
+    void shouldThrowViolationsConstants() {
 
 		assertExceptionIsThrown(pathClassWithConstantNamesNotWrittenCorrectly, CONSTANTS_VIOLATION_MESSAGE);
 
 	}
 
-	@Test
-	public void shouldNotThrowAnyViolationConstants() {
+    @Test
+    void shouldNotThrowAnyViolationConstants() {
 
 		assertNoExceptionIsThrown(pathClassWithConstantNamesWrittenCorrectly);
 
 	}
 
-	@Test
-	public void shouldThrowViolationsStaticNonFinalFields() {
+    @Test
+    void shouldThrowViolationsStaticNonFinalFields() {
 
 		assertExceptionIsThrown(pathClassWithStaticNonFinalFieldsNotWrittenCorrectly,
 				STATIC_NON_FINAL_FIELDS_VIOLATION_MESSAGE);
 
 	}
 
-	@Test
-	public void shouldNotThrowAnyViolationStaticNonFinalFields() {
+    @Test
+    void shouldNotThrowAnyViolationStaticNonFinalFields() {
 
 		assertNoExceptionIsThrown(pathClassWithStaticNonFinalFieldsWrittenCorrectly);
 
 	}
 
-	@Test
-	public void shouldThrowViolationsEnums() {
+    @Test
+    void shouldThrowViolationsEnums() {
 
 		assertExceptionIsThrown(pathEnumWithValuesNotWrittenCorrectly, ENUM_CONSTANTS_VIOLATION_MESSAGE);
 
 	}
 
-	@Test
-	public void shouldNotThrowAnyViolationEnums() {
+    @Test
+    void shouldNotThrowAnyViolationEnums() {
 
 		assertNoExceptionIsThrown(pathEnumWithValuesWrittenCorrectly);
 

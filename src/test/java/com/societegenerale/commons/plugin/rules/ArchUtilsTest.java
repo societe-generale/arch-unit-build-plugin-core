@@ -16,13 +16,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  * These are not great test, as they will fail when new classes are added in the
  * code base, but acceptable for now
  */
-public class ArchUtilsTest {
+class ArchUtilsTest {
 
 	// instantiating to init the static logger in ArchUtils..
 	ArchUtils archUtils = new ArchUtils(new SilentLog());
 
-	@Test
-	public void shouldLoadClassesFromGivenPackage() {
+    @Test
+    void shouldLoadClassesFromGivenPackage() {
 		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target/classes/"),
 				"com/societegenerale/commons/plugin/model");
 
@@ -31,8 +31,8 @@ public class ArchUtilsTest {
 		assertThat(noOfClassesInPackage).isEqualTo(4);
 	}
 
-	@Test
-	public void shouldLoadAllClassesWhenGivenPakageDoesntExist() {
+    @Test
+    void shouldLoadAllClassesWhenGivenPackageDoesntExist() {
 		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target/classes"), "someNotExistingFolder");
 
 		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
@@ -40,8 +40,8 @@ public class ArchUtilsTest {
 		assertThat(noOfClasses).isEqualTo(36);
 	}
 
-	@Test
-	public void shouldNotLoadAllClassesWhenFallbackIsDisabled() {
+    @Test
+    void shouldNotLoadAllClassesWhenFallbackIsDisabled() {
 		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target/classes"), "someNotExistingFolder", Collections.emptyList(), false);
 
 		long noOfClasses = classes.stream().filter(it -> !it.isNestedClass()).count();
@@ -49,8 +49,8 @@ public class ArchUtilsTest {
 		assertThat(noOfClasses).isZero();
 	}
 
-	@Test
-	public void shouldIgnoreClassesFromConfiguredPaths() {
+    @Test
+    void shouldIgnoreClassesFromConfiguredPaths() {
 
 		JavaClasses classes = ArchUtils.importAllClassesInPackage(new RootClassFolder("./target"), "");
 

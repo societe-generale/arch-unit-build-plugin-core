@@ -13,17 +13,17 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-public class NoJavaUtilDateRuleTestTest {
+class NoJavaUtilDateRuleTestTest {
 
-	@Test
-	public void shouldThrowViolations() {
+    @Test
+    void shouldThrowViolations() {
 
 		assertExceptionIsThrownFor(ObjectWithAdateField.class);
 
 	}
 
-	@Test
-	public void shouldNotThrowAnyViolation() {
+    @Test
+    void shouldNotThrowAnyViolation() {
 
 		assertNoExceptionIsThrownFor(ObjectWithJava8TimeLib.class);
 

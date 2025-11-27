@@ -13,22 +13,22 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class NoAutowiredFieldTestTest {
+class NoAutowiredFieldTestTest {
 
 	private String pathTestClassWithAutowiredField = "com/societegenerale/aut/main/ClassWithAutowiredField.class";
 
 	// injected fields should not trigger autowired violation - they have their own rule
 	private String pathTestClassWithInjectedField = "com/societegenerale/aut/main/ClassWithInjectedField.class";
 
-	@BeforeEach
-	public void setup() {
+    @BeforeEach
+    void setup() {
 		// in the normal lifecycle, ArchUtils is instantiated, which enables a static
 		// field there to be initialized
 		ArchUtils archUtils = new ArchUtils(new SilentLog());
 	}
 
-	@Test
-	public void shouldThrowViolations() {
+    @Test
+    void shouldThrowViolations() {
 
 		Throwable validationExceptionThrown = catchThrowable(() -> {
 
@@ -43,8 +43,8 @@ public class NoAutowiredFieldTestTest {
 
 	}
 
-	@Test
-	public void shouldNotThrowAnyViolation() {
+    @Test
+    void shouldNotThrowAnyViolation() {
 		assertThatCode(() -> new NoAutowiredFieldTest().execute(pathTestClassWithInjectedField,
 				new TestSpecificScopeProvider(), emptySet())).doesNotThrowAnyException();
 	}

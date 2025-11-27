@@ -13,21 +13,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class NoJodaTimeRuleTestTest {
+class NoJodaTimeRuleTestTest {
 
 
     private String pathObjectWithJodaTimeReferences = "com/societegenerale/aut/main/ObjectWithJodaTimeReferences.class";
     private String pathObjectWithJava8Library = "com/societegenerale/aut/main/ObjectWithJava8TimeLib.class";
 
     @BeforeEach
-    public void setup() {
+    void setup() {
         // in the normal lifecycle, ArchUtils is instantiated, which enables a static
         // field there to be initialized
         ArchUtils archUtils = new ArchUtils(new SilentLog());
     }
 
     @Test
-    public void shouldCatchViolationsInStaticBlocksAndMemberFields() {
+    void shouldCatchViolationsInStaticBlocksAndMemberFields() {
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
             new NoJodaTimeRuleTest().execute(pathObjectWithJodaTimeReferences, new TestSpecificScopeProvider(), emptySet());
@@ -46,7 +46,7 @@ public class NoJodaTimeRuleTestTest {
     }
 
     @Test
-    public void shouldNotThrowAnyViolation(){
+    void shouldNotThrowAnyViolation(){
         assertThatCode(
             () -> new NoJodaTimeRuleTest().execute(pathObjectWithJava8Library, new TestSpecificScopeProvider(), emptySet()))
             .doesNotThrowAnyException();

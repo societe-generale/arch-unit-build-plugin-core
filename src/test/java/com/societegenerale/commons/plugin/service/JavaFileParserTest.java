@@ -8,24 +8,24 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class JavaFileParserTest extends AbstractExcludePathTest
+class JavaFileParserTest extends AbstractExcludePathTest
 {
     private final JavaFileParser javaFileParser = new JavaFileParser();
 
     @BeforeAll
-    public static void init() throws IOException
+    static void init() throws IOException
     {
         AbstractExcludePathTest.init();
     }
 
     @AfterAll
-    public static void cleanup() throws IOException
+    static void cleanup() throws IOException
     {
         AbstractExcludePathTest.cleanup();
     }
 
     @Test
-    public void canParseJavaFile() throws IOException
+    void canParseJavaFile() throws Exception
     {
         final JavaFileParser.JavaFile fileWithPackage = javaFileParser.parse(getTempJavaFile(), getLogger());
         assertThat(fileWithPackage.getClassName()).isEqualTo(AbstractExcludePathTest.CLASS_NAME );
@@ -33,7 +33,7 @@ public class JavaFileParserTest extends AbstractExcludePathTest
     }
 
     @Test
-    public void canParseJavaFileWithoutPackage() throws IOException
+    void canParseJavaFileWithoutPackage() throws Exception
     {
         final JavaFileParser.JavaFile fileWithoutPackage = javaFileParser.parse(getTempJavaFileWithDefaultPackage(), getLogger());
         assertThat(fileWithoutPackage.getClassName()).isEqualTo(AbstractExcludePathTest.CLASS_NAME);
@@ -41,7 +41,7 @@ public class JavaFileParserTest extends AbstractExcludePathTest
     }
 
     @Test
-    public void canParseJavaFileWithComments() throws IOException
+    void canParseJavaFileWithComments() throws Exception
     {
         final JavaFileParser.JavaFile fileWithFileComment = javaFileParser.parse(
                 AbstractExcludePathTest.getTempJavaFileWithFileComment(), getLogger());
