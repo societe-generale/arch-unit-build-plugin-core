@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class DontReturnNullCollectionTestTest {
+class DontReturnNullCollectionTestTest {
 
     String pathObjectWithAmethodReturningAnullList = "com/societegenerale/aut/main/ObjectWithMethodsReturningNullCollections.class";
 
@@ -22,13 +22,13 @@ public class DontReturnNullCollectionTestTest {
     String pathObjectWithLombokBuilder = "com/societegenerale/aut/main/ObjectWithLombokBuilder.class$ObjectWithLombokBuilderBuilder";
 
     @BeforeEach
-    public void setup(){
+    void setup(){
         //in the normal lifecycle, ArchUtils is instantiated, which enables a static field there to be initialized
         new ArchUtils(new SilentLog());
     }
 
     @Test
-    public void shouldThrowViolations() {
+    void shouldThrowViolations() {
 
         Throwable validationExceptionThrown = catchThrowable(() ->
             new DontReturnNullCollectionTest().execute(pathObjectWithAmethodReturningAnullList, new TestSpecificScopeProvider(), emptySet())
@@ -40,7 +40,7 @@ public class DontReturnNullCollectionTestTest {
     }
 
     @Test
-    public void shouldNotThrowViolations() {
+    void shouldNotThrowViolations() {
 
         assertThatCode(() -> new DontReturnNullCollectionTest().execute(pathProperlyAnnotatedObjectWithAmethodReturningAlist, new TestSpecificScopeProvider(),emptySet()))
                 .doesNotThrowAnyException();
@@ -49,7 +49,7 @@ public class DontReturnNullCollectionTestTest {
 
 
     @Test
-    public void shouldNotThrowViolationsOnLambdas() {
+    void shouldNotThrowViolationsOnLambdas() {
 
         assertThatCode(() -> new DontReturnNullCollectionTest()
             .execute(pathObjectWithLambdasReturningListsInside, new TestSpecificScopeProvider(),emptySet()))
@@ -58,7 +58,7 @@ public class DontReturnNullCollectionTestTest {
     }
 
     @Test
-    public void shouldNotThrowViolationsOnClassesUsingLombokBuilder() {
+    void shouldNotThrowViolationsOnClassesUsingLombokBuilder() {
 
         assertThatCode(() -> new DontReturnNullCollectionTest()
             .execute("com/societegenerale/aut/main/lombok_builder", new TestSpecificScopeProvider(),emptySet()))

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class ExclusionImportOptionTest {
+class ExclusionImportOptionTest {
 
     private static Path testRootDir;
 
@@ -25,27 +25,27 @@ public class ExclusionImportOptionTest {
     private final Log log = new SilentLogWithMemory();
 
     @BeforeAll
-    public static void init() throws IOException {
+    static void init() throws IOException {
         testRootDir = Files.createTempDirectory("ExclusionImportOptionTest");
         locationToBeExcluded = Location.of(Paths.get(testRootDir.toString(), "com", "societegenerale", "commons", "plugin", "utils", "Foo.class"));
         locationToBeIncluded = Location.of(Paths.get(testRootDir.toString(), "com", "societegenerale", "commons", "plugin", "Bar.class"));
     }
 
     @AfterAll
-    public static void cleanUp() throws IOException {
+    static void cleanUp() throws IOException {
         if (testRootDir != null) {
             Files.deleteIfExists(testRootDir);
         }
     }
 
     @Test
-    public void includes_LocationNull() {
+    void includes_LocationNull() {
         ExclusionImportOption exclusionImportOptionPackage = new ExclusionImportOption(log, "somePattern");
         assertFalse(exclusionImportOptionPackage.includes(null));
     }
 
     @Test
-    public void includes_DirectoryBased() {
+    void includes_DirectoryBased() {
 
         String excludePathDirectorySlashes = "com/societegenerale/commons/plugin/utils";
         String excludePathDirectoryBackslashes = "com\\societegenerale\\commons\\plugin\\utils";
@@ -62,7 +62,7 @@ public class ExclusionImportOptionTest {
     }
 
     @Test
-    public void includes_PackageBased() {
+    void includes_PackageBased() {
 
         String excludePathPackage = "com.societegenerale.commons.plugin.utils";
 
@@ -72,7 +72,7 @@ public class ExclusionImportOptionTest {
     }
 
     @Test
-    public void includes_ClassfileBased() {
+    void includes_ClassfileBased() {
 
         String excludePathClassfileWithSlashes = "com/societegenerale/commons/plugin/utils/Foo";
         String excludePathClassfileWithBackslashes = "com\\societegenerale\\commons\\plugin\\utils\\Foo";
@@ -102,7 +102,7 @@ public class ExclusionImportOptionTest {
     }
 
     @Test
-    public void includes_ClasspathBased() {
+    void includes_ClasspathBased() {
 
         String excludePathClassfileWithPackage = "com.societegenerale.commons.plugin.utils.Foo";
         String excludePathClassfileWithTypeAndPackage = "com.societegenerale.commons.plugin.utils.Foo.class";

@@ -13,13 +13,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
-public class NoPrefixForInterfacesRuleTestTest {
+class NoPrefixForInterfacesRuleTestTest {
 
     private JavaClasses interfacesWithIncorrectNames = new ClassFileImporter().importClasses(IInterfaceWithIncorrectName.class);
     private JavaClasses interfacesWithProperNames = new ClassFileImporter().importClasses(InterfaceWithCorrectName.class, TotallyGoodInterfaceName.class);
 
     @Test
-    public void shouldNotThrowAnyViolation(){
+    void shouldNotThrowAnyViolation(){
         assertThatCode(
                 () -> classes().should(NoPrefixForInterfacesRuleTest.notBePrefixed()).check(interfacesWithProperNames))
                 .doesNotThrowAnyException();
@@ -27,7 +27,7 @@ public class NoPrefixForInterfacesRuleTestTest {
 
 
     @Test
-    public void shouldThrowViolations(){
+    void shouldThrowViolations(){
 
         Throwable validationExceptionThrown = catchThrowable(() -> {
 

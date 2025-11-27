@@ -15,24 +15,24 @@ import org.junit.jupiter.api.Test;
 import static com.societegenerale.commons.plugin.service.ExcludedPathsPreProcessor.PACKAGE_INFO_JAVA;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
+class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
 {
     private final ExcludedPathsPreProcessor preProcessor = new ExcludedPathsPreProcessor();
 
     @BeforeAll
-    public static void init() throws IOException
+    static void init() throws IOException
     {
         AbstractExcludePathTest.init();
     }
 
     @AfterAll
-    public static void cleanup() throws IOException
+    static void cleanup() throws IOException
     {
         AbstractExcludePathTest.cleanup();
     }
 
     @Test
-    public void testFindJavaFiles_EmptyDir() throws IOException
+    void findJavaFilesEmptyDir() throws Exception
     {
         final Path emptyDir =
                 Files.createDirectory(Paths.get(getTestTempRootDirectory().toString() + "/EmptyDirectory"));
@@ -43,7 +43,7 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
     }
 
     @Test
-    public void testFindJavaFiles() throws IOException
+    void findJavaFiles() throws Exception
     {
         final Path notAJavaFilePath =
                 Files.createFile(Paths.get(getTestTempRootDirectory().toString() + "/NotAJavaFile.txt"));
@@ -66,14 +66,14 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
     }
 
     @Test
-    public void testDetermineClassNames_EmptySet()
+    void determineClassNamesEmptySet()
     {
         final Set<String> actual = preProcessor.determineClassNames(new HashSet<>(), getLogger());
         assertThat(actual).isEmpty();
     }
 
     @Test
-    public void testDetermineClassNames()
+    void determineClassNames()
     {
         final Set<String> expected = new HashSet<>();
         expected.add(AbstractExcludePathTest.CLASS_NAME);
@@ -91,7 +91,7 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
     }
 
     @Test
-    public void testConvertToPath() throws IOException
+    void convertToPath() throws Exception
     {
         final Path targetDir = AbstractExcludePathTest.getTestProjectBuildDirectory();
 
@@ -119,7 +119,7 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
     }
 
     @Test
-    public void testProcessExcludedPaths()
+    void processExcludedPaths()
     {
         assertThat(preProcessor.processExcludedPaths(getLogger(), null, null)).isNotNull();
 
@@ -138,7 +138,7 @@ public class ExcludedPathsPreProcessorTest extends AbstractExcludePathTest
     }
 
     @Test
-    public void testIsJavaFile()
+    void isJavaFile()
     {
         assertThat(preProcessor.isJavaFile(null)).isFalse();
         assertThat(preProcessor.isJavaFile("")).isFalse();

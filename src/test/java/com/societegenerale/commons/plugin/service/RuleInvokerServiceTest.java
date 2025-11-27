@@ -1,6 +1,5 @@
 package com.societegenerale.commons.plugin.service;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 
 import com.societegenerale.aut.test.TestSpecificScopeProvider;
@@ -20,15 +19,15 @@ import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RuleInvokerServiceTest {
+class RuleInvokerServiceTest {
 
     RuleInvokerService ruleInvokerService = new RuleInvokerService(new SilentLog(), new TestSpecificScopeProvider());
 
     ConfigurableRule configurableRule = new ConfigurableRule();
 
     @Test
-    public void shouldInvokePreConfiguredRulesMethod()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldInvokePreConfiguredRulesMethod()
+            throws Exception {
 
         Rules rules = new Rules(Arrays.asList(NoStandardStreamRuleTest.class.getName()), emptyList());
 
@@ -40,8 +39,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldInvokePreConfiguredRuleThatCanLog()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldInvokePreConfiguredRuleThatCanLog()
+            throws Exception {
 
         Rules rules = new Rules(Arrays.asList(HexagonalArchitectureTest.class.getName()), emptyList());
 
@@ -53,8 +52,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldNotExecuteSkippedConfigurableRules()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldNotExecuteSkippedConfigurableRules()
+            throws Exception {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "test");
 
@@ -70,8 +69,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteConfigurableRuleWithNoPackageProvided_OnlyOnClassesOfScope()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldExecuteConfigurableRuleWithNoPackageProvided_OnlyOnClassesOfScope()
+            throws Exception {
 
         ApplyOn applyOn = new ApplyOn(null, "test");
 
@@ -88,8 +87,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecute2ConfigurableRulesOnTest()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldExecute2ConfigurableRulesOnTest()
+            throws Exception {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "test");
 
@@ -107,8 +106,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteOnlyTheConfiguredRule()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldExecuteOnlyTheConfiguredRule()
+            throws Exception {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "test");
 
@@ -126,8 +125,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteAllRulesFromConfigurableClassByDefault()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldExecuteAllRulesFromConfigurableClassByDefault()
+            throws Exception {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "main");
 
@@ -145,8 +144,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteAllRulesOnSpecificPackageInTest()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldExecuteAllRulesOnSpecificPackageInTest()
+            throws Exception {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase", "test");
 
@@ -164,8 +163,8 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void shouldExecuteAllRulesFromArchUnit_GeneralCodingRule()
-            throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void shouldExecuteAllRulesFromArchUnit_GeneralCodingRule()
+            throws Exception {
 
         ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase", "test");
 
@@ -185,7 +184,7 @@ public class RuleInvokerServiceTest {
     }
 
     @Test
-    public void testScopeProviderWithDots() throws InstantiationException, IllegalAccessException, InvocationTargetException {
+    void scopeProviderWithDots() throws Exception {
         ApplyOn applyOn = new ApplyOn("com.societegenerale.aut.test.specificCase", "test");
 
         configurableRule.setRule(DummyCustomRule.class.getName());
