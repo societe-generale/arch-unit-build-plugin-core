@@ -83,7 +83,7 @@
     <jakarta.inject-api.version>2.0.1</jakarta.inject-api.version>
     <mockito.version>5.20.0</mockito.version>
     <junit.version>4.13.2</junit.version>
-    <joda-time.version>2.12.5</joda-time.version>
+    <joda-time.version>2.14.0</joda-time.version>
     <spring-beans.version>7.0.1</spring-beans.version>
     <powermock.version>2.0.9</powermock.version>
     <lombok.version>1.18.42</lombok.version>
