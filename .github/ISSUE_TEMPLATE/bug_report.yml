@@ -1,5 +1,5 @@
 name: "Bug report"
-descrption: "Use this template to report a reproducible bug. The fields below help maintainers triage and reproduce the issue faster."
+description: "Use this template to report a reproducible bug. The fields below help maintainers triage and reproduce the issue faster."
 title: "[Bug] {{summary}}"
 type: bug
 assignees:
