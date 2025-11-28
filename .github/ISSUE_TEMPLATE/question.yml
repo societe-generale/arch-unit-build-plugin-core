@@ -1,5 +1,5 @@
 name: "Question"
-about: "Ask a question about how to use the project, APIs, or docs. Use this form to give context and environment details so maintainers can help quickly."
+description: "Ask a question about how to use the project, APIs or docs."
 title: "[Question] {{summary}}"
 type: question
 assignees:
