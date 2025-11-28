@@ -1,5 +1,5 @@
 name: "Feature request"
-about: "Suggest a new feature or an improvement. Provide motivation, proposed behavior and acceptance criteria if possible."
+description: "Suggest a new feature or an improvement. Provide motivation, proposed behavior and acceptance criteria if possible."
 title: "[Feature] {{summary}}"
 type: feature
 assignees:
