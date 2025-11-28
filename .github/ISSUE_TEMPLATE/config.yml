@@ -1,25 +1,2 @@
 blank_issues_enabled: false
-contact_links: []
-issue_template:
-  - name: "Bug report"
-    about: "Report a reproducible bug."
-    title: "[Bug] {{summary}}"
-    labels:
-      - bug
-      - needs-triage
-    template: "bug_report.yml"
-  - name: "Feature request"
-    about: "Suggest a new feature or an improvement."
-    title: "[Feature] {{summary}}"
-    labels:
-      - enhancement
-      - needs-triage
-    template: "feature_request.yml"
-  - name: "Question"
-    about: "Ask a question about how to use the project, APIs or docs."
-    title: "[Question] {{summary}}"
-    labels:
-      - question
-      - needs-triage
-    template: "question.yml"
 
