@@ -1,5 +1,5 @@
 name: "Bug report"
-about: "Use this template to report a reproducible bug. The fields below help maintainers triage and reproduce the issue faster."
+descrption: "Use this template to report a reproducible bug. The fields below help maintainers triage and reproduce the issue faster."
 title: "[Bug] {{summary}}"
 type: bug
 assignees:
@@ -57,11 +57,11 @@ body:
       description: "Optional: check items you can attach to help triage."
       options:
         - label: I can provide logs
-          value: logs
+          required: false
         - label: I can provide a small reproduction repository
-          value: repository
+          required: false
         - label: I can provide screenshots
-          value: screenshots
+          required: false
     validations:
       required: false
   - type: input
