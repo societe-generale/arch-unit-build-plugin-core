@@ -94,7 +94,6 @@
     <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
     <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
     <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
-    <maven-release-plugin.version>3.3.0</maven-release-plugin.version>
     <jacoco.version>0.8.14</jacoco.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
     <maven-resources-plugin.version>3.4.0</maven-resources-plugin.version>
@@ -284,21 +283,6 @@
           <includes>
             <include>**/*Test.java</include>
           </includes>
-        </configuration>
-      </plugin>
-
-      <plugin>
-        <artifactId>maven-release-plugin</artifactId>
-        <groupId>org.apache.maven.plugins</groupId>
-        <version>${maven-release-plugin.version}</version>
-        <configuration>
-          <tagNameFormat>arch_unit_build_plugin_core_@{project.version}</tagNameFormat>
-          <localCheckout>true</localCheckout>
-          <autoVersionSubmodules>true</autoVersionSubmodules>
-          <pushChanges>false</pushChanges>
-          <useReleaseProfile>false</useReleaseProfile>
-          <releaseProfiles>makeRelease</releaseProfiles>
-          <mavenExecutorId>forked-path</mavenExecutorId>
         </configuration>
       </plugin>
 
