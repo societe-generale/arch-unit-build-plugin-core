@@ -23,12 +23,19 @@ jobs:
           server-username: CENTRAL_USERNAME
           server-password: CENTRAL_PASSWORD
 
+      - name: Configure Git user for release plugin
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
       - name: Build & Publish to Sonatype Central Portal
-        run: mvn -B -P makeRelease clean deploy -DskipTests -ntp
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+        run: |
+          mvn --batch-mode -P makeRelease release:prepare -Dgpg.passphrase=${GPG_PASSPHRASE}
+          mvn --batch-mode -P makeRelease release:perform -Dgpg.passphrase=${GPG_PASSPHRASE}
 
       - name: Upload built artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
