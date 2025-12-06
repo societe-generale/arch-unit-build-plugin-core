@@ -34,8 +34,7 @@ jobs:
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
           GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          mvn --batch-mode -P makeRelease release:prepare -Dgpg.passphrase=${GPG_PASSPHRASE} -DskipTests -ntp
-          mvn --batch-mode -P makeRelease release:perform -Dgpg.passphrase=${GPG_PASSPHRASE} -DskipTests -ntp
+          mvn -B -P makeRelease clean deploy -DskipTests -ntp
 
       - name: Upload built artifacts to GitHub Release
         uses: softprops/action-gh-release@v2
