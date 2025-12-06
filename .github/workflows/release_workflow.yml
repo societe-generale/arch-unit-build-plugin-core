@@ -19,9 +19,12 @@ jobs:
           java-version: 25
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
+          server-id: central
+          server-username: CENTRAL_USERNAME
+          server-password: CENTRAL_PASSWORD
 
       - name: Build & Publish to Sonatype Central Portal
-        run: mvn -B -P makeRelease clean deploy -DskipTests
+        run: mvn -B -P makeRelease clean deploy -DskipTests -ntp
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}

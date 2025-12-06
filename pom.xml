@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://www.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.societegenerale.commons</groupId>
   <artifactId>arch-unit-build-plugin-core</artifactId>
@@ -11,6 +11,13 @@
   <name>ArchUnit plugin core</name>
   <description>The core logic for Maven or Gradle ArchUnit plugin</description>
   <url>https://github.com/societe-generale/arch-unit-build-plugin-core</url>
+
+  <distributionManagement>
+    <repository>
+      <id>central</id>
+      <url>https://central.sonatype.com/publish</url>
+    </repository>
+  </distributionManagement>
 
   <developers>
     <developer>
@@ -51,7 +58,6 @@
     <tag>arch_unit_build_plugin_core_5.0.0</tag>
   </scm>
 
-  <!-- SNAPSHOT repo section retained for compatibility -->
   <repositories>
     <repository>
       <id>sonatype-snapshots</id>
@@ -88,7 +94,6 @@
     <maven-compiler-plugin.version>3.14.1</maven-compiler-plugin.version>
     <maven-jar-plugin.version>3.5.0</maven-jar-plugin.version>
     <maven-surefire-plugin.version>3.5.4</maven-surefire-plugin.version>
-    <maven-deploy-plugin.version>3.1.4</maven-deploy-plugin.version>
     <maven-release-plugin.version>3.3.0</maven-release-plugin.version>
     <jacoco.version>0.8.14</jacoco.version>
     <coveralls-maven-plugin.version>4.3.0</coveralls-maven-plugin.version>
@@ -280,12 +285,6 @@
             <include>**/*Test.java</include>
           </includes>
         </configuration>
-      </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-deploy-plugin</artifactId>
-        <version>${maven-deploy-plugin.version}</version>
       </plugin>
 
       <plugin>
