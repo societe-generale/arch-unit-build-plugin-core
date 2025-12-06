@@ -24,7 +24,7 @@ jobs:
           server-password: CENTRAL_PASSWORD
 
       - name: Build & Publish to Sonatype Central Portal
-        run: mvn -B -P makeRelease clean deploy -DskipTests -ntp -Dgpg.passphrase=${{ secrets.GPG_PASSPHRASE }}
+        run: mvn -B -P makeRelease clean deploy -DskipTests -ntp
         env:
           CENTRAL_USERNAME: ${{ secrets.CENTRAL_USERNAME }}
           CENTRAL_PASSWORD: ${{ secrets.CENTRAL_PASSWORD }}
