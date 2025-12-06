@@ -48,7 +48,7 @@
     <url>https://github.com/societe-generale/arch-unit-build-plugin-core</url>
     <connection>scm:git:git@github.com:societe-generale/arch-unit-build-plugin-core.git</connection>
     <developerConnection>scm:git:git@github.com:societe-generale/arch-unit-build-plugin-core.git</developerConnection>
-    <tag>arch_unit_build_plugin_core_5_0_0</tag>
+    <tag>arch_unit_build_plugin_core_5.0.0</tag>
   </scm>
 
   <!-- SNAPSHOT repo section retained for compatibility -->
