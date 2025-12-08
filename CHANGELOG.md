@@ -12,6 +12,75 @@
 
 ### Fixed
 
+## [5.0.0] - 2025-12-07
+
+### Changed
+
+- Java 21 → 25
+- JUnit 5/4 → JUnit 6 BOM
+- Migration from Nexus Staging → `central-publishing-maven-plugin`
+- Many libraries jumped several major versions
+- Migration from `javax.inject` → `jakarta.inject`
+
+#### Dependency version changes
+
+| Library                | Old Version  | New Version  | Change                                   |
+|------------------------|--------------|--------------|------------------------------------------|
+| ArchUnit               | 1.3.0        | 1.4.1        | Upgrade                                  |
+| Guava                  | 32.1.2-jre   | 33.5.0-jre   | Upgrade                                  |
+| Apache Commons Lang    | 3.13.0       | 3.20.0       | Upgrade                                  |
+| Roaster                | 2.28.0.Final | 2.30.3.Final | Upgrade                                  |
+| javax.inject           | 1            | *Removed*    | Removed (Replaced by jakarta.inject-api) |
+| jakarta.inject-api     | —            | 2.0.1        | Added replacement                        |
+| Mockito Core           | 5.4.0        | 5.20.0       | Upgrade                                  |
+| JUnit 4                | 4.13.2       | 4.13.2       | Same                                     |
+| Joda-Time              | 2.12.5       | 2.14.0       | Upgrade                                  |
+| Spring Beans           | 6.0.12       | 7.0.1        | Upgrade                                  |
+| Powermock JUnit4       | 2.0.9        | 2.0.9        | Same                                     |
+| Lombok                 | 1.18.30      | 1.18.42      | Upgrade                                  |
+| AssertJ                | 3.24.2       | 3.27.6       | Upgrade                                  |
+| SLF4J (nop)            | 2.0.7        | 2.0.17       | Upgrade                                  |
+| JUnit Jupiter          | 5.10.0       | 6.0.1        | Upgrade (Major)                          |
+| Jackson Annotations    | 2.15.2       | 2.20         | Upgrade                                  |
+| Commons IO             | 2.14.0       | 2.21.0       | Upgrade                                  |
+| jakarta.annotation-api | 2.1.1        | 3.0.0        | Upgrade                                  |
+| jsr305                 | 3.0.2        | *Removed*    | Removed                                  |
+| spotbugs-annotations   | —            | 4.9.8        | Added                                    |
+
+#### Plugin version changes
+
+| Plugin                     | Old Version | New Version | Change  |
+|----------------------------|-------------|-------------|---------|
+| maven-compiler-plugin      | 3.11.0      | 3.14.1      | Upgrade |
+| maven-jar-plugin           | 3.3.0       | 3.5.0       | Upgrade |
+| maven-surefire-plugin      | 3.1.2       | 3.5.4       | Upgrade |
+| maven-deploy-plugin        | 3.1.1       | 3.1.4       | Upgrade |
+| maven-release-plugin       | 3.0.1       | 3.3.0       | Upgrade |
+| jacoco-maven-plugin        | 0.8.11      | 0.8.14      | Upgrade |
+| maven-resources-plugin     | 3.3.1       | 3.4.0       | Upgrade |
+| maven-source-plugin        | 3.3.0       | 3.4.0       | Upgrade |
+| maven-javadoc-plugin       | 3.5.0       | 3.12.0      | Upgrade |
+| maven-gpg-plugin           | 3.1.0       | 3.2.8       | Upgrade |
+| nexus-staging-maven-plugin | 1.6.13      | *Removed*   | Removed |
+| central-publishing-plugin  | —           | 0.9.0       | Added   |
+
+#### Removed libraries
+
+| Removed Library                                 | Reason                                                       |
+|-------------------------------------------------|--------------------------------------------------------------|
+| javax.inject:javax.inject                       | Replaced with jakarta.inject-api                             |
+| com.google.code.findbugs:jsr305                 | Replaced with spotbugs-annotations                           |
+| org.sonatype.plugins:nexus-staging-maven-plugin | Publishing model changed (new Sonatype Central plugin added) |
+
+#### Added libraries
+
+| Added Library                                              | Purpose                      |
+|------------------------------------------------------------|------------------------------|
+| jakarta.inject:jakarta.inject-api:2.0.1                    | Replacement for javax.inject |
+| com.github.spotbugs:spotbugs-annotations:4.9.8             | Replacement for jsr305       |
+| org.sonatype.central:central-publishing-maven-plugin:0.9.0 | New publishing workflow      |
+
+
 ## [4.0.1] - 2024-01-28
 
 ### Changed
