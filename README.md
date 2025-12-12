@@ -16,3 +16,9 @@ To get a full documentation, we invite you to follow this link : https://github.
 -   v4.x is using `com.tngtech.archunit`.`archunit` 1.2.0+ , with JDK21
 -   v3.x is using `com.tngtech.archunit`.`archunit` 1.0.0+ , with JDK11
 -   v2.x is using `com.tngtech.archunit`.`archunit` 0.x.x, with JDK 8
+
+## Official maintainers
+
+- [Paul Williams](https://github.com/paul58914080)
+- [Vincent Fuchs](https://github.com/vincent-fuchs)
+- [Arpit Garg](https://github.com/arpitgarg9168)
