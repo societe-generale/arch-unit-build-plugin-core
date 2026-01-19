@@ -5,22 +5,16 @@ updates:
     schedule:
       interval: daily
     open-pull-requests-limit: 10
-    reviewers:
-    - societe-generale/gbis-core
     labels:
       - dependencies
       - automated
-    assignees:
-      - paul58914080
     commit-message:
       prefix: "build: "
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: "/.github/"
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
-    reviewers:
-      - societe-generale/gbis-core
     labels:
       - ci
       - automated
