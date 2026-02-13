@@ -68,7 +68,7 @@
     <mockito.version>5.21.0</mockito.version>
     <junit.version>4.13.2</junit.version>
     <joda-time.version>2.14.0</joda-time.version>
-    <spring-beans.version>7.0.3</spring-beans.version>
+    <spring-beans.version>7.0.4</spring-beans.version>
     <powermock.version>2.0.9</powermock.version>
     <lombok.version>1.18.42</lombok.version>
     <assertj.version>3.27.7</assertj.version>
