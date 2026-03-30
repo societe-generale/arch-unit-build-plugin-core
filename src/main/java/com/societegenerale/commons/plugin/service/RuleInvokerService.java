@@ -112,7 +112,7 @@ public class RuleInvokerService {
             return "";
         }
 
-        InvokableRules invokableRules = InvokableRules.of(rule.getRule(), rule.getChecks(),log);
+        InvokableRules invokableRules = InvokableRules.of(rule.getRule(), rule.getChecks(), rule.getExcludedChecks(), log);
 
         String fullPathFromRootTopackage = getPackageNameOnWhichToApplyRules(rule);
 
