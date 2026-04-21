@@ -125,6 +125,25 @@ class RuleInvokerServiceTest {
     }
 
     @Test
+    void shouldExcludeConfiguredChecks()
+            throws Exception {
+
+        ApplyOn applyOn = new ApplyOn("com.societegenerale.commons.plugin.rules", "test");
+
+        configurableRule.setRule(DummyCustomRule.class.getName());
+        configurableRule.setApplyOn(applyOn);
+        configurableRule.setExcludedChecks(singletonList("annotatedWithTest"));
+
+        Rules rules = new Rules(emptyList(), Arrays.asList(configurableRule));
+
+        String errorMessage = ruleInvokerService.invokeRules(rules);
+        assertThat(errorMessage).isNotEmpty();
+        assertThat(errorMessage).contains("Architecture Violation");
+        assertThat(errorMessage).doesNotContain("classes should be annotated with @Test");
+        assertThat(errorMessage).contains("classes should reside in a package 'myPackage'");
+    }
+
+    @Test
     void shouldExecuteAllRulesFromConfigurableClassByDefault()
             throws Exception {
 
