@@ -20,6 +20,8 @@ public class ConfigurableRule implements Serializable {
 
   private List<String> checks = new ArrayList<>();
 
+  private List<String> excludedChecks = new ArrayList<>();
+
   private boolean skip;
 
   public List<String> getChecks() {
@@ -36,6 +38,14 @@ public class ConfigurableRule implements Serializable {
 
   public void setChecks(List<String> checks) {
     this.checks = checks;
+  }
+
+  public List<String> getExcludedChecks() {
+    return excludedChecks;
+  }
+
+  public void setExcludedChecks(List<String> excludedChecks) {
+    this.excludedChecks = excludedChecks;
   }
 
   public ApplyOn getApplyOn() {
