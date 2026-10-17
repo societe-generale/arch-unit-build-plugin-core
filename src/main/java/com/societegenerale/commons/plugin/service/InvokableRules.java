@@ -32,7 +32,7 @@ class InvokableRules {
 
     private final Log log;
 
-    private InvokableRules(String rulesClassName, List<String> ruleChecks, Log log) {
+    private InvokableRules(String rulesClassName, List<String> ruleChecks, List<String> excludedChecks, Log log) {
 
         this.log=log;
 
@@ -41,11 +41,13 @@ class InvokableRules {
         Set<Field> allFieldsWhichAreArchRules = getAllFieldsWhichAreArchRules(rulesLocation.getDeclaredFields());
         Set<Method> allMethodsWhichAreArchRules = getAllMethodsWhichAreArchRules(rulesLocation.getDeclaredMethods());
         validateRuleChecks(Sets.union(allMethodsWhichAreArchRules, allFieldsWhichAreArchRules), ruleChecks);
+        validateRuleChecks(Sets.union(allMethodsWhichAreArchRules, allFieldsWhichAreArchRules), excludedChecks);
 
         Predicate<String> isChosenCheck = ruleChecks.isEmpty() ? check -> true : ruleChecks::contains;
+        Predicate<String> isNotExcluded = excludedChecks.isEmpty() ? check -> true : check -> !excludedChecks.contains(check);
 
-        archRuleFields = filterNames(allFieldsWhichAreArchRules, isChosenCheck);
-        archRuleMethods = filterNames(allMethodsWhichAreArchRules, isChosenCheck);
+        archRuleFields = filterNames(allFieldsWhichAreArchRules, isChosenCheck.and(isNotExcluded));
+        archRuleMethods = filterNames(allMethodsWhichAreArchRules, isChosenCheck.and(isNotExcluded));
 
         if(log.isInfoEnabled()) {
             logBuiltInvokableRules(rulesClassName);
@@ -125,8 +127,8 @@ class InvokableRules {
         }
     }
 
-    static InvokableRules of(String rulesClassName, List<String> checks, Log log) {
-        return new InvokableRules(rulesClassName, checks, log);
+    static InvokableRules of(String rulesClassName, List<String> checks, List<String> excludedChecks, Log log) {
+        return new InvokableRules(rulesClassName, checks, excludedChecks, log);
     }
 
     static class InvocationResult {
