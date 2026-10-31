@@ -4,6 +4,11 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ReflectionUtils {
     public static Class<?> loadClassWithContextClassLoader(String className) {
@@ -44,5 +49,26 @@ public class ReflectionUtils {
         } catch (IllegalAccessException e) {
             throw ReflectionException.wrap(e);
         }
+    }
+
+    public static List<Field> getAllFields(Class<?> clazz) {
+        List<Field> fields = new ArrayList<>();
+        Set<Class<?>> visited = new HashSet<>();
+        addFieldsRecursively(fields, clazz, visited);
+        return fields;
+    }
+
+    private static void addFieldsRecursively(List<Field> fields, Class<?> clazz, Set<Class<?>> visited) {
+        if (clazz == Object.class || !visited.add(clazz)) {
+            return;
+        }
+        for (Class<?> interfaceClazz : clazz.getInterfaces()) {
+            addFieldsRecursively(fields, interfaceClazz, visited);
+        }
+        Class<?> superClass = clazz.getSuperclass();
+        if (null != superClass) {
+            addFieldsRecursively(fields, superClass, visited);
+        }
+        Collections.addAll(fields, clazz.getDeclaredFields());
     }
 }

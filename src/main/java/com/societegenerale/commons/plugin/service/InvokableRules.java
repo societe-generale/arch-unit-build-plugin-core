@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Member;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,7 @@ import java.util.function.Predicate;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.societegenerale.commons.plugin.Log;
+import com.societegenerale.commons.plugin.utils.ReflectionUtils;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.lang.ArchRule;
 
@@ -38,7 +40,7 @@ class InvokableRules {
 
         rulesLocation = loadClassWithContextClassLoader(rulesClassName);
 
-        Set<Field> allFieldsWhichAreArchRules = getAllFieldsWhichAreArchRules(rulesLocation.getDeclaredFields());
+        Set<Field> allFieldsWhichAreArchRules = getAllFieldsWhichAreArchRules(getDeclaredFields(rulesLocation));
         Set<Method> allMethodsWhichAreArchRules = getAllMethodsWhichAreArchRules(rulesLocation.getDeclaredMethods());
         validateRuleChecks(Sets.union(allMethodsWhichAreArchRules, allFieldsWhichAreArchRules), ruleChecks);
 
@@ -50,6 +52,13 @@ class InvokableRules {
         if(log.isInfoEnabled()) {
             logBuiltInvokableRules(rulesClassName);
         }
+    }
+
+    private static List<Field> getDeclaredFields(Class<?> clazz) {
+        if (clazz.isInterface()) {
+            return ReflectionUtils.getAllFields(clazz);
+        }
+        return Arrays.asList(clazz.getDeclaredFields());
     }
 
     private void logBuiltInvokableRules(String rulesClassName) {
@@ -85,15 +94,15 @@ class InvokableRules {
                 .collect(toSet());
     }
 
-    private Set<Field> getAllFieldsWhichAreArchRules(Field[] fields) {
-        return stream(fields)
+    private Set<Field> getAllFieldsWhichAreArchRules(List<Field> fields) {
+        return fields.stream()
                 .filter(f -> ArchRule.class.isAssignableFrom(f.getType()))
                 .collect(toSet());
     }
 
     InvocationResult invokeOn(JavaClasses importedClasses) {
 
-        Object instance = newInstance(rulesLocation);
+        Object instance = rulesLocation.isInterface() ? null : newInstance(rulesLocation);
 
         if(log.isInfoEnabled()) {
             log.info("applying rules on "+importedClasses.size()+" classe(s). To see the details, enable debug logs");
